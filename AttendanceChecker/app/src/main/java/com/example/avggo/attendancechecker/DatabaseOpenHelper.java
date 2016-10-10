@@ -33,13 +33,51 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
                 + "coursecode TEXT, "
                 + "coursename TEXT);";
         db.execSQL(sql);
+        sql = "CREATE TABLE CourseOffering ("
+                + "co_id INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + "courseid INTEGER, "
+                + "time TEXT, "
+                + "section TEXT);";
+        db.execSQL(sql);
         sql = "CREATE TABLE " + Attendance.TABLE_NAME  + " ("
                 + Attendance.COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                 + Attendance.COL_ROOM + " TEXT, "
-                + Attendance.COL_COID + " TEXT, "
-                + Attendance.COL_FACULTYID + " TEXT, "
+                + Attendance.COL_COID + " INTEGER, "
+                + Attendance.COL_FACULTYID + " INTEGER, "
                 + Attendance.COL_CODE + " TEXT, "
                 + Attendance.COL_REMARKS + " TEXT);";
+        db.execSQL(sql);
+        sql = "CREATE TABLE AttendanceCode ("
+                + "ac_id INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + "code TEXT, "
+                + "name TEXT, "
+                + "description TEXT);";
+        db.execSQL(sql);
+        sql = "CREATE TABLE CheckerAccount ("
+                + "checkerid INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + "c_firstname TEXT, "
+                + "c_middlename TEXT, "
+                + "c_lastname TEXT, "
+                + "username TEXT, "
+                + "email TEXT, "
+                + "password TEXT, "
+                + "rotationid INTEGER);";
+        db.execSQL(sql);
+        sql = "CREATE TABLE RotationRoom ("
+                + "rotationid INTEGER"
+                + "roomid INTEGER);";
+        db.execSQL(sql);
+        sql = "CREATE TABLE Room ("
+                + "roomname INTEGER"
+                + "roomid INTEGER"
+                + "buildingid INTEGER);";
+        db.execSQL(sql);
+        sql = "CREATE TABLE Rotation ("
+                + "rotationid TEXT PRIMARY KEY);";
+        db.execSQL(sql);
+        sql = "CREATE TABLE Building ("
+                + "buildingid INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + "buildingname INTEGER);";
         db.execSQL(sql);
     }
 
