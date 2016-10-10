@@ -42,7 +42,8 @@ public class LoginActivity extends AppCompatActivity {
                     if (u == null) {
                         Toast.makeText(v.getContext(), "Incorrect username or password", Toast.LENGTH_SHORT).show();
 
-                    } else {
+                    }
+                    else {
                         String checkPassword = u.getPw();
                         if (password.equals(checkPassword)) {
                             CHECKER_ID = u.getCheckerid();
@@ -51,7 +52,8 @@ public class LoginActivity extends AppCompatActivity {
                             Toast.makeText(v.getContext(), "Welcome " + CHECKER_NAME, Toast.LENGTH_LONG).show();
                             homepage.setClass(getBaseContext(), MainActivity.class);
                             startActivity(homepage);
-                        } else
+                        }
+                        else
                             Toast.makeText(v.getContext(), "Incorrect username or password", Toast.LENGTH_LONG).show();
                     }
                 }
