@@ -1,6 +1,7 @@
 package com.example.avggo.attendancechecker;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
@@ -11,7 +12,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class DatabaseOpenHelper extends SQLiteOpenHelper {
     public static final String SCHEMA = "attendance_checker";
 
-    public DatabaseOpenHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
+    public DatabaseOpenHelper(Context context) {
         super(context, SCHEMA, null, 1);
     }
 
@@ -53,15 +54,15 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
                 + "name TEXT, "
                 + "description TEXT);";
         db.execSQL(sql);
-        sql = "CREATE TABLE CheckerAccount ("
-                + "checkerid INTEGER PRIMARY KEY AUTOINCREMENT, "
-                + "c_firstname TEXT, "
-                + "c_middlename TEXT, "
-                + "c_lastname TEXT, "
-                + "username TEXT, "
-                + "email TEXT, "
-                + "password TEXT, "
-                + "rotationid INTEGER);";
+        sql = "CREATE TABLE " + CheckerAccount.TABLE_NAME  + " ("
+                + CheckerAccount.COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + CheckerAccount.COL_FNAME + " TEXT, "
+                + CheckerAccount.COL_MNAME + " TEXT, "
+                + CheckerAccount.COL_LNAME + " TEXT, "
+                + CheckerAccount.COL_UN + " TEXT, "
+                + CheckerAccount.COL_EMAIL + " TEXT, "
+                + CheckerAccount.COL_PW + " TEXT, "
+                + CheckerAccount.COL_RID + " INTEGER);";
         db.execSQL(sql);
         sql = "CREATE TABLE RotationRoom ("
                 + "rotationid INTEGER"
@@ -79,10 +80,39 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
                 + "buildingid INTEGER PRIMARY KEY AUTOINCREMENT, "
                 + "buildingname INTEGER);";
         db.execSQL(sql);
+
+        sql = "INSERT INTO CheckerAccount (\"c_firstname\", \"c_middlename\", \"c_lastname\", \"username\", \"email\", \"password\", \"rotationid\" ) VALUES ('Vince', 'Gornal', 'Gonzales', 'test', 'test@gmail.com', 'test', 'A');" ;
+        db.execSQL(sql);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
+    }
+
+    public CheckerAccount checkIfUserExists(String username) {
+        CheckerAccount u = new CheckerAccount();
+        SQLiteDatabase db = getReadableDatabase();
+
+        Cursor c = db.query(CheckerAccount.TABLE_NAME, null, " "+ CheckerAccount.COL_UN + "=? ", new String[]{username}, null, null, null);
+
+        if (c.moveToFirst()) {
+            u.setCheckerid(c.getInt(c.getColumnIndex(CheckerAccount.COL_ID)));
+            u.setFname(c.getString(c.getColumnIndex(CheckerAccount.COL_FNAME)));
+            u.setMname(c.getString(c.getColumnIndex(CheckerAccount.COL_MNAME)));
+            u.setLname(c.getString(c.getColumnIndex(CheckerAccount.COL_LNAME)));
+            u.setUn(c.getString(c.getColumnIndex(CheckerAccount.COL_UN)));
+            u.setEmail(c.getString(c.getColumnIndex(CheckerAccount.COL_EMAIL)));
+            u.setPw(c.getString(c.getColumnIndex(CheckerAccount.COL_PW)));
+            u.setRid(c.getInt(c.getColumnIndex(CheckerAccount.COL_RID)));
+
+        } else {
+            u = null;
+        }
+
+        c.close();
+        db.close();
+
+        return u;
     }
 }
