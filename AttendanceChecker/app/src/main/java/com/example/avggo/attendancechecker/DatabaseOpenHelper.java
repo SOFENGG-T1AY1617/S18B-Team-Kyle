@@ -5,6 +5,10 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.example.avggo.attendancechecker.model.Attendance;
+import com.example.avggo.attendancechecker.model.CheckerAccount;
+import com.example.avggo.attendancechecker.model.Faculty;
+
 /**
  * Created by avggo on 10/9/2016.
  */

@@ -8,6 +8,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.avggo.attendancechecker.model.CheckerAccount;
+import com.example.avggo.attendancechecker.ui.ListActivity;
+
 public class LoginActivity extends AppCompatActivity {
 
     public static int CHECKER_ID;
@@ -50,7 +53,7 @@ public class LoginActivity extends AppCompatActivity {
                             CHECKER_NAME = u.getFname() + " " + u.getLname();
 
                             Toast.makeText(v.getContext(), "Welcome " + CHECKER_NAME, Toast.LENGTH_LONG).show();
-                            homepage.setClass(getBaseContext(), MainActivity.class);
+                            homepage.setClass(getBaseContext(), ListActivity.class);
                             startActivity(homepage);
                         }
                         else

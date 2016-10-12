@@ -1,4 +1,4 @@
-package com.example.avggo.attendancechecker;
+package com.example.avggo.attendancechecker.model;
 
 /**
  * Created by avggo on 10/9/2016.
