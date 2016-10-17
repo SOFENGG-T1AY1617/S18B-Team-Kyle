@@ -17,7 +17,17 @@
 
     <TextView
         android:id="@+id/lbl_header"
-        android:text="Header Text"
+        android:text="KYLE SANTOS"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:background="@color/colorPrimary"
+        android:textColor="@android:color/white"
+        android:gravity="center"
+        />
+
+    <TextView
+        android:id="@+id/lbl_sub_header"
+        android:text="kyle_santos@dlsu.com"
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
         android:background="@color/colorPrimary"
