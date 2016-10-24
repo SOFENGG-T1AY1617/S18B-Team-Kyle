@@ -3,7 +3,6 @@
     android:id="@+id/cont_item_root"
     android:layout_width="match_parent"
     android:layout_height="72dp"
-    android:background="@drawable/background_state_drawable"
     android:clickable="true"
     >
 
@@ -51,7 +50,6 @@
         android:clickable="true"
         android:padding="16dp"
         android:src="@drawable/ic_star_border_black_24dp"
-        android:background="@drawable/background_state_drawable"
         />
 
 </RelativeLayout>

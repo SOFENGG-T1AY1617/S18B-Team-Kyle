@@ -18,6 +18,7 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
 
     public DatabaseOpenHelper(Context context) {
         super(context, SCHEMA, null, 1);
+        context.deleteDatabase("attendance_checker");
     }
 
     @Override
@@ -34,26 +35,32 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
                 + Faculty.COL_PIC + " BLOB);";
         db.execSQL(sql);
         sql = "CREATE TABLE Course ("
-                + "courseid INTEGER PRIMARY KEY AUTOINCREMENT, "
-                + "coursecode TEXT, "
-                + "coursename TEXT);";
+                + "id INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + "code TEXT, "
+                + "name TEXT);";
         db.execSQL(sql);
         sql = "CREATE TABLE CourseOffering ("
-                + "co_id INTEGER PRIMARY KEY AUTOINCREMENT, "
-                + "courseid INTEGER, "
-                + "time TEXT, "
-                + "section TEXT);";
+                + "id INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + "course_id INTEGER, "
+                + "faculty_id INTEGER, "
+                + "term_id INTEGER, "
+                + "section INTEGER, "
+                + "time_start TEXT, "
+                + "time_end TEXT, "
+                + "room_id INTEGER);";
         db.execSQL(sql);
         sql = "CREATE TABLE " + Attendance.TABLE_NAME  + " ("
                 + Attendance.COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                 + Attendance.COL_ROOM + " TEXT, "
                 + Attendance.COL_COID + " INTEGER, "
                 + Attendance.COL_FACULTYID + " INTEGER, "
-                + Attendance.COL_CODE + " TEXT, "
+                + Attendance.COL_A_STATUS + " INTEGER, "
+                + Attendance.COL_DATE + " TEXT, "
+                + Attendance.COL_TIME_SET + " TEXT, "
                 + Attendance.COL_REMARKS + " TEXT);";
         db.execSQL(sql);
-        sql = "CREATE TABLE AttendanceCode ("
-                + "ac_id INTEGER PRIMARY KEY AUTOINCREMENT, "
+        sql = "CREATE TABLE AttendanceStatus ("
+                + "id INTEGER PRIMARY KEY AUTOINCREMENT, "
                 + "code TEXT, "
                 + "name TEXT, "
                 + "description TEXT);";
@@ -69,23 +76,34 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
                 + CheckerAccount.COL_RID + " INTEGER);";
         db.execSQL(sql);
         sql = "CREATE TABLE RotationRoom ("
-                + "rotationid INTEGER"
-                + "roomid INTEGER);";
+                + "id TEXT"
+                + "room_id INTEGER);";
         db.execSQL(sql);
         sql = "CREATE TABLE Room ("
-                + "roomname INTEGER"
-                + "roomid INTEGER"
-                + "buildingid INTEGER);";
+                + "id INTEGER"
+                + "name TEXT"
+                + "building_id INTEGER);";
         db.execSQL(sql);
         sql = "CREATE TABLE Rotation ("
-                + "rotationid TEXT PRIMARY KEY);";
+                + "rotation_id TEXT PRIMARY KEY);";
         db.execSQL(sql);
         sql = "CREATE TABLE Building ("
-                + "buildingid INTEGER PRIMARY KEY AUTOINCREMENT, "
-                + "buildingname INTEGER);";
+                + "id INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + "name TEXT);";
+        db.execSQL(sql);
+        sql = "CREATE TABLE Term ("
+                + "id INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + "start TEXT"
+                + "end TEXT"
+                + "term_no INTEGER"
+                + "year_id INTEGER);";
+        db.execSQL(sql);
+        sql = "CREATE TABLE AcademicYear ("
+                + "id INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + "name TEXT);";
         db.execSQL(sql);
 
-        sql = "INSERT INTO CheckerAccount (\"c_firstname\", \"c_middlename\", \"c_lastname\", \"username\", \"email\", \"password\", \"rotationid\" ) VALUES ('Vince', 'Gornal', 'Gonzales', 'test', 'test@gmail.com', 'test', 'A');" ;
+        sql = "INSERT INTO CheckerAccount (\"first_name\", \"middle_name\", \"last_name\", \"user_name\", \"email\", \"password\", \"rotation_id\" ) VALUES ('Vince', 'Gornal', 'Gonzales', 'test', 'test@gmail.com', 'test', 'A');";
         db.execSQL(sql);
     }
 

@@ -6,17 +6,18 @@ package com.example.avggo.attendancechecker.model;
 
 public class Faculty {
     public static final String TABLE_NAME = "Faculty";
-    public static final String COL_ID = "f_id";
-    public static final String COL_FNAME = "f_firstname";
-    public static final String COL_MNAME = "f_middlename";
-    public static final String COL_LNAME = "f_lastname";
+    public static final String COL_ID = "id";
+    public static final String COL_FNAME = "first_name";
+    public static final String COL_MNAME = "middle_name";
+    public static final String COL_LNAME = "last_name";
     public static final String COL_COLLEGE = "college";
     public static final String COL_EMAIL = "email";
     public static final String COL_PIC = "pic";
-    public static final String COL_MOBNUM = "mobilenumber";
+    public static final String COL_MOBNUM = "mobile_number";
     public static final String COL_DEPT = "department";
 
     private String fname, mname, lname, college, email, mobnum, dept;
+    private int imageResId;
 
     public Faculty(){}
     public Faculty(String fname, String mname, String lname, String college, String email, String mobnum, String dept){

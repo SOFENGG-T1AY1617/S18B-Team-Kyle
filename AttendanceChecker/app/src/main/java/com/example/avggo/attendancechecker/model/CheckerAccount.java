@@ -6,14 +6,14 @@ package com.example.avggo.attendancechecker.model;
 
 public class CheckerAccount {
     public static final String TABLE_NAME = "CheckerAccount";
-    public static final String COL_ID = "checkerid";
-    public static final String COL_FNAME = "c_firstname";
-    public static final String COL_MNAME = "c_middlename";
-    public static final String COL_LNAME = "c_lastname";
-    public static final String COL_UN = "username";
+    public static final String COL_ID = "id";
+    public static final String COL_FNAME = "first_name";
+    public static final String COL_MNAME = "middle_name";
+    public static final String COL_LNAME = "last_name";
+    public static final String COL_UN = "user_name";
     public static final String COL_EMAIL = "email";
     public static final String COL_PW = "password";
-    public static final String COL_RID = "rotationid";
+    public static final String COL_RID = "rotation_id";
 
     private String fname, mname, lname, un, email, pw;
     private int checkerid, rid;

@@ -1,5 +1,5 @@
 <resources>
     <string name="app_name">AttendanceChecker</string>
-    <string name="open">Open</string>
-    <string name="close">Close</string>
+    <string name="openDrawer">Open Drawer </string>
+    <string name="closeDrawer">Close Drawer </string>
 </resources>

@@ -6,12 +6,14 @@ package com.example.avggo.attendancechecker.model;
 
 public class Attendance {
     public static final String TABLE_NAME = "Attendance";
-    public static final String COL_ID = "a_id";
+    public static final String COL_ID = "id";
     public static final String COL_ROOM = "room";
-    public static final String COL_COID = "co_id";
-    public static final String COL_FACULTYID = "facultyid";
-    public static final String COL_CODE = "code";
+    public static final String COL_COID = "courseoffering_id";
+    public static final String COL_FACULTYID = "faculty_id";
+    public static final String COL_A_STATUS = "status_id";
     public static final String COL_REMARKS = "remarks";
+    public static final String COL_DATE = "date";
+    public static final String COL_TIME_SET = "time_set";
 
     private String room, coursecode, fname, code, email, remarks;
     private byte[] pic;

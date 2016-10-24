@@ -32,7 +32,8 @@ public class LoginActivity extends AppCompatActivity {
 
         login.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {Intent homepage = new Intent();
+            public void onClick(View v) {
+                Intent homepage = new Intent();
 
                 String username = usernameET.getText().toString();
                 String password = passwordET.getText().toString();
@@ -52,8 +53,11 @@ public class LoginActivity extends AppCompatActivity {
                             CHECKER_ID = u.getCheckerid();
                             CHECKER_NAME = u.getFname() + " " + u.getLname();
 
+                            homepage.putExtra("DISPLAY_NAME", u.getFname() + " " + u.getLname());
+                            homepage.putExtra("EMAIL", u.getEmail());
+
                             Toast.makeText(v.getContext(), "Welcome " + CHECKER_NAME, Toast.LENGTH_LONG).show();
-                            homepage.setClass(getBaseContext(), ListActivity.class);
+                            homepage.setClass(getBaseContext(), MainActivity.class);
                             startActivity(homepage);
                         }
                         else
