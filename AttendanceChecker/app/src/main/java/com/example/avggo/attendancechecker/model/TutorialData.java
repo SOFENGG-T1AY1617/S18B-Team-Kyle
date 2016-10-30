@@ -29,7 +29,7 @@ public class TutorialData {
     private static final int icon = R.drawable.ic_tonality_black_36dp;
 
     public static List<ListItem> getListData() {
-        List<ListItem> data = new ArrayList<>();
+        List<ListItem> data = new ArrayList<>(); //change to attendance and
 
         //Repeat process 4 times, so that we have enough data to demonstrate a scrollable
         //RecyclerView
@@ -42,6 +42,7 @@ public class TutorialData {
                 data.add(item);
             }
         }
+
         return data;
     }
 }

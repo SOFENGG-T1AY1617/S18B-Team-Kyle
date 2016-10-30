@@ -55,6 +55,7 @@ public class LoginActivity extends AppCompatActivity {
 
                             homepage.putExtra("DISPLAY_NAME", u.getFname() + " " + u.getLname());
                             homepage.putExtra("EMAIL", u.getEmail());
+                            homepage.putExtra("RID", u.getRid());
 
                             Toast.makeText(v.getContext(), "Welcome " + CHECKER_NAME, Toast.LENGTH_LONG).show();
                             homepage.setClass(getBaseContext(), MainActivity.class);

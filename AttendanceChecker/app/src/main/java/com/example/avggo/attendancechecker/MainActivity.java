@@ -42,10 +42,14 @@ public class MainActivity extends AppCompatActivity{
 
     ActionBarDrawerToggle mDrawerToggle;                  // Declaring Action Bar Drawer Toggle
 
+    private String RID;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        RID = getIntent().getStringExtra("RID");
 
         //SET NAVIGATION TEXT
         NAME = getIntent().getStringExtra("DISPLAY_NAME");
@@ -53,7 +57,7 @@ public class MainActivity extends AppCompatActivity{
         toolbar = (Toolbar) findViewById(R.id.tool_bar);
         toolbar.setTitle("Attendance");
         setSupportActionBar(toolbar);
-        pagerAdapter =  new ViewPagerAdapter(getSupportFragmentManager(), tabList, TAB_NUMBERS);
+        pagerAdapter =  new ViewPagerAdapter(getSupportFragmentManager(), tabList, TAB_NUMBERS, RID);
         viewPager = (ViewPager) findViewById(R.id.pager);
         viewPager.setAdapter(pagerAdapter);
         viewPager.setPageTransformer(true, new AccordionTransformer());

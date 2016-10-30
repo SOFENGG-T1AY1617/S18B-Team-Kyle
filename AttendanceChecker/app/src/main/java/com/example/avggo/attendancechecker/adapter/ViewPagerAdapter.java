@@ -7,28 +7,36 @@ package com.example.avggo.attendancechecker.adapter;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import android.widget.Toast;
 
-import com.example.avggo.attendancechecker.ui.AttendanceList;
+import com.example.avggo.attendancechecker.ui.AttendanceFragment;
 
 public class ViewPagerAdapter extends FragmentStatePagerAdapter{
     CharSequence Titles[];
     int NumbOfTabs;
-    public ViewPagerAdapter(FragmentManager fm,CharSequence mTitles[], int mNumbOfTabsumb){
+    String RID;
+
+    public ViewPagerAdapter(FragmentManager fm,CharSequence mTitles[], int mNumbOfTabsumb, String RID){
         super(fm);
         this.Titles = mTitles;
         this.NumbOfTabs = mNumbOfTabsumb;
+        this.RID = RID;
     }
+
     public Fragment getItem(int position){
         if(position == 0){
-            AttendanceList al = new AttendanceList();
+            AttendanceFragment al = new AttendanceFragment();
+            al.setRID(RID);
             return al;
         }
         else if(position == 1){
-            AttendanceList al = new AttendanceList();
+            AttendanceFragment al = AttendanceFragment.newInstance(RID);
+            al.setRID(RID);
             return al;
         }
         else if(position == 2){
-            AttendanceList al = new AttendanceList();
+            AttendanceFragment al = AttendanceFragment.newInstance(RID);
+            al.setRID(RID);
             return al;
         }
         else return null;
