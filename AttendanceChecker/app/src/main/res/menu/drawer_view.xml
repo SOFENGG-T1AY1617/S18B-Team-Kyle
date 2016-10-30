@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group
+        android:id="@+id/nav_group_building"
+        android:checkableBehavior="single">
+
+        <item
+            android:id="@+id/nav_lasallehall"
+            android:icon="@android:drawable/ic_delete"
+            android:title="@string/nav_lasallehall"/>
+
+        <item
+            android:id="@+id/nav_yuchengco"
+            android:icon="@android:drawable/ic_delete"
+            android:title="@string/nav_yuchengco"/>
+
+        <item
+            android:id="@+id/nav_saintjoseph"
+            android:icon="@android:drawable/ic_delete"
+            android:title="@string/nav_saintjoseph"/>
+
+        <item
+            android:id="@+id/nav_velasco"
+            android:icon="@android:drawable/ic_delete"
+            android:title="@string/nav_velasco"/>
+
+        <item
+            android:id="@+id/nav_miguel"
+            android:icon="@android:drawable/ic_delete"
+            android:title="@string/nav_miguel"/>
+
+        <item
+            android:id="@+id/nav_gokongwei"
+            android:icon="@android:drawable/ic_delete"
+            android:title="@string/nav_gokongwei"/>
+
+        <item
+            android:id="@+id/nav_andrew"
+            android:icon="@android:drawable/ic_delete"
+            android:title="@string/nav_andrew"/>
+
+        <item
+            android:id="@+id/nav_razon"
+            android:icon="@android:drawable/ic_delete"
+            android:title="@string/nav_razon"/>
+    </group>
+
+    <group
+        android:id="@+id/nav_group_settings"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_help"
+            android:icon="@drawable/ic_help_black_24dp"
+            android:title="@string/nav_help" />
+
+        <item
+            android:id="@+id/nav_logout"
+            android:icon="@drawable/ic_input_black_24dp"
+            android:title="@string/nav_logout" />
+    </group>
+</menu>
