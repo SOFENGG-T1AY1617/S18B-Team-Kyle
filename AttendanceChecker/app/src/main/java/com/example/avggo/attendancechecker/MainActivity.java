@@ -11,6 +11,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.Toast;
 
 
 import com.ToxicBakery.viewpager.transforms.AccordionTransformer;
@@ -50,6 +51,7 @@ public class MainActivity extends AppCompatActivity{
         setContentView(R.layout.activity_main);
 
         RID = getIntent().getStringExtra("RID");
+        Toast.makeText(getBaseContext(), RID, Toast.LENGTH_LONG).show();
 
         //SET NAVIGATION TEXT
         NAME = getIntent().getStringExtra("DISPLAY_NAME");

@@ -15,11 +15,11 @@ public class CheckerAccount {
     public static final String COL_PW = "password";
     public static final String COL_RID = "rotation_id";
 
-    private String fname, mname, lname, un, email, pw;
-    private int checkerid, rid;
+    private String fname, mname, lname, un, email, pw, rid;
+    private int checkerid;
 
     public CheckerAccount(){}
-    public CheckerAccount(int checkerid, String fname, String mname, String lname, String un, String email, String pw, int rid){
+    public CheckerAccount(int checkerid, String fname, String mname, String lname, String un, String email, String pw, String rid){
         this.checkerid = checkerid;
         this.fname = fname;
         this.mname = mname;
@@ -58,7 +58,7 @@ public class CheckerAccount {
         return pw;
     }
 
-    public int getRid() {
+    public String getRid() {
         return rid;
     }
 
@@ -90,7 +90,7 @@ public class CheckerAccount {
         this.pw = pw;
     }
 
-    public void setRid(int rid) {
+    public void setRid(String rid) {
         this.rid = rid;
     }
 }

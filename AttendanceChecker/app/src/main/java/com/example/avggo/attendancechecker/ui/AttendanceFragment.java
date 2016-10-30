@@ -51,7 +51,7 @@ public class AttendanceFragment extends android.support.v4.app.Fragment implemen
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.activity_list, container, false);
 
-        Toast.makeText(v.getContext(), getRID(), Toast.LENGTH_LONG).show();
+        //Toast.makeText(v.getContext(), getRID(), Toast.LENGTH_LONG).show();
 
         db = new DatabaseOpenHelper(getContext());
 
@@ -91,6 +91,6 @@ public class AttendanceFragment extends android.support.v4.app.Fragment implemen
     }
 
     String getRID() {
-        return this.RID;
+        return(getArguments().getString("RID"));
     }
 }

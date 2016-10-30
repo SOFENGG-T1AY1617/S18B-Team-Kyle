@@ -88,7 +88,7 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
                 + CheckerAccount.COL_UN + " TEXT, "
                 + CheckerAccount.COL_EMAIL + " TEXT, "
                 + CheckerAccount.COL_PW + " TEXT, "
-                + CheckerAccount.COL_RID + " INTEGER);";
+                + CheckerAccount.COL_RID + " TEXT);";
         db.execSQL(sql);
         sql = "CREATE TABLE RotationRoom ("
                 + "rotation_id TEXT, "
@@ -301,7 +301,7 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
             u.setUn(c.getString(c.getColumnIndex(CheckerAccount.COL_UN)));
             u.setEmail(c.getString(c.getColumnIndex(CheckerAccount.COL_EMAIL)));
             u.setPw(c.getString(c.getColumnIndex(CheckerAccount.COL_PW)));
-            u.setRid(c.getInt(c.getColumnIndex(CheckerAccount.COL_RID)));
+            u.setRid(c.getString(c.getColumnIndex(CheckerAccount.COL_RID)));
 
         } else {
             u = null;
