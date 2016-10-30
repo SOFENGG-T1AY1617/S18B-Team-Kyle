@@ -55,12 +55,6 @@ public class AttendanceAdapter extends RecyclerView.Adapter<AttendanceAdapter.At
         ListItem item = listData.get(position);
         holder.title.setText(item.getTitle());
         holder.subTitle.setText(item.getSubTitle());
-        if(item.isFavourite()){
-            holder.secondaryIcon.setImageResource(R.drawable.ic_star_black_24dp);
-        }
-        else{
-            holder.secondaryIcon.setImageResource(R.drawable.ic_star_border_black_24dp);
-        }
     }
 
     @Override
@@ -73,7 +67,6 @@ public class AttendanceAdapter extends RecyclerView.Adapter<AttendanceAdapter.At
         private TextView title;
         private TextView subTitle;
         private ImageView thumbnail;
-        private ImageView secondaryIcon;
         private View container;
 
         public AttendanceHolder(View itemView) {
@@ -82,8 +75,6 @@ public class AttendanceAdapter extends RecyclerView.Adapter<AttendanceAdapter.At
             title = (TextView)itemView.findViewById(R.id.lbl_item_text);
             subTitle = (TextView)itemView.findViewById(R.id.lbl_item_sub_title);
             thumbnail = (ImageView)itemView.findViewById(R.id.im_item_icon);
-            secondaryIcon = (ImageView)itemView.findViewById(R.id.im_item_icon_secondary);
-            secondaryIcon.setOnClickListener(this);
             container = itemView.findViewById(R.id.cont_item_root);
             container.setOnClickListener(this);
         }

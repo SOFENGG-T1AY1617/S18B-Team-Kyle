@@ -21,8 +21,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import com.example.avggo.attendancechecker.DatabaseOpenHelper;
 import com.example.avggo.attendancechecker.R;
 import com.example.avggo.attendancechecker.adapter.AttendanceAdapter;
+import com.example.avggo.attendancechecker.model.Attendance;
 import com.example.avggo.attendancechecker.model.ListItem;
 import com.example.avggo.attendancechecker.model.TutorialData;
 
@@ -33,6 +35,8 @@ public class ListActivity extends AppCompatActivity implements AttendanceAdapter
     private static final String BUNDLE_EXTRAS = "BUNDLE_EXTRAS";
     private static final String EXTRA_QUOTE = "EXTRA_QUOTE";
     private static final String EXTRA_ATTR = "EXTRA_ATTR";
+
+    DatabaseOpenHelper db;
 
     private RecyclerView recView;
     private AttendanceAdapter adapter;
@@ -52,6 +56,8 @@ public class ListActivity extends AppCompatActivity implements AttendanceAdapter
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
+
+        db = new DatabaseOpenHelper(getBaseContext());
 
         toolbar = (Toolbar)findViewById(R.id.tool_bar);
         setSupportActionBar(toolbar);
@@ -79,7 +85,6 @@ public class ListActivity extends AppCompatActivity implements AttendanceAdapter
         //setUpNavDrawer();
         Bundle extras = getIntent().getBundleExtra("EXTRAS");
     }
-
 
     @Override
     public void onItemClick(int p) {

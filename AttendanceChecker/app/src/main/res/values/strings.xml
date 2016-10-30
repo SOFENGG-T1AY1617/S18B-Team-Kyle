@@ -2,4 +2,14 @@
     <string name="app_name">AttendanceChecker</string>
     <string name="openDrawer">Open Drawer </string>
     <string name="closeDrawer">Close Drawer </string>
+    <string-array name="code_names">
+        <item>Present</item>
+        <item>Absent</item>
+        <item>Late</item>
+        <item>Substitute</item>
+        <item>Seatwork</item>
+        <item>Vacant Room</item>
+        <item>Early Dismissal</item>
+        <item>Unscheduled Class</item>
+    </string-array>
 </resources>

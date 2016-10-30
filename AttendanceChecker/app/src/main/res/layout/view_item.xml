@@ -1,0 +1,308 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:background="@color/colorDefault"
+                android:id="@+id/upperLayout"
+                android:elevation="0dp"
+                android:layout_height="300dp"
+                android:padding="28px">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_weight="1"
+                    app:srcCompat="@drawable/winfred"
+                    android:id="@+id/facultyImage"
+                    android:elevation="0dp"
+                    android:layout_height="match_parent" />
+
+                <TextView
+                    android:text="Mr. Winfred Villaluna"
+                    android:layout_width="match_parent"
+                    android:id="@+id/facultyName"
+                    android:textAlignment="center"
+                    android:textSize="28sp"
+                    android:textColor="@color/black_overlay"
+                    android:layout_height="wrap_content"
+                    android:elevation="0dp" />
+
+                <TextView
+                    android:text="College of Computer Studies"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/facultyCollege"
+                    android:textAlignment="center"
+                    android:textSize="20sp"
+                    android:textColor="@color/black_overlay" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="15dp"
+                android:background="@color/colorDefault"
+                android:gravity="center_horizontal"
+                android:id="@+id/middleLayout"
+                android:padding="28px">
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="10dp"
+                    android:id="@+id/attendaceTitleLayout">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:srcCompat="@drawable/pen_icon"
+                        android:id="@+id/imageView4"
+                        android:elevation="1dp" />
+
+                    <TextView
+                        android:text="Attendance for Today"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/textView7"
+                        android:textStyle="normal|bold"
+                        android:textSize="24sp"
+                        android:textColor="@color/black_overlay"
+                        android:elevation="1dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/wrapperLayout">
+
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:id="@+id/codeLayout">
+
+                        <TextView
+                            android:text="Code: "
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/textView8"
+                            android:textSize="24sp"
+                            android:textColor="@color/black_overlay" />
+
+                        <Spinner
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/spinner"
+                            android:entries="@array/code_names"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="10dp"
+                        android:id="@+id/wrapperLayout1">
+
+                        <TextView
+                            android:text="Remarks:"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/remarksLabel"
+                            android:textSize="24sp"
+                            android:textColor="@color/black_overlay" />
+
+                        <EditText
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="textMultiLine"
+                            android:ems="10"
+                            android:id="@+id/remarksTextField" />
+
+                        <Button
+                            android:text="Submit"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/submitButton"
+                            android:background="@color/colorPrimary"
+                            android:layout_marginBottom="20px"/>
+                    </LinearLayout>
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/lowerlayout"
+                android:layout_marginTop="15dp"
+                android:elevation="1dp"
+                android:background="@color/colorDefault"
+                android:gravity="center"
+                android:padding="28px">
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/classDetailsTitleLayout"
+                    android:gravity="center"
+                    android:layout_gravity="center">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:srcCompat="@drawable/class_details"
+                        android:id="@+id/imageView2"
+                        android:elevation="1dp" />
+
+                    <TextView
+                        android:text="Class Details"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/textView5"
+                        android:textStyle="normal|bold"
+                        android:textSize="24sp"
+                        android:textColor="@color/black_overlay"
+                        android:elevation="1dp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_height="match_parent"
+                    android:id="@+id/wrapperLayout2"
+                    android:layout_width="275dp">
+
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="5dp">
+
+                        <TextView
+                            android:text="Course Code:"
+                            android:layout_width="110dp"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/courseCodeLbl"
+                            android:textStyle="normal|bold"
+                            android:textSize="18sp"
+                            android:textColor="@color/black_overlay"
+                            android:elevation="2dp" />
+
+                        <TextView
+                            android:text="SOFENGG"
+                            android:layout_width="160dp"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/courseCode"
+                            android:textSize="18sp"
+                            android:textColor="@color/black_overlay"
+                            android:layout_weight="1.86" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="5dp">
+
+                        <TextView
+                            android:text="Course Name:"
+                            android:layout_width="110dp"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/courseNamelbl"
+                            android:textStyle="normal|bold"
+                            android:textSize="18sp"
+                            android:textColor="@color/black_overlay"
+                            android:elevation="1dp" />
+
+                        <TextView
+                            android:text="Introduction to Software Engineering"
+                            android:layout_width="160dp"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/courseName"
+                            android:layout_weight="0.5"
+                            android:textSize="18sp"
+                            android:textColor="@color/black_overlay" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="5dp">
+
+                        <TextView
+                            android:text="Class Time:"
+                            android:layout_width="110dp"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/classTimelbl"
+                            android:textStyle="normal|bold"
+                            android:textSize="18sp"
+                            android:textColor="@color/black_overlay"
+                            android:elevation="1dp" />
+
+                        <TextView
+                            android:text="18:00 - 19:45"
+                            android:layout_width="160dp"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/classTime"
+                            android:layout_weight="0.5"
+                            android:textSize="18sp"
+                            android:textColor="@color/black_overlay" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="5dp">
+
+                        <TextView
+                            android:text="Room Number"
+                            android:layout_width="110dp"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/roomNumberlbl"
+                            android:textStyle="normal|bold"
+                            android:textSize="18sp"
+                            android:textColor="@color/black_overlay"
+                            android:elevation="1dp" />
+
+                        <TextView
+                            android:text="G202"
+                            android:layout_width="160dp"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/textView14"
+                            android:layout_weight="0.5"
+                            android:textSize="18sp"
+                            android:textColor="@color/black_overlay" />
+                    </LinearLayout>
+                </LinearLayout>
+
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

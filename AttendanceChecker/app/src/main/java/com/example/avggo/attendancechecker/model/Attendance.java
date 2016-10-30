@@ -15,13 +15,16 @@ public class Attendance {
     public static final String COL_DATE = "date";
     public static final String COL_TIME_SET = "time_set";
 
-    private String room, coursecode, fname, code, email, remarks;
+    private String room, coursecode, coursename, startTime, endTime, fname, code, email, remarks;
     private byte[] pic;
 
     public Attendance(){}
-    public Attendance(String room, String coursecode, String fname, String code, String email, String remarks, byte[] pic){
+    public Attendance(String room, String coursecode, String coursename, String startTime, String endTime, String fname, String code, String email, String remarks, byte[] pic){
         this.room = room;
         this.coursecode = coursecode;
+        this.coursename = coursename;
+        this.startTime = startTime;
+        this.endTime = endTime;
         this.fname = fname;
         this.code = code;
         this.email = email;
@@ -83,5 +86,29 @@ public class Attendance {
 
     public void setPic(byte[] pic) {
         this.pic = pic;
+    }
+
+    public String getCoursename() {
+        return coursename;
+    }
+
+    public void setCoursename(String coursename) {
+        this.coursename = coursename;
+    }
+
+    public String getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(String startTime) {
+        this.startTime = startTime;
+    }
+
+    public String getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
     }
 }
