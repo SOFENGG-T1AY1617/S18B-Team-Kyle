@@ -1,10 +1,13 @@
 package com.example.avggo.attendancechecker.ui;
 
-import android.support.v7.app.AppCompatActivity;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.widget.TextView;
 
 import com.example.avggo.attendancechecker.R;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class DetailActivity extends AppCompatActivity {
 
@@ -12,6 +15,7 @@ public class DetailActivity extends AppCompatActivity {
     private static final String EXTRA_QUOTE = "EXTRA_QUOTE";
     private static final String EXTRA_ATTR = "EXTRA_ATTR";
 
+    CircleImageView facultyImage;
     TextView facultyName, facultyCollege, courseCode, courseName, classTime, roomName;
 
     @Override
@@ -19,6 +23,7 @@ public class DetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.view_item);
 
+        facultyImage = (CircleImageView) findViewById(R.id.facultyImage);
         facultyName = (TextView) findViewById(R.id.facultyName);
         facultyCollege = (TextView) findViewById(R.id.facultyCollege);
         courseCode = (TextView) findViewById(R.id.courseCode);
@@ -26,18 +31,20 @@ public class DetailActivity extends AppCompatActivity {
         classTime = (TextView) findViewById(R.id.classTime);
         roomName = (TextView) findViewById(R.id.roomName);
 
-        String sfacultyName = getIntent().getStringExtra("FNAME");
-        String sfacultyCollege = getIntent().getStringExtra("COLLEGE");
-        String scourseCode = getIntent().getStringExtra("COURSE_C");
-        String scourseName = getIntent().getStringExtra("COURSE_N");
-        String sclassTime = getIntent().getStringExtra("TIME");
-        String sroomName = getIntent().getStringExtra("ROOM_N");
+        byte[] sFacultyImage = getIntent().getByteArrayExtra("PIC");
+        String sFacultyName = getIntent().getStringExtra("FNAME");
+        String sFacultyCollege = getIntent().getStringExtra("COLLEGE");
+        String sCourseCode = getIntent().getStringExtra("COURSE_C");
+        String sCourseName = getIntent().getStringExtra("COURSE_N");
+        String sClassTime = getIntent().getStringExtra("TIME");
+        String sRoomName = getIntent().getStringExtra("ROOM_N");
 
-        facultyName.setText(sfacultyName);
-        facultyCollege.setText(sfacultyCollege);
-        courseCode.setText(scourseCode);
-        courseName.setText(scourseName);
-        classTime.setText(sclassTime);
-        roomName.setText(sroomName);
+        facultyImage.setImageBitmap(BitmapFactory.decodeByteArray(sFacultyImage, 0, sFacultyImage.length));
+        facultyName.setText(sFacultyName);
+        facultyCollege.setText(sFacultyCollege);
+        courseCode.setText(sCourseCode);
+        courseName.setText(sCourseName);
+        classTime.setText(sClassTime);
+        roomName.setText(sRoomName);
     }
 }

@@ -75,6 +75,7 @@ public class AttendanceFragment extends android.support.v4.app.Fragment implemen
 
         Intent i = new Intent(getActivity(), DetailActivity.class);
 
+        i.putExtra("PIC", item.getPic());
         i.putExtra("FNAME", item.getFname());
         i.putExtra("COLLEGE", item.getCollege());
         i.putExtra("COURSE_C", item.getCoursecode());
