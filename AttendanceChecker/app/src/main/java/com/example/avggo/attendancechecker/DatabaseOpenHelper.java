@@ -9,7 +9,9 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.example.avggo.attendancechecker.model.Attendance;
 import com.example.avggo.attendancechecker.model.CheckerAccount;
@@ -58,7 +60,7 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
                 + "course_id INTEGER, "
                 + "faculty_id INTEGER, "
                 + "term_id INTEGER, "
-                + "section INTEGER, "
+                + "section TEXT, "
                 + "time_start TEXT, "
                 + "time_end TEXT, "
                 + "days TEXT, "
@@ -66,7 +68,6 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
         db.execSQL(sql);
         sql = "CREATE TABLE " + Attendance.TABLE_NAME  + " ("
                 + Attendance.COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-                + Attendance.COL_ROOM + " TEXT, "
                 + Attendance.COL_COID + " INTEGER, "
                 + Attendance.COL_FACULTYID + " INTEGER, "
                 + Attendance.COL_A_STATUS + " INTEGER, "
@@ -91,16 +92,16 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
                 + CheckerAccount.COL_RID + " TEXT);";
         db.execSQL(sql);
         sql = "CREATE TABLE RotationRoom ("
-                + "rotation_id TEXT, "
+                + "rotation_id INTEGER, "
                 + "room_id INTEGER);";
         db.execSQL(sql);
         sql = "CREATE TABLE Room ("
-                + "id INTEGER, "
+                + "id INTEGER PRIMARY KEY AUTOINCREMENT, "
                 + "name TEXT, "
                 + "building_id INTEGER);";
         db.execSQL(sql);
         sql = "CREATE TABLE Rotation ("
-                + "rotation_id TEXT PRIMARY KEY);";
+                + "id TEXT PRIMARY KEY);";
         db.execSQL(sql);
         sql = "CREATE TABLE Building ("
                 + "id INTEGER PRIMARY KEY AUTOINCREMENT, "
@@ -124,8 +125,9 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
         initializeDBData(db);
     }
 
-    private ArrayList<Attendance> getAssignedAttendance(String RID){
+    public ArrayList<Attendance> getAssignedAttendance(String RID, String building){
         String weekDay;
+        SQLiteDatabase db = getReadableDatabase();
         SimpleDateFormat dayFormat = new SimpleDateFormat("EEEE", Locale.US);
 
         Calendar calendar = Calendar.getInstance();
@@ -133,9 +135,65 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
 
         weekDay = weekDay.substring(0, 1);
 
-        String query = "SELECT * FROM ";
+        String query;
 
-        return null;
+        if(building.equals("NULL")) {
+            query = "select f.first_name, f.middle_name, f.last_name, f.college, c.code, c.name 'course_name', co.time_start, co.time_end, r.name 'room_name', f.pic " +
+                    "from (rotationroom rr inner join checkeraccount ca on rr.rotation_id = ca.rotation_id) " +
+                    "inner join room r on rr.room_id = r.id " +
+                    "inner join courseoffering co on r.id = co.room_id " +
+                    "inner join faculty f on co.faculty_id = f.id " +
+                    "inner join course c on co.course_id = c.id " +
+                    "where days like '%" + weekDay + "%' and rr.rotation_id = '" + RID + "';";
+        }
+        else{
+            query = "select f.first_name, f.middle_name, f.last_name, f.college, c.code, c.name 'course_name', co.time_start, co.time_end, r.name 'room_name', f.pic, b.name 'bname' " +
+                    "from (rotationroom rr inner join checkeraccount ca on rr.rotation_id = ca.rotation_id) " +
+                    "inner join room r on rr.room_id = r.id " +
+                    "inner join courseoffering co on r.id = co.room_id " +
+                    "inner join faculty f on co.faculty_id = f.id " +
+                    "inner join course c on co.course_id = c.id " +
+                    "inner join building b on r.building_id = b.id " +
+                    "where days like '%" + weekDay + "%' and bname = '" + building +"' and rr.rotation_id = '" + RID + "';";
+        }
+
+        Cursor c = db.rawQuery(query, null);
+
+        ArrayList<Attendance> assignedAttendance = new ArrayList<Attendance>();
+
+        if(c.moveToFirst()){
+            while (c.isAfterLast() == false) {
+                String first_name = c.getString(c.getColumnIndex("first_name"));
+                String middle_name = c.getString(c.getColumnIndex("middle_name"));
+                String last_name = c.getString(c.getColumnIndex("last_name"));
+                String college = c.getString(c.getColumnIndex("college"));
+                String code = c.getString(c.getColumnIndex("code"));
+                String course_name = c.getString(c.getColumnIndex("course_name"));
+                String time_start = c.getString(c.getColumnIndex("time_start"));
+                String time_end = c.getString(c.getColumnIndex("time_end"));
+                String room_name = c.getString(c.getColumnIndex("room_name"));
+                byte[] pic = c.getBlob(c.getColumnIndex("pic"));
+
+                Attendance a = new Attendance();
+
+                a.setFname(first_name + " " + middle_name + " " + last_name);
+                a.setCollege(college);
+                a.setCoursecode(code);
+                a.setCoursename(course_name);
+                a.setStartTime(time_start);
+                a.setEndTime(time_end);
+                a.setRoom(room_name);
+                a.setPic(pic);
+
+                assignedAttendance.add(a);
+
+                c.moveToNext();
+            }
+        }
+
+        c.close();
+
+        return assignedAttendance;
     }
 
     private void initializeDBData(SQLiteDatabase db){
@@ -160,26 +218,38 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
 
         sql = "INSERT INTO Building (\"name\") VALUES ('Gokongwei');";
         db.execSQL(sql);
+        sql = "INSERT INTO Building (\"name\") VALUES ('Andrew');";
+        db.execSQL(sql);
 
-        sql = "INSERT INTO Room (\"name\", \"building_id\") VALUES ('G208', '1');";
+        sql = "INSERT INTO Room (\"name\", \"building_id\") VALUES ('G208', '1');"; //1
         db.execSQL(sql);
-        sql = "INSERT INTO Room (\"name\", \"building_id\") VALUES ('G205', '1');";
+        sql = "INSERT INTO Room (\"name\", \"building_id\") VALUES ('G205', '1');"; //2
         db.execSQL(sql);
-        sql = "INSERT INTO Room (\"name\", \"building_id\") VALUES ('G209', '1');";
+        sql = "INSERT INTO Room (\"name\", \"building_id\") VALUES ('G209', '1');"; //3
         db.execSQL(sql);
-        sql = "INSERT INTO Room (\"name\", \"building_id\") VALUES ('G306A', '1');";
+        sql = "INSERT INTO Room (\"name\", \"building_id\") VALUES ('G306A', '1');"; //4
         db.execSQL(sql);
-        sql = "INSERT INTO Room (\"name\", \"building_id\") VALUES ('G302A', '1');";
+        sql = "INSERT INTO Room (\"name\", \"building_id\") VALUES ('G302A', '1');"; //5
         db.execSQL(sql);
-        sql = "INSERT INTO Room (\"name\", \"building_id\") VALUES ('G302B', '1');";
+        sql = "INSERT INTO Room (\"name\", \"building_id\") VALUES ('G302B', '1');"; //6
         db.execSQL(sql);
-        sql = "INSERT INTO Room (\"name\", \"building_id\") VALUES ('G201', '1');";
+        sql = "INSERT INTO Room (\"name\", \"building_id\") VALUES ('G201', '1');"; //7
         db.execSQL(sql);
-        sql = "INSERT INTO Room (\"name\", \"building_id\") VALUES ('G204', '1');";
+        sql = "INSERT INTO Room (\"name\", \"building_id\") VALUES ('G204', '1');"; //8
         db.execSQL(sql);
-        sql = "INSERT INTO Room (\"name\", \"building_id\") VALUES ('G213', '1');";
+        sql = "INSERT INTO Room (\"name\", \"building_id\") VALUES ('G213', '1');"; //9
         db.execSQL(sql);
-        sql = "INSERT INTO Room (\"name\", \"building_id\") VALUES ('G206', '1');";
+        sql = "INSERT INTO Room (\"name\", \"building_id\") VALUES ('G206', '1');"; //10
+        db.execSQL(sql);
+        sql = "INSERT INTO Room (\"name\", \"building_id\") VALUES ('A1101', '2');"; //11
+        db.execSQL(sql);
+        sql = "INSERT INTO Room (\"name\", \"building_id\") VALUES ('A1102', '2');"; //12
+        db.execSQL(sql);
+        sql = "INSERT INTO Room (\"name\", \"building_id\") VALUES ('A1103', '2');"; //13
+        db.execSQL(sql);
+        sql = "INSERT INTO Room (\"name\", \"building_id\") VALUES ('All04', '2');"; //14
+        db.execSQL(sql);
+        sql = "INSERT INTO Room (\"name\", \"building_id\") VALUES ('A1105', '2');"; //15
         db.execSQL(sql);
 
         sql = "INSERT INTO CourseOffering (\"course_id\", \"faculty_id\", \"term_id\", \"section\", \"time_start\", \"time_end\", \"days\", \"room_id\") VALUES ('1', '1', '1', 'S17', '12:45', '14:15', 'TH', '1');";
@@ -212,16 +282,20 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
         db.execSQL(sql);
         sql = "INSERT INTO CourseOffering (\"course_id\", \"faculty_id\", \"term_id\", \"section\", \"time_start\", \"time_end\", \"days\", \"room_id\") VALUES ('5', '3', '1', 'S19', '11:00', '12:30', 'TH', '8');";
         db.execSQL(sql);
+        sql = "INSERT INTO CourseOffering (\"course_id\", \"faculty_id\", \"term_id\", \"section\", \"time_start\", \"time_end\", \"days\", \"room_id\") VALUES ('5', '3', '1', 'S21', '11:00', '12:30', 'MW', '11');";
+        db.execSQL(sql);
+        sql = "INSERT INTO CourseOffering (\"course_id\", \"faculty_id\", \"term_id\", \"section\", \"time_start\", \"time_end\", \"days\", \"room_id\") VALUES ('5', '3', '1', 'S21', '16:15', '17:45', 'MW', '12');";
+        db.execSQL(sql);
 
-        sql = "INSERT INTO Rotation (\"rotation_id\") VALUES ('A');";
+        sql = "INSERT INTO Rotation (\"id\") VALUES ('A');";
         db.execSQL(sql);
-        sql = "INSERT INTO Rotation (\"rotation_id\") VALUES ('B');";
+        sql = "INSERT INTO Rotation (\"id\") VALUES ('B');";
         db.execSQL(sql);
-        sql = "INSERT INTO Rotation (\"rotation_id\") VALUES ('C');";
+        sql = "INSERT INTO Rotation (\"id\") VALUES ('C');";
         db.execSQL(sql);
-        sql = "INSERT INTO Rotation (\"rotation_id\") VALUES ('D');";
+        sql = "INSERT INTO Rotation (\"id\") VALUES ('D');";
         db.execSQL(sql);
-        sql = "INSERT INTO Rotation (\"rotation_id\") VALUES ('E');";
+        sql = "INSERT INTO Rotation (\"id\") VALUES ('E');";
         db.execSQL(sql);
 
         sql = "INSERT INTO RotationRoom (\"rotation_id\", \"room_id\") VALUES ('A', '1');";
@@ -233,6 +307,10 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
         sql = "INSERT INTO RotationRoom (\"rotation_id\", \"room_id\") VALUES ('A', '4');";
         db.execSQL(sql);
         sql = "INSERT INTO RotationRoom (\"rotation_id\", \"room_id\") VALUES ('A', '5');";
+        db.execSQL(sql);
+        sql = "INSERT INTO RotationRoom (\"rotation_id\", \"room_id\") VALUES ('A', '11');";
+        db.execSQL(sql);
+        sql = "INSERT INTO RotationRoom (\"rotation_id\", \"room_id\") VALUES ('A', '12');";
         db.execSQL(sql);
 
         ContentValues cv = new ContentValues();
@@ -250,9 +328,9 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
         db.insert(Faculty.TABLE_NAME, null, cv);
 
         cv = new ContentValues();
-        cv.put(Faculty.COL_FNAME, "Salvador");
+        cv.put(Faculty.COL_FNAME, "Florante");
         cv.put(Faculty.COL_MNAME, "R.");
-        cv.put(Faculty.COL_LNAME, "Florante");
+        cv.put(Faculty.COL_LNAME, "Salvador");
         cv.put(Faculty.COL_COLLEGE, "College of Computer Studies");
         cv.put(Faculty.COL_EMAIL, "florante.salvador@dlsu.edu.ph");
         cv.put(Faculty.COL_MOBNUM, "09175148169");

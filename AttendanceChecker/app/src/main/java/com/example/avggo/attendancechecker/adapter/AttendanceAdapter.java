@@ -1,19 +1,26 @@
 package com.example.avggo.attendancechecker.adapter;
 
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.media.Image;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.avggo.attendancechecker.R;
+import com.example.avggo.attendancechecker.model.Attendance;
 import com.example.avggo.attendancechecker.model.ListItem;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * Created by avggo on 10/12/2016.
@@ -21,7 +28,7 @@ import java.util.List;
 
 public class AttendanceAdapter extends RecyclerView.Adapter<AttendanceAdapter.AttendanceHolder>{
 
-    private List<ListItem> listData;
+    private List<Attendance> listData;
     private LayoutInflater inflater;
 
     private ItemClickCallback itemClickCallback;
@@ -39,7 +46,7 @@ public class AttendanceAdapter extends RecyclerView.Adapter<AttendanceAdapter.At
         this.itemClickCallback = itemClickCallback;
     }
 
-    public AttendanceAdapter(List<ListItem> listData, Context c){
+    public AttendanceAdapter(List<Attendance> listData, Context c){
         this.inflater = LayoutInflater.from(c);
         this.listData = listData;
     }
@@ -52,9 +59,12 @@ public class AttendanceAdapter extends RecyclerView.Adapter<AttendanceAdapter.At
 
     @Override
     public void onBindViewHolder(AttendanceHolder holder, int position) {
-        ListItem item = listData.get(position);
-        holder.title.setText(item.getTitle());
-        holder.subTitle.setText(item.getSubTitle());
+        Attendance item = listData.get(position);
+        holder.title.setText(item.getRoom());
+        holder.subTitle.setText(item.getFname());
+        int i = R.drawable.bulos;
+        Log.d("TEST", Integer.toString(i));
+        holder.thumbnail.setImageResource(R.drawable.bulos);
     }
 
     @Override
@@ -66,7 +76,7 @@ public class AttendanceAdapter extends RecyclerView.Adapter<AttendanceAdapter.At
 
         private TextView title;
         private TextView subTitle;
-        private ImageView thumbnail;
+        private CircleImageView thumbnail;
         private View container;
 
         public AttendanceHolder(View itemView) {
@@ -74,7 +84,7 @@ public class AttendanceAdapter extends RecyclerView.Adapter<AttendanceAdapter.At
 
             title = (TextView)itemView.findViewById(R.id.lbl_item_text);
             subTitle = (TextView)itemView.findViewById(R.id.lbl_item_sub_title);
-            thumbnail = (ImageView)itemView.findViewById(R.id.im_item_icon);
+            thumbnail = (CircleImageView) itemView.findViewById(R.id.im_item_icon);
             container = itemView.findViewById(R.id.cont_item_root);
             container.setOnClickListener(this);
         }

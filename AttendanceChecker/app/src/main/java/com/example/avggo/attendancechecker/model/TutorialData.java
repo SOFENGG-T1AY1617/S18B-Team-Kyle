@@ -33,14 +33,13 @@ public class TutorialData {
 
         //Repeat process 4 times, so that we have enough data to demonstrate a scrollable
         //RecyclerView
-        for (int x = 0; x < 4; x++) {
-            //create ListItem with dummy data, then add them to our List
-            for (int i = 0; i < titles.length; i++) {
-                ListItem item = new ListItem();
-                item.setTitle(titles[i]);
-                item.setSubTitle(subTitles[i]);
-                data.add(item);
-            }
+
+        //create ListItem with dummy data, then add them to our List
+        for (int i = 0; i < titles.length; i++) {
+            ListItem item = new ListItem();
+            item.setTitle(titles[i]);
+            item.setSubTitle(subTitles[i]);
+            data.add(item);
         }
 
         return data;

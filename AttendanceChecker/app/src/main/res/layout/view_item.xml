@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:descendantFocusability="beforeDescendants"
+    android:focusableInTouchMode="true"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -22,7 +24,7 @@
                 android:id="@+id/upperLayout"
                 android:elevation="0dp"
                 android:layout_height="300dp"
-                android:padding="28px">
+                android:padding="36dp">
 
                 <ImageView
                     android:layout_width="match_parent"
@@ -61,7 +63,7 @@
                 android:background="@color/colorDefault"
                 android:gravity="center_horizontal"
                 android:id="@+id/middleLayout"
-                android:padding="28px">
+                android:padding="36dp">
 
                 <LinearLayout
                     android:orientation="horizontal"
@@ -108,7 +110,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:id="@+id/textView8"
-                            android:textSize="24sp"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
                             android:textColor="@color/black_overlay" />
 
                         <Spinner
@@ -130,7 +133,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:id="@+id/remarksLabel"
-                            android:textSize="24sp"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
                             android:textColor="@color/black_overlay" />
 
                         <EditText
@@ -142,10 +146,11 @@
 
                         <Button
                             android:text="Submit"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
+                            android:layout_width="88dp"
+                            android:layout_height="45dp"
                             android:id="@+id/submitButton"
-                            android:background="@color/colorPrimary"
+                            android:theme="@style/AppTheme.Button"
+                            android:layout_gravity="center"
                             android:layout_marginBottom="20px"/>
                     </LinearLayout>
                 </LinearLayout>
@@ -161,7 +166,7 @@
                 android:elevation="1dp"
                 android:background="@color/colorDefault"
                 android:gravity="center"
-                android:padding="28px">
+                android:padding="36dp">
 
                 <LinearLayout
                     android:orientation="horizontal"
@@ -208,7 +213,7 @@
                             android:layout_height="wrap_content"
                             android:id="@+id/courseCodeLbl"
                             android:textStyle="normal|bold"
-                            android:textSize="18sp"
+                            android:textSize="16sp"
                             android:textColor="@color/black_overlay"
                             android:elevation="2dp" />
 
@@ -216,8 +221,9 @@
                             android:text="SOFENGG"
                             android:layout_width="160dp"
                             android:layout_height="wrap_content"
+                            android:layout_marginLeft="10px"
                             android:id="@+id/courseCode"
-                            android:textSize="18sp"
+                            android:textSize="16sp"
                             android:textColor="@color/black_overlay"
                             android:layout_weight="1.86" />
                     </LinearLayout>
@@ -234,7 +240,7 @@
                             android:layout_height="wrap_content"
                             android:id="@+id/courseNamelbl"
                             android:textStyle="normal|bold"
-                            android:textSize="18sp"
+                            android:textSize="16sp"
                             android:textColor="@color/black_overlay"
                             android:elevation="1dp" />
 
@@ -243,8 +249,9 @@
                             android:layout_width="160dp"
                             android:layout_height="wrap_content"
                             android:id="@+id/courseName"
+                            android:layout_marginLeft="10px"
                             android:layout_weight="0.5"
-                            android:textSize="18sp"
+                            android:textSize="16sp"
                             android:textColor="@color/black_overlay" />
                     </LinearLayout>
 
@@ -260,7 +267,7 @@
                             android:layout_height="wrap_content"
                             android:id="@+id/classTimelbl"
                             android:textStyle="normal|bold"
-                            android:textSize="18sp"
+                            android:textSize="16sp"
                             android:textColor="@color/black_overlay"
                             android:elevation="1dp" />
 
@@ -269,8 +276,9 @@
                             android:layout_width="160dp"
                             android:layout_height="wrap_content"
                             android:id="@+id/classTime"
+                            android:layout_marginLeft="10px"
                             android:layout_weight="0.5"
-                            android:textSize="18sp"
+                            android:textSize="16sp"
                             android:textColor="@color/black_overlay" />
                     </LinearLayout>
 
@@ -281,12 +289,12 @@
                         android:layout_marginTop="5dp">
 
                         <TextView
-                            android:text="Room Number"
+                            android:text="Room"
                             android:layout_width="110dp"
                             android:layout_height="wrap_content"
                             android:id="@+id/roomNumberlbl"
                             android:textStyle="normal|bold"
-                            android:textSize="18sp"
+                            android:textSize="16sp"
                             android:textColor="@color/black_overlay"
                             android:elevation="1dp" />
 
@@ -294,9 +302,10 @@
                             android:text="G202"
                             android:layout_width="160dp"
                             android:layout_height="wrap_content"
-                            android:id="@+id/textView14"
+                            android:id="@+id/roomName"
+                            android:layout_marginLeft="10px"
                             android:layout_weight="0.5"
-                            android:textSize="18sp"
+                            android:textSize="16sp"
                             android:textColor="@color/black_overlay" />
                     </LinearLayout>
                 </LinearLayout>

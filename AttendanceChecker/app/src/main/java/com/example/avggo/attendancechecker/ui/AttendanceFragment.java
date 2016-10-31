@@ -14,6 +14,7 @@ import android.widget.Toast;
 import com.example.avggo.attendancechecker.DatabaseOpenHelper;
 import com.example.avggo.attendancechecker.R;
 import com.example.avggo.attendancechecker.adapter.AttendanceAdapter;
+import com.example.avggo.attendancechecker.model.Attendance;
 import com.example.avggo.attendancechecker.model.ListItem;
 import com.example.avggo.attendancechecker.model.TutorialData;
 
@@ -35,12 +36,13 @@ public class AttendanceFragment extends android.support.v4.app.Fragment implemen
     private DatabaseOpenHelper db;
     private String RID;
 
-    public static AttendanceFragment newInstance(String RID) {
+    public static AttendanceFragment newInstance(String RID, String building) {
         AttendanceFragment f = new AttendanceFragment();
 
         Bundle args = new Bundle();
 
         args.putString("RID", RID);
+        args.putString("BUILDING", building);
         f.setArguments(args);
 
         return(f);
@@ -55,12 +57,12 @@ public class AttendanceFragment extends android.support.v4.app.Fragment implemen
 
         db = new DatabaseOpenHelper(getContext());
 
-        listData = (ArrayList) TutorialData.getListData();
+        listData = (ArrayList) db.getAssignedAttendance(getRID(), getBuilding());
 
         recView = (RecyclerView) v.findViewById(R.id.rec_list);
         recView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        adapter = new AttendanceAdapter(TutorialData.getListData(), getActivity());
+        adapter = new AttendanceAdapter(db.getAssignedAttendance(getRID(), getBuilding()), getActivity());
         recView.setAdapter(adapter);
         adapter.setItemClickCallback(this);
 
@@ -69,15 +71,17 @@ public class AttendanceFragment extends android.support.v4.app.Fragment implemen
 
     @Override
     public void onItemClick(int p) {
-        ListItem item = (ListItem) listData.get(p);
+        Attendance item = (Attendance) listData.get(p);
 
         Intent i = new Intent(getActivity(), DetailActivity.class);
 
-        Bundle extras = new Bundle();
-        extras.putString(EXTRA_QUOTE, item.getTitle());
-        extras.putString(EXTRA_ATTR, item.getSubTitle());
+        i.putExtra("FNAME", item.getFname());
+        i.putExtra("COLLEGE", item.getCollege());
+        i.putExtra("COURSE_C", item.getCoursecode());
+        i.putExtra("COURSE_N", item.getCoursename());
+        i.putExtra("TIME", item.getStartTime() + " - " + item.getEndTime());
+        i.putExtra("ROOM_N", item.getRoom());
 
-        i.putExtra(BUNDLE_EXTRAS, extras);
         startActivity(i);
     }
 
@@ -92,5 +96,8 @@ public class AttendanceFragment extends android.support.v4.app.Fragment implemen
 
     String getRID() {
         return(getArguments().getString("RID"));
+    }
+    String getBuilding() {
+        return(getArguments().getString("BUILDING"));
     }
 }

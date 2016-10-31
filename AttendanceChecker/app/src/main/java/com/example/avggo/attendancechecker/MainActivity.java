@@ -1,6 +1,11 @@
 package com.example.avggo.attendancechecker;
 
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.annotation.IdRes;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
@@ -9,14 +14,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
-<<<<<<< HEAD
-
-=======
->>>>>>> e5da41edc56ccfd09139fc6a6b8dbab19adb3e52
 
 import com.ToxicBakery.viewpager.transforms.AccordionTransformer;
 import com.example.avggo.attendancechecker.adapter.ViewPagerAdapter;
+import com.example.avggo.attendancechecker.model.Attendance;
+
+import java.io.ByteArrayOutputStream;
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
     private Toolbar toolbar;
@@ -40,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
     ActionBarDrawerToggle mDrawerToggle;                  // Declaring Action Bar Drawer Toggle
 
     private String RID;
+    private DatabaseOpenHelper db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         RID = getIntent().getStringExtra("RID");
-        Toast.makeText(getBaseContext(), RID, Toast.LENGTH_LONG).show();
+        //Toast.makeText(getBaseContext(), RID, Toast.LENGTH_LONG).show();
 
         //SET NAVIGATION TEXT
         NAME = getIntent().getStringExtra("DISPLAY_NAME");
@@ -69,8 +76,36 @@ public class MainActivity extends AppCompatActivity {
         });
         tabSlider.setViewPager(viewPager);
 
+        db = new DatabaseOpenHelper(getBaseContext());
+
         //initialize drawer
         initializeDrawer();
+
+        setMenuCounter(R.id.nav_allbuildings, db.getAssignedAttendance(RID, "NULL").size());
+        setMenuCounter(R.id.nav_gokongwei, db.getAssignedAttendance(RID, "Gokongwei").size());
+        setMenuCounter(R.id.nav_lasallehall, db.getAssignedAttendance(RID, "La Salle Hall").size());
+        setMenuCounter(R.id.nav_yuchengco, db.getAssignedAttendance(RID, "Yuchengco").size());
+        setMenuCounter(R.id.nav_saintjoseph, db.getAssignedAttendance(RID, "Saint Joseph").size());
+        setMenuCounter(R.id.nav_velasco, db.getAssignedAttendance(RID, "Velasco").size());
+        setMenuCounter(R.id.nav_miguel, db.getAssignedAttendance(RID, "Miguel").size());
+        setMenuCounter(R.id.nav_andrew, db.getAssignedAttendance(RID, "Andrew").size());
+        setMenuCounter(R.id.nav_razon, db.getAssignedAttendance(RID, "Razon").size());
+    }
+
+    private void filterByBuilding(String building){
+        pagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(), tabList, TAB_NUMBERS, RID, building);
+        viewPager = (ViewPager) findViewById(R.id.pager);
+        viewPager.setAdapter(pagerAdapter);
+        viewPager.setPageTransformer(true, new AccordionTransformer());
+        viewPager.setCurrentItem(0);
+        tabSlider = (SlidingTabLayout) findViewById(R.id.tabs);
+        tabSlider.setDistributeEvenly(true);
+        tabSlider.setCustomTabColorizer(new SlidingTabLayout.TabColorizer() {
+            public int getIndicatorColor(int position) {
+                return getResources().getColor(R.color.tabsScrollColor);
+            }
+        });
+        tabSlider.setViewPager(viewPager);
     }
 
     public void initializeDrawer() {
@@ -80,7 +115,19 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onNavigationItemSelected(MenuItem menuItem) {
                 menuItem.setChecked(true);
-                Toast.makeText(getApplicationContext(), menuItem.getTitle(), Toast.LENGTH_SHORT).show();
+
+                if(menuItem.getTitle().equals("Log Out")){
+                    goToLogin();
+                }
+                else if(menuItem.getTitle().equals("All Buildings")){
+                    filterByBuilding("NULL");
+                }
+                else if(menuItem.getTitle().equals("Gokongwei")){
+                    filterByBuilding("Gokongwei");
+                }
+                else if(menuItem.getTitle().equals("Andrew")){
+                    filterByBuilding("Andrew");
+                }
                 ((DrawerLayout) findViewById(R.id.DrawerLayout)).closeDrawers();
                 return true;
             }
@@ -94,6 +141,10 @@ public class MainActivity extends AppCompatActivity {
                 super.onDrawerOpened(drawerView);
                 // code here will execute once the drawer is opened( As I dont want anything happened whe drawer is
                 // open I am not going to put anything here)
+                TextView name = (TextView) findViewById(R.id.name);
+                name.setText(NAME);
+                TextView email = (TextView) findViewById(R.id.email);
+                email.setText(EMAIL);
             }
 
             @Override
@@ -105,5 +156,17 @@ public class MainActivity extends AppCompatActivity {
 
         Drawer.addDrawerListener(mDrawerToggle); // Drawer Listener set to the Drawer toggle
         mDrawerToggle.syncState();               // Finally we set the drawer toggle sync State
+    }
+
+    private void setMenuCounter(@IdRes int itemId, int count) {
+        TextView view = (TextView) mNavigationView.getMenu().findItem(itemId).getActionView();
+        view.setText(count > 0 ? String.valueOf(count) : null);
+    }
+
+    public void goToLogin(){
+        Intent loginscreen = new Intent(this, LoginActivity.class);
+        loginscreen.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(loginscreen);
+        this.finish();
     }
 }

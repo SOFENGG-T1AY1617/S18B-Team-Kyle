@@ -3,13 +3,14 @@ package com.example.avggo.attendancechecker;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewAnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.avggo.attendancechecker.model.CheckerAccount;
-import com.example.avggo.attendancechecker.ui.ListActivity;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -28,6 +29,35 @@ public class LoginActivity extends AppCompatActivity {
         db = new DatabaseOpenHelper(getBaseContext());
         usernameET = (EditText)findViewById(R.id.username_et);
         passwordET = (EditText)findViewById(R.id.password_et);
+
+        usernameET.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if(event.getAction()==MotionEvent.ACTION_DOWN) {
+                    ViewAnimationUtils.createCircularReveal(usernameET,
+                            (int) event.getX(),
+                            (int) event.getY(),
+                            0,
+                            usernameET.getHeight() * 2).start();
+                }
+                return false;
+            }
+        });
+
+        passwordET.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if(event.getAction()==MotionEvent.ACTION_DOWN) {
+                    ViewAnimationUtils.createCircularReveal(passwordET,
+                            (int) event.getX(),
+                            (int) event.getY(),
+                            0,
+                            passwordET.getHeight() * 2).start();
+                }
+                return false;
+            }
+        });
+
         login = (Button)findViewById(R.id.login_btn);
 
         login.setOnClickListener(new View.OnClickListener() {
@@ -40,12 +70,13 @@ public class LoginActivity extends AppCompatActivity {
                 CheckerAccount u = db.checkIfUserExists(username);
 
                 if(username.equals("") || password.equals("")) {
-                    Toast.makeText(getBaseContext(), "Please fill up all the fields", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Please fill up all the fields.", Toast.LENGTH_SHORT).show();
+                    clearFields();
                 }
                 else {
                     if (u == null) {
-                        Toast.makeText(v.getContext(), "Incorrect username or password", Toast.LENGTH_SHORT).show();
-
+                        Toast.makeText(getApplicationContext(), "Incorrect username or password.", Toast.LENGTH_SHORT).show();
+                        clearFields();
                     }
                     else {
                         String checkPassword = u.getPw();
@@ -57,15 +88,23 @@ public class LoginActivity extends AppCompatActivity {
                             homepage.putExtra("EMAIL", u.getEmail());
                             homepage.putExtra("RID", u.getRid());
 
-                            Toast.makeText(v.getContext(), "Welcome " + CHECKER_NAME, Toast.LENGTH_LONG).show();
+                            Toast.makeText(getApplicationContext(), "Welcome " + CHECKER_NAME + "!", Toast.LENGTH_LONG).show();
                             homepage.setClass(getBaseContext(), MainActivity.class);
                             startActivity(homepage);
+                            clearFields();
                         }
-                        else
-                            Toast.makeText(v.getContext(), "Incorrect username or password", Toast.LENGTH_LONG).show();
+                        else {
+                            Toast.makeText(getApplicationContext(), "Incorrect username or password.", Toast.LENGTH_LONG).show();
+                            clearFields();
+                        }
                     }
                 }
             }
         });
+    }
+
+    private void clearFields(){
+        usernameET.setText("");
+        passwordET.setText("");
     }
 }

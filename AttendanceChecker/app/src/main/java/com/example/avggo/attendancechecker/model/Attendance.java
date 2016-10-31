@@ -7,7 +7,6 @@ package com.example.avggo.attendancechecker.model;
 public class Attendance {
     public static final String TABLE_NAME = "Attendance";
     public static final String COL_ID = "id";
-    public static final String COL_ROOM = "room";
     public static final String COL_COID = "courseoffering_id";
     public static final String COL_FACULTYID = "faculty_id";
     public static final String COL_A_STATUS = "status_id";
@@ -15,7 +14,16 @@ public class Attendance {
     public static final String COL_DATE = "date";
     public static final String COL_TIME_SET = "time_set";
 
-    private String room, coursecode, coursename, startTime, endTime, fname, code, email, remarks;
+    private String room;
+    private String coursecode;
+    private String coursename;
+    private String startTime;
+    private String endTime;
+    private String fname;
+    private String code;
+    private String email;
+    private String remarks;
+    private String college;
     private byte[] pic;
 
     public Attendance(){}
@@ -110,5 +118,12 @@ public class Attendance {
 
     public void setEndTime(String endTime) {
         this.endTime = endTime;
+    }
+    public String getCollege() {
+        return college;
+    }
+
+    public void setCollege(String college) {
+        this.college = college;
     }
 }
