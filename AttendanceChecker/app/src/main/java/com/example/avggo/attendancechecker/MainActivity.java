@@ -1,11 +1,7 @@
 package com.example.avggo.attendancechecker;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.annotation.IdRes;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.ViewPager;
@@ -16,14 +12,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.ToxicBakery.viewpager.transforms.AccordionTransformer;
 import com.example.avggo.attendancechecker.adapter.ViewPagerAdapter;
-import com.example.avggo.attendancechecker.model.Attendance;
-
-import java.io.ByteArrayOutputStream;
-import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
     private Toolbar toolbar;
@@ -93,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
         setMenuCounter(R.id.nav_razon, db.getAssignedAttendance(RID, "Razon").size());
     }
 
-    private void filterByBuilding(String building){
+    private void filterByBuilding(String building) {
         pagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(), tabList, TAB_NUMBERS, RID, building);
         viewPager = (ViewPager) findViewById(R.id.pager);
         viewPager.setAdapter(pagerAdapter);
@@ -117,16 +108,13 @@ public class MainActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(MenuItem menuItem) {
                 menuItem.setChecked(true);
 
-                if(menuItem.getTitle().equals("Log Out")){
+                if (menuItem.getTitle().equals("Log Out")) {
                     goToLogin();
-                }
-                else if(menuItem.getTitle().equals("All Buildings")){
+                } else if (menuItem.getTitle().equals("All Buildings")) {
                     filterByBuilding("NULL");
-                }
-                else if(menuItem.getTitle().equals("Gokongwei")){
+                } else if (menuItem.getTitle().equals("Gokongwei")) {
                     filterByBuilding("Gokongwei");
-                }
-                else if(menuItem.getTitle().equals("Andrew")){
+                } else if (menuItem.getTitle().equals("Andrew")) {
                     filterByBuilding("Andrew");
                 }
                 ((DrawerLayout) findViewById(R.id.DrawerLayout)).closeDrawers();
@@ -164,7 +152,7 @@ public class MainActivity extends AppCompatActivity {
         view.setText(count > 0 ? String.valueOf(count) : null);
     }
 
-    public void goToLogin(){
+    public void goToLogin() {
         Intent loginscreen = new Intent(this, LoginActivity.class);
         loginscreen.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(loginscreen);

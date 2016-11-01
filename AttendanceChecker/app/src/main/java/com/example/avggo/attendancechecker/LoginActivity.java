@@ -1,8 +1,8 @@
 package com.example.avggo.attendancechecker;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewAnimationUtils;
@@ -27,13 +27,13 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         db = new DatabaseOpenHelper(getBaseContext());
-        usernameET = (EditText)findViewById(R.id.username_et);
-        passwordET = (EditText)findViewById(R.id.password_et);
+        usernameET = (EditText) findViewById(R.id.username_et);
+        passwordET = (EditText) findViewById(R.id.password_et);
 
         usernameET.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                if(event.getAction()==MotionEvent.ACTION_DOWN) {
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
                     ViewAnimationUtils.createCircularReveal(usernameET,
                             (int) event.getX(),
                             (int) event.getY(),
@@ -47,7 +47,7 @@ public class LoginActivity extends AppCompatActivity {
         passwordET.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                if(event.getAction()==MotionEvent.ACTION_DOWN) {
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
                     ViewAnimationUtils.createCircularReveal(passwordET,
                             (int) event.getX(),
                             (int) event.getY(),
@@ -58,7 +58,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        login = (Button)findViewById(R.id.login_btn);
+        login = (Button) findViewById(R.id.login_btn);
 
         login.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -69,16 +69,14 @@ public class LoginActivity extends AppCompatActivity {
                 String password = passwordET.getText().toString();
                 CheckerAccount u = db.checkIfUserExists(username);
 
-                if(username.equals("") || password.equals("")) {
+                if (username.equals("") || password.equals("")) {
                     Toast.makeText(getApplicationContext(), "Please fill up all the fields.", Toast.LENGTH_SHORT).show();
                     clearFields();
-                }
-                else {
+                } else {
                     if (u == null) {
                         Toast.makeText(getApplicationContext(), "Incorrect username or password.", Toast.LENGTH_SHORT).show();
                         clearFields();
-                    }
-                    else {
+                    } else {
                         String checkPassword = u.getPw();
                         if (password.equals(checkPassword)) {
                             CHECKER_ID = u.getCheckerid();
@@ -92,8 +90,7 @@ public class LoginActivity extends AppCompatActivity {
                             homepage.setClass(getBaseContext(), MainActivity.class);
                             startActivity(homepage);
                             clearFields();
-                        }
-                        else {
+                        } else {
                             Toast.makeText(getApplicationContext(), "Incorrect username or password.", Toast.LENGTH_LONG).show();
                             clearFields();
                         }
@@ -103,7 +100,7 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    private void clearFields(){
+    private void clearFields() {
         usernameET.setText("");
         passwordET.setText("");
     }

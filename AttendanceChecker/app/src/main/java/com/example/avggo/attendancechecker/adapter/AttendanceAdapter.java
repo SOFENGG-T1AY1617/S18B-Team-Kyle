@@ -1,21 +1,15 @@
 package com.example.avggo.attendancechecker.adapter;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.BitmapFactory;
-import android.media.Image;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.avggo.attendancechecker.R;
 import com.example.avggo.attendancechecker.model.Attendance;
-import com.example.avggo.attendancechecker.model.ListItem;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +20,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
  * Created by avggo on 10/12/2016.
  */
 
-public class AttendanceAdapter extends RecyclerView.Adapter<AttendanceAdapter.AttendanceHolder>{
+public class AttendanceAdapter extends RecyclerView.Adapter<AttendanceAdapter.AttendanceHolder> {
 
     private List<Attendance> listData;
     private LayoutInflater inflater;
@@ -37,16 +31,17 @@ public class AttendanceAdapter extends RecyclerView.Adapter<AttendanceAdapter.At
         this.listData = listData;
     }
 
-    public interface ItemClickCallback{
+    public interface ItemClickCallback {
         void onItemClick(int p);
+
         void onSecondaryClick(int p);
     }
 
-    public void setItemClickCallback(final ItemClickCallback itemClickCallback){
+    public void setItemClickCallback(final ItemClickCallback itemClickCallback) {
         this.itemClickCallback = itemClickCallback;
     }
 
-    public AttendanceAdapter(List<Attendance> listData, Context c){
+    public AttendanceAdapter(List<Attendance> listData, Context c) {
         this.inflater = LayoutInflater.from(c);
         this.listData = listData;
     }
@@ -62,9 +57,8 @@ public class AttendanceAdapter extends RecyclerView.Adapter<AttendanceAdapter.At
         Attendance item = listData.get(position);
         holder.title.setText(item.getRoom());
         holder.subTitle.setText(item.getFname());
-        int i = R.drawable.bulos;
-        Log.d("TEST", Integer.toString(i));
-        holder.thumbnail.setImageResource(R.drawable.bulos);
+        byte[] arrImage = item.getPic();
+        holder.thumbnail.setImageBitmap(BitmapFactory.decodeByteArray(arrImage, 0, arrImage.length));
     }
 
     @Override
@@ -72,7 +66,7 @@ public class AttendanceAdapter extends RecyclerView.Adapter<AttendanceAdapter.At
         return listData.size();
     }
 
-    class AttendanceHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    class AttendanceHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private TextView title;
         private TextView subTitle;
@@ -82,8 +76,8 @@ public class AttendanceAdapter extends RecyclerView.Adapter<AttendanceAdapter.At
         public AttendanceHolder(View itemView) {
             super(itemView);
 
-            title = (TextView)itemView.findViewById(R.id.lbl_item_text);
-            subTitle = (TextView)itemView.findViewById(R.id.lbl_item_sub_title);
+            title = (TextView) itemView.findViewById(R.id.lbl_item_text);
+            subTitle = (TextView) itemView.findViewById(R.id.lbl_item_sub_title);
             thumbnail = (CircleImageView) itemView.findViewById(R.id.im_item_icon);
             container = itemView.findViewById(R.id.cont_item_root);
             container.setOnClickListener(this);
@@ -91,10 +85,9 @@ public class AttendanceAdapter extends RecyclerView.Adapter<AttendanceAdapter.At
 
         @Override
         public void onClick(View v) {
-            if(v.getId() == R.id.cont_item_root){
+            if (v.getId() == R.id.cont_item_root) {
                 itemClickCallback.onItemClick(getAdapterPosition());
-            }
-            else{
+            } else {
                 itemClickCallback.onSecondaryClick(getAdapterPosition());
             }
         }

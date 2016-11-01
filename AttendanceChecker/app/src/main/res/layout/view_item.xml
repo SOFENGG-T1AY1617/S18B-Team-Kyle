@@ -28,8 +28,9 @@
 
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/facultyImage"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_width="70dp"
+                    android:layout_height="0dp"
+                    android:layout_gravity="center_horizontal"
                     android:layout_weight="1"
                     android:elevation="0dp"
                     android:src="@drawable/winfred"/>
@@ -146,10 +147,10 @@
 
                         <Button
                             android:id="@+id/submitButton"
-                            android:layout_width="88dp"
-                            android:layout_height="45dp"
+                            android:layout_width="96dp"
+                            android:layout_height="48dp"
                             android:layout_gravity="center"
-                            android:layout_marginBottom="20px"
+                            android:layout_marginBottom="20dp"
                             android:text="Submit"
                             android:theme="@style/AppTheme.Button" />
                     </LinearLayout>

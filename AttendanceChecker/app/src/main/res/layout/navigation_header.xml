@@ -8,7 +8,6 @@
     android:weightSum="1">
 
 
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="56dp"
@@ -49,6 +48,5 @@
         android:src="@drawable/dummy_pic"
         android:layout_marginStart="16dp"
         android:layout_marginTop="38dp"
-        android:id="@+id/circleView"
-        />
+        android:id="@+id/circleView" />
 </RelativeLayout>

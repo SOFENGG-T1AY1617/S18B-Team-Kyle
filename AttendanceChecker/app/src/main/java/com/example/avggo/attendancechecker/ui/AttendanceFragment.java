@@ -1,6 +1,5 @@
 package com.example.avggo.attendancechecker.ui;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -9,14 +8,11 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.example.avggo.attendancechecker.DatabaseOpenHelper;
 import com.example.avggo.attendancechecker.R;
 import com.example.avggo.attendancechecker.adapter.AttendanceAdapter;
 import com.example.avggo.attendancechecker.model.Attendance;
-import com.example.avggo.attendancechecker.model.ListItem;
-import com.example.avggo.attendancechecker.model.TutorialData;
 
 import java.util.ArrayList;
 
@@ -24,7 +20,7 @@ import java.util.ArrayList;
  * Created by avggo on 10/23/2016.
  */
 
-public class AttendanceFragment extends android.support.v4.app.Fragment implements AttendanceAdapter.ItemClickCallback{
+public class AttendanceFragment extends android.support.v4.app.Fragment implements AttendanceAdapter.ItemClickCallback {
 
     private static final String BUNDLE_EXTRAS = "BUNDLE_EXTRAS";
     private static final String EXTRA_QUOTE = "EXTRA_QUOTE";
@@ -45,7 +41,7 @@ public class AttendanceFragment extends android.support.v4.app.Fragment implemen
         args.putString("BUILDING", building);
         f.setArguments(args);
 
-        return(f);
+        return (f);
     }
 
     @Nullable
@@ -91,14 +87,15 @@ public class AttendanceFragment extends android.support.v4.app.Fragment implemen
 
     }
 
-    public void setRID(String RID){
+    public void setRID(String RID) {
         this.RID = RID;
     }
 
     String getRID() {
-        return(getArguments().getString("RID"));
+        return (getArguments().getString("RID"));
     }
+
     String getBuilding() {
-        return(getArguments().getString("BUILDING"));
+        return (getArguments().getString("BUILDING"));
     }
 }

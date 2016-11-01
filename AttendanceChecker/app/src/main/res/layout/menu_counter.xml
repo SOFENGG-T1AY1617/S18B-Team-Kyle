@@ -6,4 +6,4 @@
     android:text="0"
     android:paddingRight="16dp"
     android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-    android:textColor="#6d6d6d"/>
+    android:textColor="#6d6d6d" />

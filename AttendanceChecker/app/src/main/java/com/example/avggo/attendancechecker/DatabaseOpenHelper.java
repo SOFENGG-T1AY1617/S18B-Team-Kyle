@@ -9,9 +9,6 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
-import android.util.Log;
-import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.example.avggo.attendancechecker.model.Attendance;
 import com.example.avggo.attendancechecker.model.CheckerAccount;
@@ -39,7 +36,7 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String sql = "CREATE TABLE " + Faculty.TABLE_NAME  + " ("
+        String sql = "CREATE TABLE " + Faculty.TABLE_NAME + " ("
                 + Faculty.COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                 + Faculty.COL_FNAME + " TEXT, "
                 + Faculty.COL_MNAME + " TEXT, "
@@ -66,7 +63,7 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
                 + "days TEXT, "
                 + "room_id INTEGER);";
         db.execSQL(sql);
-        sql = "CREATE TABLE " + Attendance.TABLE_NAME  + " ("
+        sql = "CREATE TABLE " + Attendance.TABLE_NAME + " ("
                 + Attendance.COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                 + Attendance.COL_COID + " INTEGER, "
                 + Attendance.COL_FACULTYID + " INTEGER, "
@@ -81,7 +78,7 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
                 + "name TEXT, "
                 + "description TEXT);";
         db.execSQL(sql);
-        sql = "CREATE TABLE " + CheckerAccount.TABLE_NAME  + " ("
+        sql = "CREATE TABLE " + CheckerAccount.TABLE_NAME + " ("
                 + CheckerAccount.COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                 + CheckerAccount.COL_FNAME + " TEXT, "
                 + CheckerAccount.COL_MNAME + " TEXT, "
@@ -125,7 +122,7 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
         initializeDBData(db);
     }
 
-    public ArrayList<Attendance> getAssignedAttendance(String RID, String building){
+    public ArrayList<Attendance> getAssignedAttendance(String RID, String building) {
         String weekDay;
         SQLiteDatabase db = getReadableDatabase();
         SimpleDateFormat dayFormat = new SimpleDateFormat("EEEE", Locale.US);
@@ -137,7 +134,7 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
 
         String query;
 
-        if(building.equals("NULL")) {
+        if (building.equals("NULL")) {
             query = "select f.first_name, f.middle_name, f.last_name, f.college, c.code, c.name 'course_name', co.time_start, co.time_end, r.name 'room_name', f.pic " +
                     "from (rotationroom rr inner join checkeraccount ca on rr.rotation_id = ca.rotation_id) " +
                     "inner join room r on rr.room_id = r.id " +
@@ -145,8 +142,7 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
                     "inner join faculty f on co.faculty_id = f.id " +
                     "inner join course c on co.course_id = c.id " +
                     "where days like '%" + weekDay + "%' and rr.rotation_id = '" + RID + "';";
-        }
-        else{
+        } else {
             query = "select f.first_name, f.middle_name, f.last_name, f.college, c.code, c.name 'course_name', co.time_start, co.time_end, r.name 'room_name', f.pic, b.name 'bname' " +
                     "from (rotationroom rr inner join checkeraccount ca on rr.rotation_id = ca.rotation_id) " +
                     "inner join room r on rr.room_id = r.id " +
@@ -154,14 +150,14 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
                     "inner join faculty f on co.faculty_id = f.id " +
                     "inner join course c on co.course_id = c.id " +
                     "inner join building b on r.building_id = b.id " +
-                    "where days like '%" + weekDay + "%' and bname = '" + building +"' and rr.rotation_id = '" + RID + "';";
+                    "where days like '%" + weekDay + "%' and bname = '" + building + "' and rr.rotation_id = '" + RID + "';";
         }
 
         Cursor c = db.rawQuery(query, null);
 
         ArrayList<Attendance> assignedAttendance = new ArrayList<Attendance>();
 
-        if(c.moveToFirst()){
+        if (c.moveToFirst()) {
             while (c.isAfterLast() == false) {
                 String first_name = c.getString(c.getColumnIndex("first_name"));
                 String middle_name = c.getString(c.getColumnIndex("middle_name"));
@@ -196,7 +192,7 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
         return assignedAttendance;
     }
 
-    private void initializeDBData(SQLiteDatabase db){
+    private void initializeDBData(SQLiteDatabase db) {
         String sql;
 
         sql = "INSERT INTO Course (\"code\", \"name\") VALUES ('ADVANDB', 'Advanced Topics In Database Systems');";
@@ -350,9 +346,9 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
         db.insert(Faculty.TABLE_NAME, null, cv);
     }
 
-    private byte[] drawableToByteArray(Drawable dr){
+    private byte[] drawableToByteArray(Drawable dr) {
         Drawable d = dr; // the drawable (Captain Obvious, to the rescue!!!)
-        Bitmap bitmap = ((BitmapDrawable)d).getBitmap();
+        Bitmap bitmap = ((BitmapDrawable) d).getBitmap();
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
         byte[] bitmapdata = stream.toByteArray();
@@ -369,7 +365,7 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
         CheckerAccount u = new CheckerAccount();
         SQLiteDatabase db = getReadableDatabase();
 
-        Cursor c = db.query(CheckerAccount.TABLE_NAME, null, " "+ CheckerAccount.COL_UN + "=? ", new String[]{username}, null, null, null);
+        Cursor c = db.query(CheckerAccount.TABLE_NAME, null, " " + CheckerAccount.COL_UN + "=? ", new String[]{username}, null, null, null);
 
         if (c.moveToFirst()) {
             u.setCheckerid(c.getInt(c.getColumnIndex(CheckerAccount.COL_ID)));

@@ -26,8 +26,10 @@ public class Attendance {
     private String college;
     private byte[] pic;
 
-    public Attendance(){}
-    public Attendance(String room, String coursecode, String coursename, String startTime, String endTime, String fname, String code, String email, String remarks, byte[] pic){
+    public Attendance() {
+    }
+
+    public Attendance(String room, String coursecode, String coursename, String startTime, String endTime, String fname, String code, String email, String remarks, byte[] pic) {
         this.room = room;
         this.coursecode = coursecode;
         this.coursename = coursename;
@@ -36,7 +38,7 @@ public class Attendance {
         this.fname = fname;
         this.code = code;
         this.email = email;
-        this. remarks = remarks;
+        this.remarks = remarks;
         this.pic = pic;
     }
 
@@ -119,6 +121,7 @@ public class Attendance {
     public void setEndTime(String endTime) {
         this.endTime = endTime;
     }
+
     public String getCollege() {
         return college;
     }

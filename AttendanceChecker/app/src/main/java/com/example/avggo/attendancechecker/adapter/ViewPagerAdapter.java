@@ -10,19 +10,20 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 
 import com.example.avggo.attendancechecker.ui.AttendanceFragment;
 
-public class ViewPagerAdapter extends FragmentStatePagerAdapter{
+public class ViewPagerAdapter extends FragmentStatePagerAdapter {
     CharSequence Titles[];
     int NumbOfTabs;
     String RID, building;
 
-    public ViewPagerAdapter(FragmentManager fm,CharSequence mTitles[], int mNumbOfTabsumb, String RID, String building){
+    public ViewPagerAdapter(FragmentManager fm, CharSequence mTitles[], int mNumbOfTabsumb, String RID, String building) {
         super(fm);
         this.Titles = mTitles;
         this.NumbOfTabs = mNumbOfTabsumb;
         this.RID = RID;
         this.building = building;
     }
-    public ViewPagerAdapter(FragmentManager fm,CharSequence mTitles[], int mNumbOfTabsumb, String RID){
+
+    public ViewPagerAdapter(FragmentManager fm, CharSequence mTitles[], int mNumbOfTabsumb, String RID) {
         super(fm);
         this.Titles = mTitles;
         this.NumbOfTabs = mNumbOfTabsumb;
@@ -30,25 +31,24 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter{
         this.building = "NULL";
     }
 
-    public Fragment getItem(int position){
-        if(position == 0){
+    public Fragment getItem(int position) {
+        if (position == 0) {
             AttendanceFragment al = AttendanceFragment.newInstance(RID, building);
             return al;
-        }
-        else if(position == 1){
+        } else if (position == 1) {
             AttendanceFragment al = AttendanceFragment.newInstance(RID, building);
             return al;
-        }
-        else if(position == 2){
+        } else if (position == 2) {
             AttendanceFragment al = AttendanceFragment.newInstance(RID, building);
             return al;
-        }
-        else return null;
+        } else return null;
     }
-    public CharSequence getPageTitle(int position){
+
+    public CharSequence getPageTitle(int position) {
         return Titles[position];
     }
-    public int getCount(){
+
+    public int getCount() {
         return NumbOfTabs;
     }
 }

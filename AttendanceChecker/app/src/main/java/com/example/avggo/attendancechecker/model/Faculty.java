@@ -1,7 +1,5 @@
 package com.example.avggo.attendancechecker.model;
 
-import java.sql.Blob;
-
 /**
  * Created by avggo on 10/9/2016.
  */
@@ -21,8 +19,10 @@ public class Faculty {
     private String fname, mname, lname, college, email, mobnum, dept;
     private byte[] image;
 
-    public Faculty(){}
-    public Faculty(String fname, String mname, String lname, String college, String email, String mobnum, String dept){
+    public Faculty() {
+    }
+
+    public Faculty(String fname, String mname, String lname, String college, String email, String mobnum, String dept) {
         this.fname = fname;
         this.mname = mname;
         this.lname = lname;

@@ -18,8 +18,10 @@ public class CheckerAccount {
     private String fname, mname, lname, un, email, pw, rid;
     private int checkerid;
 
-    public CheckerAccount(){}
-    public CheckerAccount(int checkerid, String fname, String mname, String lname, String un, String email, String pw, String rid){
+    public CheckerAccount() {
+    }
+
+    public CheckerAccount(int checkerid, String fname, String mname, String lname, String un, String email, String pw, String rid) {
         this.checkerid = checkerid;
         this.fname = fname;
         this.mname = mname;
@@ -27,7 +29,7 @@ public class CheckerAccount {
         this.un = un;
         this.email = email;
         this.pw = pw;
-        this. rid = rid;
+        this.rid = rid;
     }
 
     public int getCheckerid() {
