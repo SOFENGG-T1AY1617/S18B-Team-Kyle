@@ -322,7 +322,7 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
         cv.put(Faculty.COL_COLLEGE, "College of Computer Studies");
         cv.put(Faculty.COL_EMAIL, "remediosdedios@yahoo.com");
         cv.put(Faculty.COL_MOBNUM, "09175148169");
-        Drawable d = ContextCompat.getDrawable(context, R.drawable.ic_tonality_black_36dp);
+        Drawable d = ContextCompat.getDrawable(context, R.drawable.bulos);
         cv.put(Faculty.COL_PIC, drawableToByteArray(d));
         cv.put(Faculty.COL_DEPT, "ST Department");
         db.insert(Faculty.TABLE_NAME, null, cv);
