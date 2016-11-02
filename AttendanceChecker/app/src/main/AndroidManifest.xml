@@ -10,6 +10,7 @@
         android:theme="@style/AppTheme">
         <activity android:name=".LoginActivity"/>
         <activity android:name=".MainActivity" />
+        <activity android:name=".ui.HelpActivity" />
         <activity android:name=".ui.DetailActivity" />
         <activity android:name=".ui.SplashScreenActivity">
             <intent-filter>

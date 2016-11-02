@@ -159,9 +159,11 @@ public class MainActivity extends AppCompatActivity {
                     case "Andrew":
                         filterByBuilding("Andrew");
                         break;
-//                    case "Help":
-//                        startActivity(new Intent(MainActivity.this, HelpActivity.class));
-//                        break;
+                    case "Help":
+                        Intent help = new Intent();
+                        help.setClass(getBaseContext(), HelpActivity.class);
+                        startActivity(help);
+                        break;
                 }
 
                 ((DrawerLayout) findViewById(R.id.DrawerLayout)).closeDrawers();
