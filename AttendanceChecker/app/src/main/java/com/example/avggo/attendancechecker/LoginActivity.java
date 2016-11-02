@@ -1,6 +1,8 @@
 package com.example.avggo.attendancechecker;
 
+import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MotionEvent;
@@ -20,6 +22,7 @@ public class LoginActivity extends AppCompatActivity {
     DatabaseOpenHelper db;
     EditText usernameET, passwordET;
     Button login;
+    CheckerAccount u;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,7 +70,8 @@ public class LoginActivity extends AppCompatActivity {
 
                 String username = usernameET.getText().toString();
                 String password = passwordET.getText().toString();
-                CheckerAccount u = db.checkIfUserExists(username);
+
+                new LoginTask(username).execute();
 
                 if (username.equals("") || password.equals("")) {
                     Toast.makeText(getApplicationContext(), "Please fill up all the fields.", Toast.LENGTH_SHORT).show();
@@ -103,5 +107,30 @@ public class LoginActivity extends AppCompatActivity {
     private void clearFields() {
         usernameET.setText("");
         passwordET.setText("");
+    }
+
+    class LoginTask extends AsyncTask<Object, Void, String> {
+        String username;
+
+        LoginTask(String username) {
+            this.username = username;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected String doInBackground(Object... params) {
+            u = db.checkIfUserExists(username);
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+        }
     }
 }

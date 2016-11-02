@@ -1,6 +1,9 @@
 package com.example.avggo.attendancechecker.ui;
 
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
@@ -26,11 +29,11 @@ public class AttendanceFragment extends android.support.v4.app.Fragment implemen
     private static final String EXTRA_QUOTE = "EXTRA_QUOTE";
     private static final String EXTRA_ATTR = "EXTRA_ATTR";
 
-    private RecyclerView recView;
-    private AttendanceAdapter adapter;
-    private ArrayList listData;
-    private DatabaseOpenHelper db;
-    private String RID;
+    RecyclerView recView;
+    AttendanceAdapter adapter;
+    ArrayList listData;
+    DatabaseOpenHelper db;
+    String RID;
 
     public static AttendanceFragment newInstance(String RID, String building) {
         AttendanceFragment f = new AttendanceFragment();
@@ -51,16 +54,7 @@ public class AttendanceFragment extends android.support.v4.app.Fragment implemen
 
         //Toast.makeText(v.getContext(), getRID(), Toast.LENGTH_LONG).show();
 
-        db = new DatabaseOpenHelper(getContext());
-
-        listData = (ArrayList) db.getAssignedAttendance(getRID(), getBuilding());
-
-        recView = (RecyclerView) v.findViewById(R.id.rec_list);
-        recView.setLayoutManager(new LinearLayoutManager(getActivity()));
-
-        adapter = new AttendanceAdapter(db.getAssignedAttendance(getRID(), getBuilding()), getActivity());
-        recView.setAdapter(adapter);
-        adapter.setItemClickCallback(this);
+        new AttendanceFragmentTask(getContext(), v, this).execute();
 
         return v;
     }
@@ -97,5 +91,45 @@ public class AttendanceFragment extends android.support.v4.app.Fragment implemen
 
     String getBuilding() {
         return (getArguments().getString("BUILDING"));
+    }
+
+    class AttendanceFragmentTask extends AsyncTask<Object, Void, String> {
+        Context context;
+        View v;
+        AttendanceAdapter.ItemClickCallback it;
+
+        AttendanceFragmentTask(Context context, View v, AttendanceAdapter.ItemClickCallback it) {
+            this.context = context;
+            this.v = v;
+            this.it = it;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+
+        }
+
+        @Override
+        protected String doInBackground(Object... params) {
+            db = new DatabaseOpenHelper(getContext());
+
+            listData = (ArrayList) db.getAssignedAttendance(getRID(), getBuilding());
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+
+            recView = (RecyclerView) v.findViewById(R.id.rec_list);
+            recView.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+            adapter = new AttendanceAdapter(db.getAssignedAttendance(getRID(), getBuilding()), getActivity());
+            recView.setAdapter(adapter);
+            adapter.setItemClickCallback(it);
+        }
     }
 }

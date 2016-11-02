@@ -330,6 +330,7 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
         cv.put(Faculty.COL_COLLEGE, "College of Computer Studies");
         cv.put(Faculty.COL_EMAIL, "florante.salvador@dlsu.edu.ph");
         cv.put(Faculty.COL_MOBNUM, "09175148169");
+        d = ContextCompat.getDrawable(context, R.drawable.salvador);
         cv.put(Faculty.COL_PIC, drawableToByteArray(d));
         cv.put(Faculty.COL_DEPT, "ST Department");
         db.insert(Faculty.TABLE_NAME, null, cv);
@@ -341,6 +342,7 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
         cv.put(Faculty.COL_COLLEGE, "College of Computer Studies");
         cv.put(Faculty.COL_EMAIL, "daniel.tan@dlsu.edu.ph");
         cv.put(Faculty.COL_MOBNUM, "09175148169");
+        d = ContextCompat.getDrawable(context, R.drawable.tan);
         cv.put(Faculty.COL_PIC, drawableToByteArray(d));
         cv.put(Faculty.COL_DEPT, "ST Department");
         db.insert(Faculty.TABLE_NAME, null, cv);
