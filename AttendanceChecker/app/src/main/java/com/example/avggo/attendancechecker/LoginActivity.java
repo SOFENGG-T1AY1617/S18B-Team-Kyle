@@ -23,6 +23,7 @@ public class LoginActivity extends AppCompatActivity {
     EditText usernameET, passwordET;
     Button login;
     CheckerAccount u;
+    String username, password;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,40 +67,7 @@ public class LoginActivity extends AppCompatActivity {
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent homepage = new Intent();
-
-                String username = usernameET.getText().toString();
-                String password = passwordET.getText().toString();
-
-                new LoginTask(username).execute();
-
-                if (username.equals("") || password.equals("")) {
-                    Toast.makeText(getApplicationContext(), "Please fill up all the fields.", Toast.LENGTH_SHORT).show();
-                    clearFields();
-                } else {
-                    if (u == null) {
-                        Toast.makeText(getApplicationContext(), "Incorrect username or password.", Toast.LENGTH_SHORT).show();
-                        clearFields();
-                    } else {
-                        String checkPassword = u.getPw();
-                        if (password.equals(checkPassword)) {
-                            CHECKER_ID = u.getCheckerid();
-                            CHECKER_NAME = u.getFname() + " " + u.getLname();
-
-                            homepage.putExtra("DISPLAY_NAME", u.getFname() + " " + u.getLname());
-                            homepage.putExtra("EMAIL", u.getEmail());
-                            homepage.putExtra("RID", u.getRid());
-
-                            Toast.makeText(getApplicationContext(), "Welcome " + CHECKER_NAME + "!", Toast.LENGTH_LONG).show();
-                            homepage.setClass(getBaseContext(), MainActivity.class);
-                            startActivity(homepage);
-                            clearFields();
-                        } else {
-                            Toast.makeText(getApplicationContext(), "Incorrect username or password.", Toast.LENGTH_LONG).show();
-                            clearFields();
-                        }
-                    }
-                }
+                new LoginTask().execute();
             }
         });
     }
@@ -110,15 +78,16 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     class LoginTask extends AsyncTask<Object, Void, String> {
-        String username;
 
-        LoginTask(String username) {
-            this.username = username;
+        LoginTask() {
         }
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+
+            username = usernameET.getText().toString();
+            password = passwordET.getText().toString();
         }
 
         @Override
@@ -130,6 +99,36 @@ public class LoginActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String result) {
+            Intent homepage = new Intent();
+
+            if (username.equals("") || password.equals("")) {
+                Toast.makeText(getApplicationContext(), "Please fill up all the fields.", Toast.LENGTH_SHORT).show();
+                clearFields();
+            } else {
+                if (u == null) {
+                    Toast.makeText(getApplicationContext(), "Incorrect username or password.", Toast.LENGTH_SHORT).show();
+                    clearFields();
+                } else {
+                    String checkPassword = u.getPw();
+                    if (password.equals(checkPassword)) {
+                        CHECKER_ID = u.getCheckerid();
+                        CHECKER_NAME = u.getFname() + " " + u.getLname();
+
+                        homepage.putExtra("DISPLAY_NAME", u.getFname() + " " + u.getLname());
+                        homepage.putExtra("EMAIL", u.getEmail());
+                        homepage.putExtra("RID", u.getRid());
+
+                        Toast.makeText(getApplicationContext(), "Welcome " + CHECKER_NAME + "!", Toast.LENGTH_LONG).show();
+                        homepage.setClass(getBaseContext(), MainActivity.class);
+                        startActivity(homepage);
+                        clearFields();
+                    } else {
+                        Toast.makeText(getApplicationContext(), "Incorrect username or password.", Toast.LENGTH_LONG).show();
+                        clearFields();
+                    }
+                }
+            }
+
             super.onPostExecute(result);
         }
     }

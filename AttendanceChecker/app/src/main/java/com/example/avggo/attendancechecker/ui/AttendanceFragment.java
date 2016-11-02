@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.avggo.attendancechecker.DatabaseOpenHelper;
+import com.example.avggo.attendancechecker.MainActivity;
 import com.example.avggo.attendancechecker.R;
 import com.example.avggo.attendancechecker.adapter.AttendanceAdapter;
 import com.example.avggo.attendancechecker.model.Attendance;
@@ -97,6 +98,7 @@ public class AttendanceFragment extends android.support.v4.app.Fragment implemen
         Context context;
         View v;
         AttendanceAdapter.ItemClickCallback it;
+        ProgressDialog pd;
 
         AttendanceFragmentTask(Context context, View v, AttendanceAdapter.ItemClickCallback it) {
             this.context = context;
@@ -107,8 +109,7 @@ public class AttendanceFragment extends android.support.v4.app.Fragment implemen
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-
-
+            pd=ProgressDialog.show(getContext(),"","Please Wait",false);
         }
 
         @Override
@@ -123,10 +124,10 @@ public class AttendanceFragment extends android.support.v4.app.Fragment implemen
         @Override
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
+            pd.dismiss();
 
             recView = (RecyclerView) v.findViewById(R.id.rec_list);
             recView.setLayoutManager(new LinearLayoutManager(getActivity()));
-
             adapter = new AttendanceAdapter(db.getAssignedAttendance(getRID(), getBuilding()), getActivity());
             recView.setAdapter(adapter);
             adapter.setItemClickCallback(it);
