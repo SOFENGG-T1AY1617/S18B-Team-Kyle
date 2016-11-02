@@ -15,7 +15,9 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ToxicBakery.viewpager.transforms.AccordionTransformer;
 import com.example.avggo.attendancechecker.adapter.AttendanceAdapter;
@@ -30,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
     private SlidingTabLayout tabSlider;
     private CharSequence tabList[] = {"current", "done", "submitted"};
     public static final int TAB_NUMBERS = 3;
+    public static final int DONE_TAB = 1;
 
     //navigation items
     String TITLES[] = {"Help", "Logout"};
@@ -41,6 +44,8 @@ public class MainActivity extends AppCompatActivity {
 
     NavigationView mNavigationView;
     DrawerLayout Drawer;                                  // Declaring DrawerLayout
+    Button submitButton;
+
 
     ActionBarDrawerToggle mDrawerToggle;                  // Declaring Action Bar Drawer Toggle
 
@@ -66,6 +71,9 @@ public class MainActivity extends AppCompatActivity {
         viewPager.setAdapter(pagerAdapter);
         viewPager.setPageTransformer(true, new AccordionTransformer());
         viewPager.setCurrentItem(0);
+        submitButton = (Button) findViewById(R.id.submitSheetButton);
+        submitButton.setVisibility(View.GONE);
+        submitButton.setEnabled(false);
         tabSlider = (SlidingTabLayout) findViewById(R.id.tabs);
         tabSlider.setDistributeEvenly(true);
         tabSlider.setCustomTabColorizer(new SlidingTabLayout.TabColorizer() {
@@ -74,7 +82,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         tabSlider.setViewPager(viewPager);
-
         db = new DatabaseOpenHelper(getBaseContext());
 
         //initialize drawer
@@ -89,6 +96,35 @@ public class MainActivity extends AppCompatActivity {
         setMenuCounter(R.id.nav_miguel, db.getAssignedAttendance(RID, "Miguel").size());
         setMenuCounter(R.id.nav_andrew, db.getAssignedAttendance(RID, "Andrew").size());
         setMenuCounter(R.id.nav_razon, db.getAssignedAttendance(RID, "Razon").size());
+
+        tabSlider.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+
+            // This method will be invoked when a new page becomes selected.
+            @Override
+            public void onPageSelected(int position) {
+                if(position == DONE_TAB) {
+                    submitButton.setVisibility(View.VISIBLE);
+                    if (db.getAssignedAttendance(RID, "NULL").size() == 0)
+                        submitButton.setEnabled(true);
+                    else
+                        submitButton.setEnabled(false);
+                }else
+                    submitButton.setVisibility(View.GONE);
+            }
+
+            // This method will be invoked when the current page is scrolled
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                // Code goes here
+            }
+
+            // Called when the scroll state changes:
+            // SCROLL_STATE_IDLE, SCROLL_STATE_DRAGGING, SCROLL_STATE_SETTLING
+            @Override
+            public void onPageScrollStateChanged(int state) {
+                // Code goes here
+            }
+        });
     }
 
     private void filterByBuilding(String building) {

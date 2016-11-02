@@ -26,21 +26,39 @@
                 android:background="@color/colorPrimary"
                 android:elevation="2dp" />
 
-            <android.support.v4.view.ViewPager
-                android:id="@+id/pager"
+            <LinearLayout
+                android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="@color/colorBackground" />
+                android:layout_height="match_parent">
+
+                <android.support.v4.view.ViewPager
+                    android:id="@+id/pager"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@color/colorBackground" />
+
+                <Button
+                    android:text="Submit Sheet"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:id="@+id/submitSheetButton"
+                    android:theme="@style/AppTheme.Button"/>
+
+            </LinearLayout>
+
         </android.support.design.widget.AppBarLayout>
     </LinearLayout>
 
     <android.support.design.widget.NavigationView
         android:id="@+id/navigation_view"
-        android:layout_width="296dp"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
         app:headerLayout="@layout/navigation_header"
-        app:menu="@menu/drawer_view" />
+        app:menu="@menu/drawer_view" >
+
+    </android.support.design.widget.NavigationView>
+
 </android.support.v4.widget.DrawerLayout>
