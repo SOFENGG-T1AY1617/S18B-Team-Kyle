@@ -1,17 +1,14 @@
 package com.example.avggo.attendancechecker;
 
-import android.content.Context;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.design.widget.NavigationView;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,10 +17,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ToxicBakery.viewpager.transforms.AccordionTransformer;
-import com.example.avggo.attendancechecker.adapter.AttendanceAdapter;
 import com.example.avggo.attendancechecker.adapter.ViewPagerAdapter;
-
-import java.util.ArrayList;
+import com.example.avggo.attendancechecker.ui.HelpActivity;
 
 public class MainActivity extends AppCompatActivity {
     private Toolbar toolbar;
@@ -58,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         RID = getIntent().getStringExtra("RID");
-        //Toast.makeText(getBaseContext(), RID, Toast.LENGTH_LONG).show();
+        //Toast.makeText(getApplicationContext(), RID, Toast.LENGTH_LONG).show();
 
         //SET NAVIGATION TEXT
         NAME = getIntent().getStringExtra("DISPLAY_NAME");
@@ -78,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
         tabSlider.setDistributeEvenly(true);
         tabSlider.setCustomTabColorizer(new SlidingTabLayout.TabColorizer() {
             public int getIndicatorColor(int position) {
-                return getResources().getColor(R.color.tabsScrollColor);
+                return ContextCompat.getColor(getApplicationContext(), R.color.tabsScrollColor);
             }
         });
         tabSlider.setViewPager(viewPager);
@@ -137,7 +132,7 @@ public class MainActivity extends AppCompatActivity {
         tabSlider.setDistributeEvenly(true);
         tabSlider.setCustomTabColorizer(new SlidingTabLayout.TabColorizer() {
             public int getIndicatorColor(int position) {
-                return getResources().getColor(R.color.tabsScrollColor);
+                return ContextCompat.getColor(getApplicationContext(), R.color.tabsScrollColor);
             }
         });
         tabSlider.setViewPager(viewPager);
@@ -151,15 +146,24 @@ public class MainActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(MenuItem menuItem) {
                 menuItem.setChecked(true);
 
-                if (menuItem.getTitle().equals("Log Out")) {
-                    goToLogin();
-                } else if (menuItem.getTitle().equals("All Buildings")) {
-                    filterByBuilding("NULL");
-                } else if (menuItem.getTitle().equals("Gokongwei")) {
-                    filterByBuilding("Gokongwei");
-                } else if (menuItem.getTitle().equals("Andrew")) {
-                    filterByBuilding("Andrew");
+                switch(menuItem.getTitle().toString()) {
+                    case "Log Out":
+                        goToLogin();
+                        break;
+                    case "All Buildings":
+                        filterByBuilding("NULL");
+                        break;
+                    case "Gokongwei":
+                        filterByBuilding("Gokongwei");
+                        break;
+                    case "Andrew":
+                        filterByBuilding("Andrew");
+                        break;
+//                    case "Help":
+//                        startActivity(new Intent(MainActivity.this, HelpActivity.class));
+//                        break;
                 }
+
                 ((DrawerLayout) findViewById(R.id.DrawerLayout)).closeDrawers();
                 return true;
             }
@@ -182,7 +186,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onDrawerClosed(View drawerView) {
                 super.onDrawerClosed(drawerView);
-                // Code here will execute once drawer is closed
+                //TODO Code here will execute once drawer is closed
             }
         };
 
