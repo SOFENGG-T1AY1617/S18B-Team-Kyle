@@ -30,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
     private CharSequence tabList[] = {"current", "done", "submitted"};
     private ArrayList<String> buildings = new ArrayList<String>();
     ArrayList<String> curBuildings = new ArrayList<String>();
+    ArrayList<Integer> buldingIDs = new ArrayList<Integer>();
     public static final int TAB_NUMBERS = 3;
     public static final int DONE_TAB = 1;
 
@@ -88,16 +89,6 @@ public class MainActivity extends AppCompatActivity {
         //initialize drawer
         initializeDrawer();
 
-        setMenuCounter(R.id.nav_allbuildings, db.getAssignedAttendance(RID, "NULL").size());
-        setMenuCounter(R.id.nav_gokongwei, db.getAssignedAttendance(RID, "Gokongwei").size());
-        setMenuCounter(R.id.nav_lasallehall, db.getAssignedAttendance(RID, "La Salle Hall").size());
-        setMenuCounter(R.id.nav_yuchengco, db.getAssignedAttendance(RID, "Yuchengco").size());
-        setMenuCounter(R.id.nav_saintjoseph, db.getAssignedAttendance(RID, "Saint Joseph").size());
-        setMenuCounter(R.id.nav_velasco, db.getAssignedAttendance(RID, "Velasco").size());
-        setMenuCounter(R.id.nav_miguel, db.getAssignedAttendance(RID, "Miguel").size());
-        setMenuCounter(R.id.nav_andrew, db.getAssignedAttendance(RID, "Andrew").size());
-        setMenuCounter(R.id.nav_razon, db.getAssignedAttendance(RID, "Razon").size());
-
         tabSlider.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
 
             // This method will be invoked when a new page becomes selected.
@@ -136,9 +127,18 @@ public class MainActivity extends AppCompatActivity {
         buildings.add("Velasco");
         buildings.add("Miguel");
         buildings.add("Gokongwei");
-        buildings.add("STRC");
         buildings.add("Andrew");
         buildings.add("Razon");
+
+        buldingIDs.add(R.id.nav_allbuildings);
+        buldingIDs.add(R.id.nav_lasallehall);
+        buldingIDs.add(R.id.nav_yuchengco);
+        buldingIDs.add(R.id.nav_saintjoseph);
+        buldingIDs.add(R.id.nav_velasco);
+        buldingIDs.add(R.id.nav_miguel);
+        buldingIDs.add(R.id.nav_gokongwei);
+        buldingIDs.add(R.id.nav_andrew);
+        buldingIDs.add(R.id.nav_razon);
     }
 
     private void filterByBuilding(String building) {
@@ -160,12 +160,16 @@ public class MainActivity extends AppCompatActivity {
     public void initializeDrawer() {
         mNavigationView = (NavigationView) findViewById(R.id.navigation_view);
 
-        for(int i = 1; i < mNavigationView.getMenu().size() - 2; i++){
+        for(int i = 1; i < buildings.size(); i++){
             mNavigationView.getMenu().getItem(i).setVisible(false);
         }
 
         for(int i = 0; i < curBuildings.size(); i++){
             mNavigationView.getMenu().getItem(buildings.indexOf(curBuildings.get(i))).setVisible(true);
+            if(i == 0)
+                setMenuCounter(buldingIDs.get(buildings.indexOf(curBuildings.get(i))), db.getAssignedAttendance(RID, "NULL").size());
+            else
+                setMenuCounter(buldingIDs.get(buildings.indexOf(curBuildings.get(i))), db.getAssignedAttendance(RID, curBuildings.get(i)).size());
         }
 
         mNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {

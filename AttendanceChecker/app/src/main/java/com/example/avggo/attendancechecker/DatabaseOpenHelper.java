@@ -9,6 +9,7 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 
 import com.example.avggo.attendancechecker.model.Attendance;
 import com.example.avggo.attendancechecker.model.CheckerAccount;
@@ -198,6 +199,8 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
         SimpleDateFormat dayFormat = new SimpleDateFormat("EEEE", Locale.US);
         ArrayList<String> buildings = new ArrayList<String>();
 
+        buildings.add("All Buildings");
+
         Calendar calendar = Calendar.getInstance();
         weekDay = dayFormat.format(calendar.getTime());
 
@@ -209,7 +212,7 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
                 "from rotationroom rr inner join room r on rr.room_id = r.id\n" +
                 "inner join building b on r.building_id = b.id\n" +
                 "inner join courseoffering co on r.id = co.room_id\n" +
-                "where days like '% " + weekDay + "%' and rr.rotation_id = '" + RID + "';";
+                "where days like '%" + weekDay + "%' and rr.rotation_id = '" + RID + "';";
 
         Cursor c = db.rawQuery(query, null);
 
@@ -217,7 +220,6 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
             while (c.isAfterLast() == false) {
                 String building = c.getString(c.getColumnIndex("name"));
                 buildings.add(building);
-
                 c.moveToNext();
             }
         }
