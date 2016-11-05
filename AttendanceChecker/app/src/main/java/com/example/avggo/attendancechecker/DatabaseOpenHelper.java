@@ -192,6 +192,41 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
         return assignedAttendance;
     }
 
+    public ArrayList<String> getAssignedBuildings(String RID){
+        String weekDay;
+        SQLiteDatabase db = getReadableDatabase();
+        SimpleDateFormat dayFormat = new SimpleDateFormat("EEEE", Locale.US);
+        ArrayList<String> buildings = new ArrayList<String>();
+
+        Calendar calendar = Calendar.getInstance();
+        weekDay = dayFormat.format(calendar.getTime());
+
+        weekDay = weekDay.substring(0, 1);
+
+        String query;
+
+        query = "select distinct(b.name)\n" +
+                "from rotationroom rr inner join room r on rr.room_id = r.id\n" +
+                "inner join building b on r.building_id = b.id\n" +
+                "inner join courseoffering co on r.id = co.room_id\n" +
+                "where days like '% " + weekDay + "%' and rr.rotation_id = '" + RID + "';";
+
+        Cursor c = db.rawQuery(query, null);
+
+        if (c.moveToFirst()) {
+            while (c.isAfterLast() == false) {
+                String building = c.getString(c.getColumnIndex("name"));
+                buildings.add(building);
+
+                c.moveToNext();
+            }
+        }
+
+        c.close();
+
+        return buildings;
+    }
+
     private void initializeDBData(SQLiteDatabase db) {
         String sql;
 

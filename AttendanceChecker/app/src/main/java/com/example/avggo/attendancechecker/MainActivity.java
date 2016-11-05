@@ -20,12 +20,16 @@ import com.ToxicBakery.viewpager.transforms.AccordionTransformer;
 import com.example.avggo.attendancechecker.adapter.ViewPagerAdapter;
 import com.example.avggo.attendancechecker.ui.HelpActivity;
 
+import java.util.ArrayList;
+
 public class MainActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private ViewPager viewPager;
     private ViewPagerAdapter pagerAdapter;
     private SlidingTabLayout tabSlider;
     private CharSequence tabList[] = {"current", "done", "submitted"};
+    private ArrayList<String> buildings = new ArrayList<String>();
+    ArrayList<String> curBuildings = new ArrayList<String>();
     public static final int TAB_NUMBERS = 3;
     public static final int DONE_TAB = 1;
 
@@ -53,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         RID = getIntent().getStringExtra("RID");
+        populateAllBuildings();
         //Toast.makeText(getApplicationContext(), RID, Toast.LENGTH_LONG).show();
 
         //SET NAVIGATION TEXT
@@ -79,6 +84,7 @@ public class MainActivity extends AppCompatActivity {
         tabSlider.setViewPager(viewPager);
         db = new DatabaseOpenHelper(getBaseContext());
 
+        curBuildings = db.getAssignedBuildings(RID);
         //initialize drawer
         initializeDrawer();
 
@@ -122,6 +128,19 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    private void populateAllBuildings(){
+        buildings.add("All Buildings");
+        buildings.add("La Salle Hall");
+        buildings.add("Yuchengco");
+        buildings.add("Saint Joseph");
+        buildings.add("Velasco");
+        buildings.add("Miguel");
+        buildings.add("Gokongwei");
+        buildings.add("STRC");
+        buildings.add("Andrew");
+        buildings.add("Razon");
+    }
+
     private void filterByBuilding(String building) {
         pagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(), tabList, TAB_NUMBERS, RID, building);
         viewPager = (ViewPager) findViewById(R.id.pager);
@@ -140,6 +159,14 @@ public class MainActivity extends AppCompatActivity {
 
     public void initializeDrawer() {
         mNavigationView = (NavigationView) findViewById(R.id.navigation_view);
+
+        for(int i = 1; i < mNavigationView.getMenu().size() - 2; i++){
+            mNavigationView.getMenu().getItem(i).setVisible(false);
+        }
+
+        for(int i = 0; i < curBuildings.size(); i++){
+            mNavigationView.getMenu().getItem(buildings.indexOf(curBuildings.get(i))).setVisible(true);
+        }
 
         mNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
