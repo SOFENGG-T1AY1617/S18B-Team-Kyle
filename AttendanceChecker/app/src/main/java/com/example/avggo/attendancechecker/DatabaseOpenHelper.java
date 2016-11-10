@@ -66,12 +66,11 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
         db.execSQL(sql);
         sql = "CREATE TABLE " + Attendance.TABLE_NAME + " ("
                 + Attendance.COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-                + Attendance.COL_COID + " INTEGER, "
-                + Attendance.COL_FACULTYID + " INTEGER, "
-                + Attendance.COL_A_STATUS + " INTEGER, "
-                + Attendance.COL_DATE + " TEXT, "
-                + Attendance.COL_TIME_SET + " TEXT, "
-                + Attendance.COL_REMARKS + " TEXT);";
+                + Attendance.COL_COID + " INTEGER DEFAULT NULL, "
+                + Attendance.COL_A_STATUS + " INTEGER DEFAULT NULL, "
+                + Attendance.COL_DATE + " TEXT DEFAULT NULL, "
+                + Attendance.COL_TIME_SET + " TEXT DEFAULT NULL, "
+                + Attendance.COL_REMARKS + " TEXT DEFAULT NULL);";
         db.execSQL(sql);
         sql = "CREATE TABLE AttendanceStatus ("
                 + "id INTEGER PRIMARY KEY AUTOINCREMENT, "
@@ -137,21 +136,21 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
 
         if (building.equals("NULL")) {
             query = "select f.first_name, f.middle_name, f.last_name, f.college, c.code, c.name 'course_name', co.time_start, co.time_end, r.name 'room_name', f.pic " +
-                    "from (rotationroom rr inner join checkeraccount ca on rr.rotation_id = ca.rotation_id) " +
-                    "inner join room r on rr.room_id = r.id " +
-                    "inner join courseoffering co on r.id = co.room_id " +
-                    "inner join faculty f on co.faculty_id = f.id " +
-                    "inner join course c on co.course_id = c.id " +
-                    "where days like '%" + weekDay + "%' and rr.rotation_id = '" + RID + "';";
+                    "from attendance a inner join courseoffering co on a.courseoffering_id = co.id " +
+                    "inner join faculty f on f.id = co.faculty_id " +
+                    "inner join course c on c.id = co.course_id " +
+                    "inner join room r on co.room_id = r.id " +
+                    "inner join rotationroom rr on r.id = rr.room_id " +
+                    "where rr.rotation_id = '" + RID + "' and co.days like '%" + weekDay + "%' and a.status_id is null;";
         } else {
-            query = "select f.first_name, f.middle_name, f.last_name, f.college, c.code, c.name 'course_name', co.time_start, co.time_end, r.name 'room_name', f.pic, b.name 'bname' " +
-                    "from (rotationroom rr inner join checkeraccount ca on rr.rotation_id = ca.rotation_id) " +
-                    "inner join room r on rr.room_id = r.id " +
-                    "inner join courseoffering co on r.id = co.room_id " +
-                    "inner join faculty f on co.faculty_id = f.id " +
-                    "inner join course c on co.course_id = c.id " +
-                    "inner join building b on r.building_id = b.id " +
-                    "where days like '%" + weekDay + "%' and bname = '" + building + "' and rr.rotation_id = '" + RID + "';";
+            query = "select f.first_name, f.middle_name, f.last_name, f.college, c.code, c.name 'course_name', co.time_start, co.time_end, r.name 'room_name', f.pic, b.name 'bname'\n" +
+                    "from attendance a inner join courseoffering co on a.courseoffering_id = co.id\n" +
+                    "inner join faculty f on f.id = co.faculty_id\n" +
+                    "inner join course c on c.id = co.course_id\n" +
+                    "inner join room r on co.room_id = r.id\n" +
+                    "inner join rotationroom rr on r.id = rr.room_id\n" +
+                    "inner join building b on r.building_id = b.id\n" +
+                    "where rr.rotation_id = '" + RID + "' and co.days like '%" + weekDay + "%' and a.status_id is null and bname = '" + building + "';";
         }
 
         Cursor c = db.rawQuery(query, null);
@@ -185,6 +184,8 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
                 assignedAttendance.add(a);
 
                 c.moveToNext();
+
+                Log.i("TEEEEEEST", first_name + "first name");
             }
         }
 
@@ -380,6 +381,16 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
         cv.put(Faculty.COL_PIC, drawableToByteArray(ContextCompat.getDrawable(context, R.drawable.tan)));
         cv.put(Faculty.COL_DEPT, "ST Department");
         db.insert(Faculty.TABLE_NAME, null, cv);
+
+        String query;
+
+        query = "INSERT INTO Attendance " +
+                "(courseoffering_id) " +
+                "SELECT co.id " +
+                "from CourseOffering co inner join Room r on co.room_id = r.id " +
+                "inner join RotationRoom rr on r.id = rr.room_id;";
+
+        db.execSQL(query);
     }
 
     private byte[] drawableToByteArray(Drawable dr) {
