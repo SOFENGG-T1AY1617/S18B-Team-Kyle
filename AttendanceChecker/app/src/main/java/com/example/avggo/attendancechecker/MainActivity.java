@@ -1,7 +1,10 @@
 package com.example.avggo.attendancechecker;
 
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.design.widget.NavigationView;
@@ -9,7 +12,10 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
@@ -19,7 +25,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ToxicBakery.viewpager.transforms.AccordionTransformer;
+import com.example.avggo.attendancechecker.adapter.AttendanceAdapter;
 import com.example.avggo.attendancechecker.adapter.ViewPagerAdapter;
+import com.example.avggo.attendancechecker.model.Attendance;
+import com.example.avggo.attendancechecker.model.Filter;
 import com.example.avggo.attendancechecker.ui.HelpActivity;
 
 import java.text.DateFormat;
@@ -27,8 +36,10 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.logging.Handler;
 
 public class MainActivity extends AppCompatActivity {
     private Toolbar toolbar;
@@ -39,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<String> buildings = new ArrayList<String>();
     ArrayList<String> curBuildings = new ArrayList<String>();
     ArrayList<Integer> buldingIDs = new ArrayList<Integer>();
+    ArrayList<Attendance> listData;
     public static final int TAB_NUMBERS = 3;
     public static final int DONE_TAB = 1;
 
@@ -54,11 +66,12 @@ public class MainActivity extends AppCompatActivity {
     DrawerLayout Drawer;                                  // Declaring DrawerLayout
     Button submitButton;
 
-
     ActionBarDrawerToggle mDrawerToggle;                  // Declaring Action Bar Drawer Toggle
 
     private String RID;
-    private DatabaseOpenHelper db;
+    public DatabaseOpenHelper db;
+    Timer timer;
+    Filter mainFilter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,8 +79,17 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         RID = getIntent().getStringExtra("RID");
+
+        mainFilter = new Filter();
+        mainFilter.setBuilding("NULL");
+        mainFilter.setRID(RID);
+
         populateAllBuildings();
         //Toast.makeText(getApplicationContext(), RID, Toast.LENGTH_LONG).show();
+
+        Filter f = new Filter();
+        f.setRID(RID);
+        f.setBuilding("NULL");
 
         //SET NAVIGATION TEXT
         NAME = getIntent().getStringExtra("DISPLAY_NAME");
@@ -75,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
         toolbar = (Toolbar) findViewById(R.id.tool_bar);
         toolbar.setTitle("Attendance");
         setSupportActionBar(toolbar);
-        pagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(), tabList, TAB_NUMBERS, RID);
+        pagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(), tabList, TAB_NUMBERS, f);
         viewPager = (ViewPager) findViewById(R.id.pager);
         viewPager.setAdapter(pagerAdapter);
         viewPager.setPageTransformer(true, new AccordionTransformer());
@@ -104,7 +126,7 @@ public class MainActivity extends AppCompatActivity {
             public void onPageSelected(int position) {
                 if(position == DONE_TAB) {
                     submitButton.setVisibility(View.VISIBLE);
-                    if (db.getAssignedAttendance(RID, "NULL").size() == 0)
+                    if (db.getAssignedAttendance(mainFilter).size() == 0)
                         submitButton.setEnabled(true);
                     else
                         submitButton.setEnabled(false);
@@ -126,7 +148,49 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        //new MainTask().execute();
+        Filter initialFilter = new Filter();
+        initialFilter.setBuilding("NULL");
+        initialFilter.setRID(RID);
+        listData = db.getAssignedAttendance(initialFilter);
         scheduleTask(getBaseContext());
+        /*Calendar c = GregorianCalendar.getInstance();
+
+        for(int i = 0; i < lisData.size(); i++) {
+            int hour = getHour(lisData.get(i));
+            int minute = getMinute(lisData.get(i));
+            int hourNow = c.get(Calendar.HOUR_OF_DAY);
+            int minuteNow = c.get(Calendar.MINUTE);
+
+            if (hour > hourNow || (hour == hourNow && minute > minuteNow))
+                scheduleTask(getBaseContext(), hour, minute);
+        }*/
+    }
+
+    public int getStartHour(Attendance a){
+        if(a.getStartTime().charAt(0) == '0')
+            return Integer.parseInt(a.getStartTime().substring(1, 2));
+
+        return Integer.parseInt(a.getStartTime().substring(0, 2));
+    }
+
+    public int getStartMinute(Attendance a){
+        if(a.getStartTime().charAt(3) == '0')
+            return Integer.parseInt(a.getStartTime().substring(4));
+
+        return Integer.parseInt(a.getStartTime().substring(3));
+    }
+    public int getEndHour(Attendance a){
+        if(a.getEndTime().charAt(0) == '0')
+            return Integer.parseInt(a.getEndTime().substring(1, 2));
+
+        return Integer.parseInt(a.getEndTime().substring(0, 2));
+    }
+    public int getEndMinute(Attendance a){
+        if(a.getEndTime().charAt(3) == '0')
+            return Integer.parseInt(a.getEndTime().substring(4));
+
+        return Integer.parseInt(a.getEndTime().substring(3));
     }
 
     private void populateAllBuildings(){
@@ -151,8 +215,8 @@ public class MainActivity extends AppCompatActivity {
         buldingIDs.add(R.id.nav_razon);
     }
 
-    private void filterByBuilding(String building) {
-        pagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(), tabList, TAB_NUMBERS, RID, building);
+    public void filter(Filter filter) {
+        pagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(), tabList, TAB_NUMBERS, filter);
         viewPager = (ViewPager) findViewById(R.id.pager);
         viewPager.setAdapter(pagerAdapter);
         viewPager.setPageTransformer(true, new AccordionTransformer());
@@ -177,9 +241,11 @@ public class MainActivity extends AppCompatActivity {
         for(int i = 0; i < curBuildings.size(); i++){
             mNavigationView.getMenu().getItem(buildings.indexOf(curBuildings.get(i))).setVisible(true);
             if(i == 0)
-                setMenuCounter(buldingIDs.get(buildings.indexOf(curBuildings.get(i))), db.getAssignedAttendance(RID, "NULL").size());
-            else
-                setMenuCounter(buldingIDs.get(buildings.indexOf(curBuildings.get(i))), db.getAssignedAttendance(RID, curBuildings.get(i)).size());
+                setMenuCounter(buldingIDs.get(buildings.indexOf(curBuildings.get(i))), db.getAssignedAttendance(mainFilter).size());
+            else {
+                mainFilter.setBuilding(curBuildings.get(i));
+                setMenuCounter(buldingIDs.get(buildings.indexOf(curBuildings.get(i))), db.getAssignedAttendance(mainFilter).size());
+            }
         }
 
         mNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
@@ -187,20 +253,24 @@ public class MainActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(MenuItem menuItem) {
                 menuItem.setChecked(true);
 
-                switch(menuItem.getTitle().toString()) {
-                    case "Log Out":
+                switch(menuItem.getItemId()) {
+                    case R.id.nav_logout:
+                        timer.cancel();
                         goToLogin();
                         break;
-                    case "All Buildings":
-                        filterByBuilding("NULL");
+                    case R.id.nav_allbuildings:
+                        mainFilter.setBuilding("NULL");
+                        filter(mainFilter);
                         break;
-                    case "Gokongwei":
-                        filterByBuilding("Gokongwei");
+                    case R.id.nav_gokongwei:
+                        mainFilter.setBuilding("Gokongwei");
+                        filter(mainFilter);
                         break;
-                    case "Andrew":
-                        filterByBuilding("Andrew");
+                    case R.id.nav_andrew:
+                        mainFilter.setBuilding("Andrew");
+                        filter(mainFilter);
                         break;
-                    case "Help":
+                    case R.id.nav_help:
                         Intent help = new Intent();
                         help.setClass(getBaseContext(), HelpActivity.class);
                         startActivity(help);
@@ -247,27 +317,24 @@ public class MainActivity extends AppCompatActivity {
         loginscreen.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(loginscreen);
         this.finish();
+
     }
 
     private void scheduleTask(Context c){
-        Calendar cal = Calendar.getInstance();
-        int year = cal.get(Calendar.YEAR);
-        int month = cal.get(Calendar.MONTH);
-        int day = cal.get(Calendar.DAY_OF_MONTH);
 
-        Calendar today = Calendar.getInstance();
-        today.set(Calendar.HOUR_OF_DAY, 11);
-        today.set(Calendar.MINUTE, 0);
-        today.set(Calendar.SECOND, 0);
+        //Calendar today = Calendar.getInstance();
+        //today.set(Calendar.HOUR_OF_DAY, hour);
+        //today.set(Calendar.MINUTE, minute);
+        //today.set(Calendar.SECOND, 0);
 
         //Now create the time and schedule it
-        Timer timer = new Timer();
+        timer = new Timer();
 
         //Use this if you want to execute it once
-        timer.schedule(new AttendanceScheduler(c), today.getTime());
+        timer.scheduleAtFixedRate(new AttendanceScheduler(c), 0, 1000);
     }
 
-    private static class AttendanceScheduler extends TimerTask
+    private class AttendanceScheduler extends TimerTask
     {
         private Context c;
 
@@ -277,7 +344,76 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void run() {
-            Log.e("WORRRRRRRK", "Started Repeat Timer");
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    if(listData.size() > 0) {
+                        Calendar c = GregorianCalendar.getInstance();
+                        int startHour = getStartHour(listData.get(0));
+                        int startMinute = getStartMinute(listData.get(0));
+                        int endHour = getEndHour(listData.get(0));
+                        int endMinute = getEndMinute(listData.get(0));
+                        int hourNow = c.get(Calendar.HOUR_OF_DAY);
+                        int minuteNow = c.get(Calendar.MINUTE);
+
+                        Log.i("YES" + listData.size(), "Time Now: " + hourNow + ":" + minuteNow + " Start Time: " + startHour + ":" + startMinute + " End Time: " + endHour + ":" + endMinute);
+
+                        if ((startHour == hourNow && minuteNow >= startMinute) || (((hourNow > startHour) && (hourNow < endHour)) || (hourNow == endHour && minuteNow <= endMinute))) {
+                            mainFilter.setStartHour(startHour);
+                            mainFilter.setStartMinute(startMinute);
+                            showDialog(startHour, startMinute);
+                            listData.remove(0);
+                            Log.i("REMOVED", "UPDATED");
+                        }
+                        else if(startHour < hourNow && endHour < hourNow || (hourNow == endHour && minuteNow > endMinute)) {
+                            listData.remove(0);
+                            Log.i("REMOVED", "EXCEEDED");
+                        }
+                    }
+                    else
+                        timer.cancel();
+                }
+            });
+        }
+    }
+
+    public void showDialog(int startHour, int startMinute){
+        AlertDialog.Builder adb = new AlertDialog.Builder(this);
+
+        adb.setTitle("Scheduler");
+        adb.setMessage("The next classes (" + startHour + ":" + startMinute + ") are about to start. Click \"OK\" to proceed and the list will be filtered.");
+        adb.setCancelable(false);
+
+        adb.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which){
+                filter(mainFilter);
+                mNavigationView.getMenu().performIdentifierAction(R.id.nav_allbuildings, 0);
+            }
+        });
+
+        adb.show();
+    }
+
+    class MainTask extends AsyncTask<Object, Void, String> {
+
+        MainTask() {
+
+        }
+
+        @Override
+        protected void onPreExecute() {
+        }
+
+        @Override
+        protected String doInBackground(Object... params) {
+            listData = db.getAssignedAttendance(mainFilter);
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+
         }
     }
 }

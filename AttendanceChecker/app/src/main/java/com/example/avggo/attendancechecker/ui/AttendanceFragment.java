@@ -17,6 +17,7 @@ import com.example.avggo.attendancechecker.MainActivity;
 import com.example.avggo.attendancechecker.R;
 import com.example.avggo.attendancechecker.adapter.AttendanceAdapter;
 import com.example.avggo.attendancechecker.model.Attendance;
+import com.example.avggo.attendancechecker.model.Filter;
 
 import java.util.ArrayList;
 
@@ -34,15 +35,16 @@ public class AttendanceFragment extends android.support.v4.app.Fragment implemen
     AttendanceAdapter adapter;
     ArrayList listData;
     DatabaseOpenHelper db;
-    String RID;
 
-    public static AttendanceFragment newInstance(String RID, String building) {
+    public static AttendanceFragment newInstance(Filter filter) {
         AttendanceFragment f = new AttendanceFragment();
 
         Bundle args = new Bundle();
 
-        args.putString("RID", RID);
-        args.putString("BUILDING", building);
+        args.putString("RID", filter.getRID());
+        args.putString("BUILDING", filter.getBuilding());
+        args.putInt("START_H", filter.getStartHour());
+        args.putInt("START_M", filter.getStartMinute());
         f.setArguments(args);
 
         return (f);
@@ -55,7 +57,21 @@ public class AttendanceFragment extends android.support.v4.app.Fragment implemen
 
         //Toast.makeText(v.getContext(), getRID(), Toast.LENGTH_LONG).show();
 
-        new AttendanceFragmentTask(getContext(), v, this).execute();
+        db = new DatabaseOpenHelper(getContext());
+
+        Filter f = new Filter();
+        f.setBuilding(getBuilding());
+        f.setRID(getRID());
+        f.setStartHour(getStartHour());
+        f.setStartMinute(getStartMinute());
+
+        listData = (ArrayList) db.getAssignedAttendance(f);
+
+        recView = (RecyclerView) v.findViewById(R.id.rec_list);
+        recView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        adapter = new AttendanceAdapter(db.getAssignedAttendance(f), getActivity());
+        recView.setAdapter(adapter);
+        adapter.setItemClickCallback(this);
 
         return v;
     }
@@ -82,10 +98,6 @@ public class AttendanceFragment extends android.support.v4.app.Fragment implemen
 
     }
 
-    public void setRID(String RID) {
-        this.RID = RID;
-    }
-
     String getRID() {
         return (getArguments().getString("RID"));
     }
@@ -94,7 +106,15 @@ public class AttendanceFragment extends android.support.v4.app.Fragment implemen
         return (getArguments().getString("BUILDING"));
     }
 
-    class AttendanceFragmentTask extends AsyncTask<Object, Void, String> {
+    int getStartHour() {
+        return (getArguments().getInt("START_H"));
+    }
+
+    int getStartMinute() {
+        return (getArguments().getInt("START_M"));
+    }
+
+    public class AttendanceFragmentTask extends AsyncTask<Object, Void, String> {
         Context context;
         View v;
         AttendanceAdapter.ItemClickCallback it;
@@ -114,9 +134,7 @@ public class AttendanceFragment extends android.support.v4.app.Fragment implemen
 
         @Override
         protected String doInBackground(Object... params) {
-            db = new DatabaseOpenHelper(getContext());
 
-            listData = (ArrayList) db.getAssignedAttendance(getRID(), getBuilding());
 
             return null;
         }
@@ -128,7 +146,7 @@ public class AttendanceFragment extends android.support.v4.app.Fragment implemen
 
             recView = (RecyclerView) v.findViewById(R.id.rec_list);
             recView.setLayoutManager(new LinearLayoutManager(getActivity()));
-            adapter = new AttendanceAdapter(db.getAssignedAttendance(getRID(), getBuilding()), getActivity());
+            adapter = new AttendanceAdapter(db.getAssignedAttendance(new Filter()), getActivity());
             recView.setAdapter(adapter);
             adapter.setItemClickCallback(it);
         }

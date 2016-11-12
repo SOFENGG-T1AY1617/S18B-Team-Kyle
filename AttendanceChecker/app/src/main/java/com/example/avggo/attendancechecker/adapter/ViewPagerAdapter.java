@@ -8,38 +8,30 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
+import com.example.avggo.attendancechecker.model.Filter;
 import com.example.avggo.attendancechecker.ui.AttendanceFragment;
 
 public class ViewPagerAdapter extends FragmentStatePagerAdapter {
     CharSequence Titles[];
     int NumbOfTabs;
-    String RID, building;
+    Filter filter;
 
-    public ViewPagerAdapter(FragmentManager fm, CharSequence mTitles[], int mNumbOfTabsumb, String RID, String building) {
+    public ViewPagerAdapter(FragmentManager fm, CharSequence mTitles[], int mNumbOfTabsumb, Filter filter) {
         super(fm);
         this.Titles = mTitles;
         this.NumbOfTabs = mNumbOfTabsumb;
-        this.RID = RID;
-        this.building = building;
-    }
-
-    public ViewPagerAdapter(FragmentManager fm, CharSequence mTitles[], int mNumbOfTabsumb, String RID) {
-        super(fm);
-        this.Titles = mTitles;
-        this.NumbOfTabs = mNumbOfTabsumb;
-        this.RID = RID;
-        this.building = "NULL";
+        this.filter = filter;
     }
 
     public Fragment getItem(int position) {
         if (position == 0) {
-            AttendanceFragment al = AttendanceFragment.newInstance(RID, building);
+            AttendanceFragment al = AttendanceFragment.newInstance(filter);
             return al;
         } else if (position == 1) {
-            AttendanceFragment al = AttendanceFragment.newInstance(RID, building);
+            AttendanceFragment al = AttendanceFragment.newInstance(filter);
             return al;
         } else if (position == 2) {
-            AttendanceFragment al = AttendanceFragment.newInstance(RID, building);
+            AttendanceFragment al = AttendanceFragment.newInstance(filter);
             return al;
         } else return null;
     }

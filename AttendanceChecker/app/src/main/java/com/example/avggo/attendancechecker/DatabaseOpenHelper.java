@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
@@ -14,6 +15,7 @@ import android.util.Log;
 import com.example.avggo.attendancechecker.model.Attendance;
 import com.example.avggo.attendancechecker.model.CheckerAccount;
 import com.example.avggo.attendancechecker.model.Faculty;
+import com.example.avggo.attendancechecker.model.Filter;
 
 import java.io.ByteArrayOutputStream;
 import java.text.SimpleDateFormat;
@@ -31,8 +33,20 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
 
     public DatabaseOpenHelper(Context context) {
         super(context, SCHEMA, null, 1);
-        context.deleteDatabase("attendance_checker");
+        //context.deleteDatabase("attendance_checker");
         this.context = context;
+    }
+
+    private boolean checkDataBase() {
+        SQLiteDatabase checkDB = null;
+        try {
+            checkDB = SQLiteDatabase.openDatabase(getDatabaseName(), null,
+                    SQLiteDatabase.OPEN_READONLY);
+            checkDB.close();
+        } catch (SQLiteException e) {
+            // database doesn't exist yet.
+        }
+        return checkDB != null;
     }
 
     @Override
@@ -122,7 +136,7 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
         initializeDBData(db);
     }
 
-    public ArrayList<Attendance> getAssignedAttendance(String RID, String building) {
+    public ArrayList<Attendance> getAssignedAttendance(Filter f) {
         String weekDay;
         SQLiteDatabase db = getReadableDatabase();
         SimpleDateFormat dayFormat = new SimpleDateFormat("EEEE", Locale.US);
@@ -134,24 +148,46 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
 
         String query;
 
-        if (building.equals("NULL")) {
-            query = "select f.first_name, f.middle_name, f.last_name, f.college, c.code, c.name 'course_name', co.time_start, co.time_end, r.name 'room_name', f.pic " +
-                    "from attendance a inner join courseoffering co on a.courseoffering_id = co.id " +
-                    "inner join faculty f on f.id = co.faculty_id " +
-                    "inner join course c on c.id = co.course_id " +
-                    "inner join room r on co.room_id = r.id " +
-                    "inner join rotationroom rr on r.id = rr.room_id " +
-                    "where rr.rotation_id = '" + RID + "' and co.days like '%" + weekDay + "%' and a.status_id is null;";
+        if (f.getBuilding().equals("NULL")) {
+            if(f.getStartHour() != -1) {
+                query = "select f.first_name, f.middle_name, f.last_name, f.college, c.code, c.name 'course_name', co.time_start, co.time_end, r.name 'room_name', f.pic " +
+                        "from attendance a inner join courseoffering co on a.courseoffering_id = co.id " +
+                        "inner join faculty f on f.id = co.faculty_id " +
+                        "inner join course c on c.id = co.course_id " +
+                        "inner join room r on co.room_id = r.id " +
+                        "inner join rotationroom rr on r.id = rr.room_id " +
+                        "where rr.rotation_id = '" + f.getRID() + "' and co.days like '%" + weekDay + "%' and a.status_id is null and co.time_start LIKE '%" + f.getStartHour() + ":" + f.getStartMinute() + "%' order by co.time_start;";
+            }
+            else
+                query = "select f.first_name, f.middle_name, f.last_name, f.college, c.code, c.name 'course_name', co.time_start, co.time_end, r.name 'room_name', f.pic " +
+                        "from attendance a inner join courseoffering co on a.courseoffering_id = co.id " +
+                        "inner join faculty f on f.id = co.faculty_id " +
+                        "inner join course c on c.id = co.course_id " +
+                        "inner join room r on co.room_id = r.id " +
+                        "inner join rotationroom rr on r.id = rr.room_id " +
+                        "where rr.rotation_id = '" + f.getRID() + "' and co.days like '%" + weekDay + "%' and a.status_id is null order by co.time_start;";
         } else {
-            query = "select f.first_name, f.middle_name, f.last_name, f.college, c.code, c.name 'course_name', co.time_start, co.time_end, r.name 'room_name', f.pic, b.name 'bname'\n" +
-                    "from attendance a inner join courseoffering co on a.courseoffering_id = co.id\n" +
-                    "inner join faculty f on f.id = co.faculty_id\n" +
-                    "inner join course c on c.id = co.course_id\n" +
-                    "inner join room r on co.room_id = r.id\n" +
-                    "inner join rotationroom rr on r.id = rr.room_id\n" +
-                    "inner join building b on r.building_id = b.id\n" +
-                    "where rr.rotation_id = '" + RID + "' and co.days like '%" + weekDay + "%' and a.status_id is null and bname = '" + building + "';";
+            if(f.getStartHour() != -1) {
+                query = "select f.first_name, f.middle_name, f.last_name, f.college, c.code, c.name 'course_name', co.time_start, co.time_end, r.name 'room_name', f.pic, b.name 'bname'\n" +
+                        "from attendance a inner join courseoffering co on a.courseoffering_id = co.id\n" +
+                        "inner join faculty f on f.id = co.faculty_id\n" +
+                        "inner join course c on c.id = co.course_id\n" +
+                        "inner join room r on co.room_id = r.id\n" +
+                        "inner join rotationroom rr on r.id = rr.room_id\n" +
+                        "inner join building b on r.building_id = b.id\n" +
+                        "where rr.rotation_id = '" + f.getRID() + "' and co.days like '%" + weekDay + "%' and a.status_id is null and bname = '" + f.getBuilding() + "' and co.time_start LIKE '%" + f.getStartHour() + ":" + f.getStartMinute() + "%' order by co.time_start;";
+            }
+            else
+                query = "select f.first_name, f.middle_name, f.last_name, f.college, c.code, c.name 'course_name', co.time_start, co.time_end, r.name 'room_name', f.pic, b.name 'bname'\n" +
+                        "from attendance a inner join courseoffering co on a.courseoffering_id = co.id\n" +
+                        "inner join faculty f on f.id = co.faculty_id\n" +
+                        "inner join course c on c.id = co.course_id\n" +
+                        "inner join room r on co.room_id = r.id\n" +
+                        "inner join rotationroom rr on r.id = rr.room_id\n" +
+                        "inner join building b on r.building_id = b.id\n" +
+                        "where rr.rotation_id = '" + f.getRID() + "' and co.days like '%" + weekDay + "%' and a.status_id is null and bname = '" + f.getBuilding() + "' order by co.time_start;";
         }
+
 
         Cursor c = db.rawQuery(query, null);
 
