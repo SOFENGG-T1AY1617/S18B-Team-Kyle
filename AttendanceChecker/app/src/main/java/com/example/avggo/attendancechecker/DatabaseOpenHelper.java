@@ -162,7 +162,7 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
                         "where rr.rotation_id = '" + f.getRID() + "' and co.days like '%" + weekDay + "%' and a.status_id is "+ isDone +" null and co.time_start LIKE '%" + f.getStartHour() + ":" + f.getStartMinute() + "%' order by co.time_start;";
             }
             else if(f.getStatus().equals("unique")){
-                query = "select co.time_start, co.time_end, f.first_name, f.middle_name, f.last_name, f.college, c.code, c.name 'course_name', r.name 'room_name', f.pic " +
+                query = "select co.time_start, co.time_end, f.first_name, f.middle_name, f.last_name, f.college, c.code, a.id, (SELECT code from attendancestatus ats where a.status_id = ats.id) acode, c.name 'course_name', r.name 'room_name', f.pic " +
                         "from attendance a inner join courseoffering co on a.courseoffering_id = co.id " +
                         "inner join faculty f on f.id = co.faculty_id " +
                         "inner join course c on c.id = co.course_id " +
@@ -204,8 +204,8 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
         Cursor c = db.rawQuery(query, null);
 
         ArrayList<Attendance> assignedAttendance = new ArrayList<>();
-        Log.i("tagg", "DB.getAssignedAttendance query is " + query);
-        Log.i("tagg", "DB.getAssignedAttendance result size is " + assignedAttendance.size());
+        //Log.i("tagg", "DB.getAssignedAttendance query is " + query);
+        //Log.i("tagg", "DB.getAssignedAttendance result size is " + assignedAttendance.size());
 
         if (c.moveToFirst()) {
             while (c.isAfterLast() == false) {
