@@ -411,6 +411,23 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
         sql = "INSERT INTO RotationRoom (\"rotation_id\", \"room_id\") VALUES ('A', '12');";
         db.execSQL(sql);
 
+        sql = "INSERT INTO attendancestatus (\"code\", \"name\", \"description\") VALUES ('AB', 'Absent', 'The faculty is not in class after the first third of the official class time.');";
+        db.execSQL(sql);
+        sql = "INSERT INTO attendancestatus (\"code\", \"name\", \"description\") VALUES ('ED', 'Early Dismissal', 'The faculty dismissed the class earlier than the official class time.');";
+        db.execSQL(sql);
+        sql = "INSERT INTO attendancestatus (\"code\", \"name\", \"description\") VALUES ('LA', 'Late', 'The faculty is not in class after 5 minutes from the start of the official class time.');";
+        db.execSQL(sql);
+        sql = "INSERT INTO attendancestatus (\"code\", \"name\", \"description\") VALUES ('PR', 'Present', 'The faculty is present at the start of the official class time.');";
+        db.execSQL(sql);
+        sql = "INSERT INTO attendancestatus (\"code\", \"name\", \"description\") VALUES ('SB', 'Substitute', 'The faculty inside the classroom is not hte official faculty member assigned to the class.');";
+        db.execSQL(sql);
+        sql = "INSERT INTO attendancestatus (\"code\", \"name\", \"description\") VALUES ('SW', 'Seatwork', 'The faculty is not in class, but the students are performing class work.');";
+        db.execSQL(sql);
+        sql = "INSERT INTO attendancestatus (\"code\", \"name\", \"description\") VALUES ('US', 'Unscheduled Class', 'A room is occupied by a faculty and their students without prior notice.');";
+        db.execSQL(sql);
+        sql = "INSERT INTO attendancestatus (\"code\", \"name\", \"description\") VALUES ('VR', 'Vacant Room', 'Both the faculty and the students are not in class.');";
+        db.execSQL(sql);
+
         ContentValues cv = new ContentValues();
 
         cv = new ContentValues();
