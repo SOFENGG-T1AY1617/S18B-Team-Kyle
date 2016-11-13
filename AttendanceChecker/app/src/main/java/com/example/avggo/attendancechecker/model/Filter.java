@@ -12,11 +12,8 @@ public class Filter {
     public Filter(){
         startHour = -1;
         startMinute = -1;
-<<<<<<< HEAD
         status = "";
-=======
         done = false;
->>>>>>> fcb309469345346c5fd608fb64d64e0338b743de
     }
 
     public String getRID() {
@@ -51,20 +48,19 @@ public class Filter {
         this.startMinute = startMinute;
     }
 
-<<<<<<< HEAD
     public String getStatus() {
         return status;
     }
 
     public void setStatus(String status) {
         this.status = status;
-=======
+    }
+
     public boolean getDone(){
         return done;
     }
 
     public void setDone(boolean b){
         this.done = b;
->>>>>>> fcb309469345346c5fd608fb64d64e0338b743de
     }
 }
