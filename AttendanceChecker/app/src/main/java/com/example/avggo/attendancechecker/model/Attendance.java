@@ -1,10 +1,12 @@
 package com.example.avggo.attendancechecker.model;
 
+import java.io.Serializable;
+
 /**
  * Created by avggo on 10/10/2016.
  */
 
-public class Attendance {
+public class Attendance implements Serializable{
     public static final String TABLE_NAME = "Attendance";
     public static final String COL_ID = "id";
     public static final String COL_COID = "courseoffering_id";
@@ -14,6 +16,8 @@ public class Attendance {
     public static final String COL_DATE = "date";
     public static final String COL_TIME_SET = "time_set";
 
+
+    private int id;
     private String room;
     private String coursecode;
     private String coursename;
@@ -40,6 +44,14 @@ public class Attendance {
         this.email = email;
         this.remarks = remarks;
         this.pic = pic;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getRoom() {

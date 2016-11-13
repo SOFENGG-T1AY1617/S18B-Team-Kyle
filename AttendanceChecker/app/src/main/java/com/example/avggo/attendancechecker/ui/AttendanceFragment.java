@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +22,8 @@ import com.example.avggo.attendancechecker.model.Filter;
 
 import java.util.ArrayList;
 
+import static android.app.Activity.RESULT_OK;
+
 /**
  * Created by avggo on 10/23/2016.
  */
@@ -30,6 +33,8 @@ public class AttendanceFragment extends android.support.v4.app.Fragment implemen
     private static final String BUNDLE_EXTRAS = "BUNDLE_EXTRAS";
     private static final String EXTRA_QUOTE = "EXTRA_QUOTE";
     private static final String EXTRA_ATTR = "EXTRA_ATTR";
+
+    private static final int ATTENDANCE_FRAGMENT_REQUEST = 1;
 
     RecyclerView recView;
     AttendanceAdapter adapter;
@@ -45,6 +50,7 @@ public class AttendanceFragment extends android.support.v4.app.Fragment implemen
         args.putString("BUILDING", filter.getBuilding());
         args.putInt("START_H", filter.getStartHour());
         args.putInt("START_M", filter.getStartMinute());
+        args.putBoolean("ISDONE", filter.getDone());
         f.setArguments(args);
 
         return (f);
@@ -64,6 +70,9 @@ public class AttendanceFragment extends android.support.v4.app.Fragment implemen
         f.setRID(getRID());
         f.setStartHour(getStartHour());
         f.setStartMinute(getStartMinute());
+        f.setDone(getDone());
+
+        Log.i("tagg", "AttendanceFragment.onCreateView " + f.getDone());
 
         listData = (ArrayList) db.getAssignedAttendance(f);
 
@@ -82,20 +91,31 @@ public class AttendanceFragment extends android.support.v4.app.Fragment implemen
 
         Intent i = new Intent(getActivity(), DetailActivity.class);
 
-        i.putExtra("PIC", item.getPic());
-        i.putExtra("FNAME", item.getFname());
-        i.putExtra("COLLEGE", item.getCollege());
-        i.putExtra("COURSE_C", item.getCoursecode());
-        i.putExtra("COURSE_N", item.getCoursename());
-        i.putExtra("TIME", item.getStartTime() + " - " + item.getEndTime());
-        i.putExtra("ROOM_N", item.getRoom());
+        i.putExtra("ATTENDANCE_ITEM",item);
 
-        startActivity(i);
+        startActivityForResult(i, ATTENDANCE_FRAGMENT_REQUEST);
     }
 
     @Override
     public void onSecondaryClick(int p) {
 
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        db = new DatabaseOpenHelper(getContext());
+        // Check which request we're responding to
+        if (requestCode == ATTENDANCE_FRAGMENT_REQUEST) {
+            // Make sure the request was successful
+            if (resultCode == RESULT_OK) {
+                // The user picked a contact.
+                // The Intent's data Uri identifies which contact was selected.
+                Attendance item = (Attendance) data.getSerializableExtra("CODED_ATTENDANCE_ITEM");
+                db.updateAttendance(item);
+                Log.i("tagg", "AttendanceFragment.onActivityResult()   db updated!");
+                // Do something with the contact here (bigger example below)
+            }
+        }
     }
 
     String getRID() {
@@ -113,6 +133,8 @@ public class AttendanceFragment extends android.support.v4.app.Fragment implemen
     int getStartMinute() {
         return (getArguments().getInt("START_M"));
     }
+
+    boolean getDone(){ return (getArguments().getBoolean("ISDONE"));}
 
     public class AttendanceFragmentTask extends AsyncTask<Object, Void, String> {
         Context context;

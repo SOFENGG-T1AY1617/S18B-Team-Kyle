@@ -146,17 +146,20 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
 
         weekDay = weekDay.substring(0, 1);
 
+        String isDone = (f.getDone()) ? " not " : "";
+        //Log.i("tagg", String.valueOf(f.getDone()));
         String query;
 
         if (f.getBuilding().equals("NULL")) {
             if(f.getStartHour() != -1) {
-                query = "select f.first_name, f.middle_name, f.last_name, f.college, c.code, c.name 'course_name', co.time_start, co.time_end, r.name 'room_name', f.pic " +
-                        "from attendance a inner join courseoffering co on a.courseoffering_id = co.id " +
-                        "inner join faculty f on f.id = co.faculty_id " +
-                        "inner join course c on c.id = co.course_id " +
-                        "inner join room r on co.room_id = r.id " +
-                        "inner join rotationroom rr on r.id = rr.room_id " +
-                        "where rr.rotation_id = '" + f.getRID() + "' and co.days like '%" + weekDay + "%' and a.status_id is null and co.time_start LIKE '%" + f.getStartHour() + ":" + f.getStartMinute() + "%' order by co.time_start;";
+                query = "select f.first_name, f.middle_name, f.last_name, f.college, c.code, c.name 'course_name', co.time_start, co.time_end, r.name 'room_name', f.pic, a.id id, (SELECT code from attendancestatus ats where a.status_id = ats.id) acode \n" +
+                        "from attendance a inner join courseoffering co on a.courseoffering_id = co.id \n" +
+                        "inner join faculty f on f.id = co.faculty_id \n" +
+                        "inner join course c on c.id = co.course_id \n" +
+                        "inner join room r on co.room_id = r.id \n" +
+                        "inner join rotationroom rr on r.id = rr.room_id \n" +
+                        "inner join attendancestatus ats on a.status_id = ats.id \n" +
+                        "where rr.rotation_id = '" + f.getRID() + "' and co.days like '%" + weekDay + "%' and a.status_id is "+ isDone +" null and co.time_start LIKE '%" + f.getStartHour() + ":" + f.getStartMinute() + "%' order by co.time_start;";
             }
             else if(f.getStatus().equals("unique")){
                 query = "select co.time_start, co.time_end, f.first_name, f.middle_name, f.last_name, f.college, c.code, c.name 'course_name', r.name 'room_name', f.pic " +
@@ -168,39 +171,41 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
                         "where rr.rotation_id = '" + f.getRID() + "' and co.days like '%" + weekDay + "%' and a.status_id is null group by 1 order by co.time_start;";
             }
             else
-                query = "select f.first_name, f.middle_name, f.last_name, f.college, c.code, c.name 'course_name', co.time_start, co.time_end, r.name 'room_name', f.pic " +
-                        "from attendance a inner join courseoffering co on a.courseoffering_id = co.id " +
-                        "inner join faculty f on f.id = co.faculty_id " +
-                        "inner join course c on c.id = co.course_id " +
-                        "inner join room r on co.room_id = r.id " +
-                        "inner join rotationroom rr on r.id = rr.room_id " +
-                        "where rr.rotation_id = '" + f.getRID() + "' and co.days like '%" + weekDay + "%' and a.status_id is null order by co.time_start;";
+                query = "select f.first_name, f.middle_name, f.last_name, f.college, c.code, c.name 'course_name', co.time_start, co.time_end, r.name 'room_name', f.pic, a.id id, (SELECT code from attendancestatus ats where a.status_id = ats.id) acode \n" +
+                        "from attendance a inner join courseoffering co on a.courseoffering_id = co.id \n" +
+                        "inner join faculty f on f.id = co.faculty_id \n" +
+                        "inner join course c on c.id = co.course_id \n" +
+                        "inner join room r on co.room_id = r.id \n" +
+                        "inner join rotationroom rr on r.id = rr.room_id \n" +
+                        "where rr.rotation_id = '" + f.getRID() + "' and co.days like '%" + weekDay + "%' and a.status_id is "+ isDone +"null order by co.time_start;";
         } else {
             if(f.getStartHour() != -1) {
-                query = "select f.first_name, f.middle_name, f.last_name, f.college, c.code, c.name 'course_name', co.time_start, co.time_end, r.name 'room_name', f.pic, b.name 'bname'\n" +
+                query = "select f.first_name, f.middle_name, f.last_name, f.college, c.code, c.name 'course_name', co.time_start, co.time_end, r.name 'room_name', f.pic, b.name 'bname', a.id id, (SELECT code from attendancestatus ats where a.status_id = ats.id) acode \n" +
                         "from attendance a inner join courseoffering co on a.courseoffering_id = co.id\n" +
                         "inner join faculty f on f.id = co.faculty_id\n" +
                         "inner join course c on c.id = co.course_id\n" +
                         "inner join room r on co.room_id = r.id\n" +
                         "inner join rotationroom rr on r.id = rr.room_id\n" +
                         "inner join building b on r.building_id = b.id\n" +
-                        "where rr.rotation_id = '" + f.getRID() + "' and co.days like '%" + weekDay + "%' and a.status_id is null and bname = '" + f.getBuilding() + "' and co.time_start LIKE '%" + f.getStartHour() + ":" + f.getStartMinute() + "%' order by co.time_start;";
+                        "where rr.rotation_id = '" + f.getRID() + "' and co.days like '%" + weekDay + "%' and a.status_id is "+ isDone +" null and bname = '" + f.getBuilding() + "' and co.time_start LIKE '%" + f.getStartHour() + ":" + f.getStartMinute() + "%' order by co.time_start;";
             }
             else
-                query = "select f.first_name, f.middle_name, f.last_name, f.college, c.code, c.name 'course_name', co.time_start, co.time_end, r.name 'room_name', f.pic, b.name 'bname'\n" +
+                query = "select f.first_name, f.middle_name, f.last_name, f.college, c.code, c.name 'course_name', co.time_start, co.time_end, r.name 'room_name', f.pic, b.name 'bname', a.id id, (SELECT code from attendancestatus ats where a.status_id = ats.id) acode \n" +
                         "from attendance a inner join courseoffering co on a.courseoffering_id = co.id\n" +
                         "inner join faculty f on f.id = co.faculty_id\n" +
                         "inner join course c on c.id = co.course_id\n" +
                         "inner join room r on co.room_id = r.id\n" +
                         "inner join rotationroom rr on r.id = rr.room_id\n" +
                         "inner join building b on r.building_id = b.id\n" +
-                        "where rr.rotation_id = '" + f.getRID() + "' and co.days like '%" + weekDay + "%' and a.status_id is null and bname = '" + f.getBuilding() + "' order by co.time_start;";
+                        "where rr.rotation_id = '" + f.getRID() + "' and co.days like '%" + weekDay + "%' and a.status_id is "+ isDone +" null and bname = '" + f.getBuilding() + "' order by co.time_start;";
         }
 
 
         Cursor c = db.rawQuery(query, null);
 
         ArrayList<Attendance> assignedAttendance = new ArrayList<>();
+        Log.i("tagg", "DB.getAssignedAttendance query is " + query);
+        Log.i("tagg", "DB.getAssignedAttendance result size is " + assignedAttendance.size());
 
         if (c.moveToFirst()) {
             while (c.isAfterLast() == false) {
@@ -214,6 +219,8 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
                 String time_end = c.getString(c.getColumnIndex("time_end"));
                 String room_name = c.getString(c.getColumnIndex("room_name"));
                 byte[] pic = c.getBlob(c.getColumnIndex("pic"));
+                int id = c.getInt(c.getColumnIndex("id"));
+                String aCode = c.getString(c.getColumnIndex("acode"));
 
                 Attendance a = new Attendance();
 
@@ -225,18 +232,30 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
                 a.setEndTime(time_end);
                 a.setRoom(room_name);
                 a.setPic(pic);
+                a.setId(id);
+                a.setCode(aCode);
 
                 assignedAttendance.add(a);
 
                 c.moveToNext();
 
-                Log.i("TEEEEEEST", first_name + "first name");
             }
         }
 
         c.close();
 
         return assignedAttendance;
+    }
+
+    public void updateAttendance(Attendance a){
+
+        SQLiteDatabase db = getReadableDatabase();
+
+        String query = "UPDATE attendance " +
+                "SET status_id = (SELECT id from attendancestatus ats where ats.code LIKE '%" + a.getCode()+"%') "+
+                "WHERE id = "+ a.getId() +";";
+
+        db.execSQL(query);
     }
 
     public ArrayList<String> getAssignedBuildings(String RID){
@@ -337,9 +356,9 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
         db.execSQL(sql);
         sql = "INSERT INTO CourseOffering (\"course_id\", \"faculty_id\", \"term_id\", \"section\", \"time_start\", \"time_end\", \"days\", \"room_id\") VALUES ('1', '1', '1', 'S19', '12:45', '14:15', 'MW', '3');";
         db.execSQL(sql);
-        sql = "INSERT INTO CourseOffering (\"course_id\", \"faculty_id\", \"term_id\", \"section\", \"time_start\", \"time_end\", \"days\", \"room_id\") VALUES ('2', '2', '1', 'S17', '14:30', '16:00', 'MW', '4');";
+        sql = "INSERT INTO CourseOffering (\"course_id\", \"faculty_id\", \"term_id\", \"section\", \"time_start\", \"time_end\", \"days\", \"room_id\") VALUES ('2', '2', '1', 'S17', '14:30', '16:00', 'MW', '11');";
         db.execSQL(sql);
-        sql = "INSERT INTO CourseOffering (\"course_id\", \"faculty_id\", \"term_id\", \"section\", \"time_start\", \"time_end\", \"days\", \"room_id\") VALUES ('2', '2', '1', 'S18', '09:15', '10:45', 'MW', '5');";
+        sql = "INSERT INTO CourseOffering (\"course_id\", \"faculty_id\", \"term_id\", \"section\", \"time_start\", \"time_end\", \"days\", \"room_id\") VALUES ('2', '2', '1', 'S18', '09:15', '10:45', 'MW', '12');";
         db.execSQL(sql);
         sql = "INSERT INTO CourseOffering (\"course_id\", \"faculty_id\", \"term_id\", \"section\", \"time_start\", \"time_end\", \"days\", \"room_id\") VALUES ('2', '2', '1', 'S19', '12:45', '14:15', 'MW', '6');";
         db.execSQL(sql);
@@ -357,13 +376,13 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
         db.execSQL(sql);
         sql = "INSERT INTO CourseOffering (\"course_id\", \"faculty_id\", \"term_id\", \"section\", \"time_start\", \"time_end\", \"days\", \"room_id\") VALUES ('5', '3', '1', 'S17', '12:45', '14:15', 'TH', '7');";
         db.execSQL(sql);
-        sql = "INSERT INTO CourseOffering (\"course_id\", \"faculty_id\", \"term_id\", \"section\", \"time_start\", \"time_end\", \"days\", \"room_id\") VALUES ('5', '3', '1', 'S18', '11:00', '12:30', 'MW', '9');";
+        sql = "INSERT INTO CourseOffering (\"course_id\", \"faculty_id\", \"term_id\", \"section\", \"time_start\", \"time_end\", \"days\", \"room_id\") VALUES ('5', '3', '1', 'S18', '12:45', '14:15', 'MW', '9');";
         db.execSQL(sql);
         sql = "INSERT INTO CourseOffering (\"course_id\", \"faculty_id\", \"term_id\", \"section\", \"time_start\", \"time_end\", \"days\", \"room_id\") VALUES ('5', '3', '1', 'S19', '11:00', '12:30', 'TH', '8');";
         db.execSQL(sql);
-        sql = "INSERT INTO CourseOffering (\"course_id\", \"faculty_id\", \"term_id\", \"section\", \"time_start\", \"time_end\", \"days\", \"room_id\") VALUES ('5', '3', '1', 'S21', '11:00', '12:30', 'MW', '11');";
+        sql = "INSERT INTO CourseOffering (\"course_id\", \"faculty_id\", \"term_id\", \"section\", \"time_start\", \"time_end\", \"days\", \"room_id\") VALUES ('5', '3', '1', 'S21', '14:30', '16:00', 'MW', '4');";
         db.execSQL(sql);
-        sql = "INSERT INTO CourseOffering (\"course_id\", \"faculty_id\", \"term_id\", \"section\", \"time_start\", \"time_end\", \"days\", \"room_id\") VALUES ('5', '3', '1', 'S21', '16:15', '17:45', 'MW', '12');";
+        sql = "INSERT INTO CourseOffering (\"course_id\", \"faculty_id\", \"term_id\", \"section\", \"time_start\", \"time_end\", \"days\", \"room_id\") VALUES ('5', '3', '1', 'S21', '16:15', '17:45', 'MW', '5');";
         db.execSQL(sql);
 
         sql = "INSERT INTO Rotation (\"id\") VALUES ('A');";
@@ -450,7 +469,6 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-
     }
 
     public CheckerAccount checkIfUserExists(String username) {
