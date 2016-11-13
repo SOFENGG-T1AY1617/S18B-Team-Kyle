@@ -7,10 +7,12 @@ package com.example.avggo.attendancechecker.model;
 public class Filter {
     private String building, RID;
     private int startHour, startMinute;
+    private boolean done;
 
     public Filter(){
         startHour = -1;
         startMinute = -1;
+        done = false;
     }
 
     public String getRID() {
@@ -43,5 +45,13 @@ public class Filter {
 
     public void setStartMinute(int startMinute) {
         this.startMinute = startMinute;
+    }
+
+    public boolean getDone(){
+        return done;
+    }
+
+    public void setDone(boolean b){
+        this.done = b;
     }
 }

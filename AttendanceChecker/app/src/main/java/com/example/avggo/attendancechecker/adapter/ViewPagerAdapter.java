@@ -7,6 +7,7 @@ package com.example.avggo.attendancechecker.adapter;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import android.util.Log;
 
 import com.example.avggo.attendancechecker.model.Filter;
 import com.example.avggo.attendancechecker.ui.AttendanceFragment;
@@ -24,13 +25,20 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
     }
 
     public Fragment getItem(int position) {
+        //Log.i("tagg", "ViewPagerAdapter.getItem()   -- called");
         if (position == 0) {
+            Log.i("tagg", "ViewPagerAdapter.getItem()   -- position ZERO called");
+            filter.setDone(false);
             AttendanceFragment al = AttendanceFragment.newInstance(filter);
             return al;
         } else if (position == 1) {
+            Log.i("tagg", "ViewPagerAdapter.getItem()   -- position ONE called");
+            filter.setDone(true);
             AttendanceFragment al = AttendanceFragment.newInstance(filter);
             return al;
         } else if (position == 2) {
+            Log.i("tagg", "ViewPagerAdapter.getItem()   -- position TWO called");
+            filter.setDone(true);
             AttendanceFragment al = AttendanceFragment.newInstance(filter);
             return al;
         } else return null;
