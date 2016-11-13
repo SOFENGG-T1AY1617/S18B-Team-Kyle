@@ -158,6 +158,15 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
                         "inner join rotationroom rr on r.id = rr.room_id " +
                         "where rr.rotation_id = '" + f.getRID() + "' and co.days like '%" + weekDay + "%' and a.status_id is null and co.time_start LIKE '%" + f.getStartHour() + ":" + f.getStartMinute() + "%' order by co.time_start;";
             }
+            else if(f.getStatus().equals("unique")){
+                query = "select co.time_start, co.time_end, f.first_name, f.middle_name, f.last_name, f.college, c.code, c.name 'course_name', r.name 'room_name', f.pic " +
+                        "from attendance a inner join courseoffering co on a.courseoffering_id = co.id " +
+                        "inner join faculty f on f.id = co.faculty_id " +
+                        "inner join course c on c.id = co.course_id " +
+                        "inner join room r on co.room_id = r.id " +
+                        "inner join rotationroom rr on r.id = rr.room_id " +
+                        "where rr.rotation_id = '" + f.getRID() + "' and co.days like '%" + weekDay + "%' and a.status_id is null group by 1 order by co.time_start;";
+            }
             else
                 query = "select f.first_name, f.middle_name, f.last_name, f.college, c.code, c.name 'course_name', co.time_start, co.time_end, r.name 'room_name', f.pic " +
                         "from attendance a inner join courseoffering co on a.courseoffering_id = co.id " +

@@ -5,12 +5,13 @@ package com.example.avggo.attendancechecker.model;
  */
 
 public class Filter {
-    private String building, RID;
+    private String building, RID, status;
     private int startHour, startMinute;
 
     public Filter(){
         startHour = -1;
         startMinute = -1;
+        status = "";
     }
 
     public String getRID() {
@@ -43,5 +44,13 @@ public class Filter {
 
     public void setStartMinute(int startMinute) {
         this.startMinute = startMinute;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

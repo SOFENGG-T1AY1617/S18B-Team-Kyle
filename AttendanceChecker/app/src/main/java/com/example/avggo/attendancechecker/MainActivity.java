@@ -148,12 +148,9 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        //new MainTask().execute();
-        Filter initialFilter = new Filter();
-        initialFilter.setBuilding("NULL");
-        initialFilter.setRID(RID);
-        listData = db.getAssignedAttendance(initialFilter);
-        scheduleTask(getBaseContext());
+        new MainTask().execute();
+
+
         /*Calendar c = GregorianCalendar.getInstance();
 
         for(int i = 0; i < lisData.size(); i++) {
@@ -381,7 +378,10 @@ public class MainActivity extends AppCompatActivity {
         AlertDialog.Builder adb = new AlertDialog.Builder(this);
 
         adb.setTitle("Scheduler");
-        adb.setMessage("The next classes (" + startHour + ":" + startMinute + ") are about to start. Click \"OK\" to proceed and the list will be filtered.");
+        String h = String.format("%02d", startHour);
+        String m = String.format("%02d", startMinute);
+
+        adb.setMessage("The next classes (" + h + ":" + m + ") are about to start. Click \"OK\" to proceed and the list will be filtered.");
         adb.setCancelable(false);
 
         adb.setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -407,13 +407,17 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         protected String doInBackground(Object... params) {
-            listData = db.getAssignedAttendance(mainFilter);
+            Filter initialFilter = new Filter();
+            initialFilter.setBuilding("NULL");
+            initialFilter.setRID(RID);
+            initialFilter.setStatus("unique");
+            listData = db.getAssignedAttendance(initialFilter);
             return null;
         }
 
         @Override
         protected void onPostExecute(String result) {
-
+            scheduleTask(getBaseContext());
         }
     }
 }
