@@ -46,6 +46,11 @@ public class Attendance implements Serializable{
         this.pic = pic;
     }
 
+    public String toString(){
+        return "id: " +id+" name: "+fname+" coursecode: "+coursecode+" startTime: "+startTime+" endTime: "+endTime+" room: "
+                +room+" code: "+code;
+    }
+
     public int getId() {
         return id;
     }

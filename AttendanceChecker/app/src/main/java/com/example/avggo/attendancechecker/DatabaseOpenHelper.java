@@ -152,17 +152,16 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
 
         if (f.getBuilding().equals("NULL")) {
             if(f.getStartHour() != -1) {
-                query = "select f.first_name, f.middle_name, f.last_name, f.college, c.code, c.name 'course_name', co.time_start, co.time_end, r.name 'room_name', f.pic, a.id id, (SELECT code from attendancestatus ats where a.status_id = ats.id) acode \n" +
+                query = "select f.first_name, f.middle_name, f.last_name, f.college, c.code, c.name 'course_name', co.time_start, co.time_end, r.name 'room_name', f.pic, a.id 'id', (SELECT ats.name from attendancestatus ats where a.status_id = ats.id) 'acode' \n" +
                         "from attendance a inner join courseoffering co on a.courseoffering_id = co.id \n" +
                         "inner join faculty f on f.id = co.faculty_id \n" +
                         "inner join course c on c.id = co.course_id \n" +
                         "inner join room r on co.room_id = r.id \n" +
                         "inner join rotationroom rr on r.id = rr.room_id \n" +
-                        "inner join attendancestatus ats on a.status_id = ats.id \n" +
                         "where rr.rotation_id = '" + f.getRID() + "' and co.days like '%" + weekDay + "%' and a.status_id is "+ isDone +" null and co.time_start LIKE '%" + f.getStartHour() + ":" + f.getStartMinute() + "%' order by co.time_start;";
             }
             else if(f.getStatus().equals("unique")){
-                query = "select co.time_start, co.time_end, f.first_name, f.middle_name, f.last_name, f.college, c.code, a.id, (SELECT code from attendancestatus ats where a.status_id = ats.id) acode, c.name 'course_name', r.name 'room_name', f.pic " +
+                query = "select co.time_start, co.time_end, f.first_name, f.middle_name, f.last_name, f.college, c.code, a.id 'id', (SELECT name from attendancestatus ats where a.status_id = ats.id) 'acode', c.name 'course_name', r.name 'room_name', f.pic " +
                         "from attendance a inner join courseoffering co on a.courseoffering_id = co.id " +
                         "inner join faculty f on f.id = co.faculty_id " +
                         "inner join course c on c.id = co.course_id " +
@@ -171,7 +170,7 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
                         "where rr.rotation_id = '" + f.getRID() + "' and co.days like '%" + weekDay + "%' and a.status_id is null group by 1 order by co.time_start;";
             }
             else
-                query = "select f.first_name, f.middle_name, f.last_name, f.college, c.code, c.name 'course_name', co.time_start, co.time_end, r.name 'room_name', f.pic, a.id id, (SELECT code from attendancestatus ats where a.status_id = ats.id) acode \n" +
+                query = "select f.first_name, f.middle_name, f.last_name, f.college, c.code, c.name 'course_name', co.time_start, co.time_end, r.name 'room_name', f.pic, a.id 'id', (SELECT name from attendancestatus ats where a.status_id = ats.id) 'acode' \n" +
                         "from attendance a inner join courseoffering co on a.courseoffering_id = co.id \n" +
                         "inner join faculty f on f.id = co.faculty_id \n" +
                         "inner join course c on c.id = co.course_id \n" +
@@ -180,7 +179,7 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
                         "where rr.rotation_id = '" + f.getRID() + "' and co.days like '%" + weekDay + "%' and a.status_id is "+ isDone +"null order by co.time_start;";
         } else {
             if(f.getStartHour() != -1) {
-                query = "select f.first_name, f.middle_name, f.last_name, f.college, c.code, c.name 'course_name', co.time_start, co.time_end, r.name 'room_name', f.pic, b.name 'bname', a.id id, (SELECT code from attendancestatus ats where a.status_id = ats.id) acode \n" +
+                query = "select f.first_name, f.middle_name, f.last_name, f.college, c.code, c.name 'course_name', co.time_start, co.time_end, r.name 'room_name', f.pic, b.name 'bname', a.id 'id', (SELECT name from attendancestatus ats where a.status_id = ats.id) 'acode' \n" +
                         "from attendance a inner join courseoffering co on a.courseoffering_id = co.id\n" +
                         "inner join faculty f on f.id = co.faculty_id\n" +
                         "inner join course c on c.id = co.course_id\n" +
@@ -190,7 +189,7 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
                         "where rr.rotation_id = '" + f.getRID() + "' and co.days like '%" + weekDay + "%' and a.status_id is "+ isDone +" null and bname = '" + f.getBuilding() + "' and co.time_start LIKE '%" + f.getStartHour() + ":" + f.getStartMinute() + "%' order by co.time_start;";
             }
             else
-                query = "select f.first_name, f.middle_name, f.last_name, f.college, c.code, c.name 'course_name', co.time_start, co.time_end, r.name 'room_name', f.pic, b.name 'bname', a.id id, (SELECT code from attendancestatus ats where a.status_id = ats.id) acode \n" +
+                query = "select f.first_name, f.middle_name, f.last_name, f.college, c.code, c.name 'course_name', co.time_start, co.time_end, r.name 'room_name', f.pic, b.name 'bname', a.id 'id', (SELECT name from attendancestatus ats where a.status_id = ats.id) 'acode' \n" +
                         "from attendance a inner join courseoffering co on a.courseoffering_id = co.id\n" +
                         "inner join faculty f on f.id = co.faculty_id\n" +
                         "inner join course c on c.id = co.course_id\n" +
@@ -204,7 +203,7 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
         Cursor c = db.rawQuery(query, null);
 
         ArrayList<Attendance> assignedAttendance = new ArrayList<>();
-        //Log.i("tagg", "DB.getAssignedAttendance query is " + query);
+        Log.i("tagg", "DB.getAssignedAttendance query is " + query);
         //Log.i("tagg", "DB.getAssignedAttendance result size is " + assignedAttendance.size());
 
         if (c.moveToFirst()) {
@@ -234,7 +233,7 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
                 a.setPic(pic);
                 a.setId(id);
                 a.setCode(aCode);
-
+                Log.i("tagg", "DB.getAssignedAttendance() " + a.toString());
                 assignedAttendance.add(a);
 
                 c.moveToNext();
@@ -243,7 +242,7 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
         }
 
         c.close();
-
+        db.close();
         return assignedAttendance;
     }
 
@@ -251,11 +250,27 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
 
         SQLiteDatabase db = getReadableDatabase();
 
-        String query = "UPDATE attendance " +
-                "SET status_id = (SELECT id from attendancestatus ats where ats.code LIKE '%" + a.getCode()+"%') "+
+        String query = "SELECT id as 'huh' from attendancestatus where name LIKE '%" + a.getCode()+"%';";
+
+        Cursor c = db.rawQuery(query, null);
+        Log.i("tagg", "DB.updateAttendance() query is " + query);
+
+        int id = 1;
+
+        if (c.moveToFirst()) {
+            id = c.getInt(c.getColumnIndex("huh"));
+            Log.i("tagg", id + "-id");
+        }
+        c.close();
+
+        query = "UPDATE attendance " +
+                "SET status_id =  "+id+" " +
                 "WHERE id = "+ a.getId() +";";
 
+        Log.i("tagg", "DB.updateAttendance() query is " + query);
+
         db.execSQL(query);
+        db.close();
     }
 
     public ArrayList<String> getAssignedBuildings(String RID){

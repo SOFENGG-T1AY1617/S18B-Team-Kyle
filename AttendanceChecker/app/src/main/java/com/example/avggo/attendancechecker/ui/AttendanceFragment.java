@@ -35,6 +35,7 @@ public class AttendanceFragment extends android.support.v4.app.Fragment implemen
     private static final String EXTRA_ATTR = "EXTRA_ATTR";
 
     private static final int ATTENDANCE_FRAGMENT_REQUEST = 1;
+    private static int most_recent_item = -1;
 
     RecyclerView recView;
     AttendanceAdapter adapter;
@@ -88,10 +89,13 @@ public class AttendanceFragment extends android.support.v4.app.Fragment implemen
     @Override
     public void onItemClick(int p) {
         Attendance item = (Attendance) listData.get(p);
+        most_recent_item = p;
 
         Intent i = new Intent(getActivity(), DetailActivity.class);
 
         i.putExtra("ATTENDANCE_ITEM",item);
+
+        Log.i("tagg", "AttendanceFragment.onItemClick()  item clicked has id " + item.getId());
 
         startActivityForResult(i, ATTENDANCE_FRAGMENT_REQUEST);
     }
@@ -112,7 +116,16 @@ public class AttendanceFragment extends android.support.v4.app.Fragment implemen
                 // The Intent's data Uri identifies which contact was selected.
                 Attendance item = (Attendance) data.getSerializableExtra("CODED_ATTENDANCE_ITEM");
                 db.updateAttendance(item);
-                Log.i("tagg", "AttendanceFragment.onActivityResult()   db updated!");
+                listData.remove(most_recent_item);
+                this.getLoaderManager();
+                recView.removeViewAt(most_recent_item);
+                adapter.removeItem(most_recent_item);
+                //adapter.notifyItemRemoved(most_recent_item);
+                //adapter.notifyItemRangeChanged(most_recent_item, listData.size());
+                //getLoaderManager().restartLoader(0, null, this);
+                //adapter.notifyDataSetChanged();
+                Log.i("tagg", "AttendanceFragment.onActivityResult()   db updated on id " + item.getId());
+                Log.i("tagg", "AttendanceFragment.onActivityResult()   list size is " + listData.size());
                 // Do something with the contact here (bigger example below)
             }
         }

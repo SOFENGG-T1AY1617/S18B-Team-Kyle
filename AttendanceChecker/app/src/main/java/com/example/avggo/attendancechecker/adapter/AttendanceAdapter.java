@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.avggo.attendancechecker.R;
 import com.example.avggo.attendancechecker.model.Attendance;
@@ -44,6 +45,13 @@ public class AttendanceAdapter extends RecyclerView.Adapter<AttendanceAdapter.At
     public AttendanceAdapter(List<Attendance> listData, Context c) {
         this.inflater = LayoutInflater.from(c);
         this.listData = listData;
+    }
+
+    public void removeItem(int index){
+        listData.remove(index);
+        notifyItemRemoved(index);
+        notifyItemRangeChanged(index, listData.size());
+        notifyDataSetChanged();
     }
 
     @Override
