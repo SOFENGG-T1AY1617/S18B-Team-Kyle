@@ -42,6 +42,9 @@ import java.util.TimerTask;
 import java.util.logging.Handler;
 
 public class MainActivity extends AppCompatActivity {
+
+    public static boolean submitted = false;
+
     private Toolbar toolbar;
     private ViewPager viewPager;
     private ViewPagerAdapter pagerAdapter;
@@ -145,6 +148,14 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onPageScrollStateChanged(int state) {
                 // Code goes here
+            }
+        });
+
+        submitButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                submitted = true;
+                //pagerAdapter.removeAll();
             }
         });
 

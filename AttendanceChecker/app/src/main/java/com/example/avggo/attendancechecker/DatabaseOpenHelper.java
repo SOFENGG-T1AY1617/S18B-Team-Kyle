@@ -199,50 +199,55 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
                         "where rr.rotation_id = '" + f.getRID() + "' and co.days like '%" + weekDay + "%' and a.status_id is "+ isDone +" null and bname = '" + f.getBuilding() + "' order by co.time_start;";
         }
 
-
-        Cursor c = db.rawQuery(query, null);
-
         ArrayList<Attendance> assignedAttendance = new ArrayList<>();
-        Log.i("tagg", "DB.getAssignedAttendance query is " + query);
-        //Log.i("tagg", "DB.getAssignedAttendance result size is " + assignedAttendance.size());
+        Log.i("tagg", "DB.getAssignedAttendance query is  " + f.getSubmitted());
 
-        if (c.moveToFirst()) {
-            while (c.isAfterLast() == false) {
-                String first_name = c.getString(c.getColumnIndex("first_name"));
-                String middle_name = c.getString(c.getColumnIndex("middle_name"));
-                String last_name = c.getString(c.getColumnIndex("last_name"));
-                String college = c.getString(c.getColumnIndex("college"));
-                String code = c.getString(c.getColumnIndex("code"));
-                String course_name = c.getString(c.getColumnIndex("course_name"));
-                String time_start = c.getString(c.getColumnIndex("time_start"));
-                String time_end = c.getString(c.getColumnIndex("time_end"));
-                String room_name = c.getString(c.getColumnIndex("room_name"));
-                byte[] pic = c.getBlob(c.getColumnIndex("pic"));
-                int id = c.getInt(c.getColumnIndex("id"));
-                String aCode = c.getString(c.getColumnIndex("acode"));
+        if(!f.getSubmitted()) {
 
-                Attendance a = new Attendance();
+            Cursor c = db.rawQuery(query, null);
 
-                a.setFname(first_name + " " + middle_name + " " + last_name);
-                a.setCollege(college);
-                a.setCoursecode(code);
-                a.setCoursename(course_name);
-                a.setStartTime(time_start);
-                a.setEndTime(time_end);
-                a.setRoom(room_name);
-                a.setPic(pic);
-                a.setId(id);
-                a.setCode(aCode);
-                Log.i("tagg", "DB.getAssignedAttendance() " + a.toString());
-                assignedAttendance.add(a);
 
-                c.moveToNext();
+            //Log.i("tagg", "DB.getAssignedAttendance result size is " + assignedAttendance.size());
 
+            if (c.moveToFirst()) {
+                while (c.isAfterLast() == false) {
+                    String first_name = c.getString(c.getColumnIndex("first_name"));
+                    String middle_name = c.getString(c.getColumnIndex("middle_name"));
+                    String last_name = c.getString(c.getColumnIndex("last_name"));
+                    String college = c.getString(c.getColumnIndex("college"));
+                    String code = c.getString(c.getColumnIndex("code"));
+                    String course_name = c.getString(c.getColumnIndex("course_name"));
+                    String time_start = c.getString(c.getColumnIndex("time_start"));
+                    String time_end = c.getString(c.getColumnIndex("time_end"));
+                    String room_name = c.getString(c.getColumnIndex("room_name"));
+                    byte[] pic = c.getBlob(c.getColumnIndex("pic"));
+                    int id = c.getInt(c.getColumnIndex("id"));
+                    String aCode = c.getString(c.getColumnIndex("acode"));
+
+                    Attendance a = new Attendance();
+
+                    a.setFname(first_name + " " + middle_name + " " + last_name);
+                    a.setCollege(college);
+                    a.setCoursecode(code);
+                    a.setCoursename(course_name);
+                    a.setStartTime(time_start);
+                    a.setEndTime(time_end);
+                    a.setRoom(room_name);
+                    a.setPic(pic);
+                    a.setId(id);
+                    a.setCode(aCode);
+                    Log.i("tagg", "DB.getAssignedAttendance() " + a.toString());
+                    assignedAttendance.add(a);
+
+                    c.moveToNext();
+
+                }
             }
+
+            c.close();
+            db.close();
         }
 
-        c.close();
-        db.close();
         return assignedAttendance;
     }
 

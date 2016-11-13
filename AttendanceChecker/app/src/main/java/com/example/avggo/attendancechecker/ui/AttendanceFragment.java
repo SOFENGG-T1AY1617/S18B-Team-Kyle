@@ -52,6 +52,7 @@ public class AttendanceFragment extends android.support.v4.app.Fragment implemen
         args.putInt("START_H", filter.getStartHour());
         args.putInt("START_M", filter.getStartMinute());
         args.putBoolean("ISDONE", filter.getDone());
+        args.putBoolean("ISSUBMITTED", filter.getSubmitted());
         f.setArguments(args);
 
         return (f);
@@ -72,6 +73,7 @@ public class AttendanceFragment extends android.support.v4.app.Fragment implemen
         f.setStartHour(getStartHour());
         f.setStartMinute(getStartMinute());
         f.setDone(getDone());
+        f.setSubmitted(getSubmitted());
 
         Log.i("tagg", "AttendanceFragment.onCreateView " + f.getDone());
 
@@ -148,6 +150,8 @@ public class AttendanceFragment extends android.support.v4.app.Fragment implemen
     }
 
     boolean getDone(){ return (getArguments().getBoolean("ISDONE"));}
+
+    boolean getSubmitted() { return (getArguments().getBoolean("ISSUBMITTED"));}
 
     public class AttendanceFragmentTask extends AsyncTask<Object, Void, String> {
         Context context;

@@ -12,6 +12,8 @@ import android.util.Log;
 import com.example.avggo.attendancechecker.model.Filter;
 import com.example.avggo.attendancechecker.ui.AttendanceFragment;
 
+import static com.example.avggo.attendancechecker.MainActivity.submitted;
+
 public class ViewPagerAdapter extends FragmentStatePagerAdapter {
     CharSequence Titles[];
     int NumbOfTabs;
@@ -29,16 +31,19 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
         if (position == 0) {
             Log.i("tagg", "ViewPagerAdapter.getItem()   -- position ZERO called");
             filter.setDone(false);
+            filter.setSubmitted(submitted);
             AttendanceFragment al = AttendanceFragment.newInstance(filter);
             return al;
         } else if (position == 1) {
             Log.i("tagg", "ViewPagerAdapter.getItem()   -- position ONE called");
             filter.setDone(true);
+            filter.setSubmitted(submitted);
             AttendanceFragment al = AttendanceFragment.newInstance(filter);
             return al;
         } else if (position == 2) {
             Log.i("tagg", "ViewPagerAdapter.getItem()   -- position TWO called");
             filter.setDone(true);
+            filter.setSubmitted(!submitted);
             AttendanceFragment al = AttendanceFragment.newInstance(filter);
             return al;
         } else return null;

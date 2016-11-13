@@ -8,12 +8,14 @@ public class Filter {
     private String building, RID, status;
     private int startHour, startMinute;
     private boolean done;
+    private boolean submitted;
 
     public Filter(){
         startHour = -1;
         startMinute = -1;
         status = "";
         done = false;
+        submitted = false;
     }
 
     public String getRID() {
@@ -62,5 +64,13 @@ public class Filter {
 
     public void setDone(boolean b){
         this.done = b;
+    }
+
+    public boolean getSubmitted(){
+        return submitted;
+    }
+
+    public void setSubmitted(boolean b){
+        this.submitted = b;
     }
 }
