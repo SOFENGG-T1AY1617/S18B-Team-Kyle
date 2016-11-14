@@ -138,11 +138,12 @@ public class MainActivity extends AppCompatActivity {
 
                     submitButton.setVisibility(View.VISIBLE);
                     mainFilter.setTab(DONE_TAB);
-                    mainFilter.setStartHour(-1);
                     mainFilter.setDone(true);
                     mainFilter.setSubmitted(false);
-                    mainFilter.setStartMinute(-1);
-                    filter(mainFilter);
+                    pagerAdapter.setFilter(mainFilter);
+                    pagerAdapter.getItem(1);
+                    viewPager.setCurrentItem(1);
+                    //filter(mainFilter);
                     if (db.getAssignedAttendance(mainFilter).size() == 0)
                         submitButton.setEnabled(true);
                     else
@@ -157,9 +158,7 @@ public class MainActivity extends AppCompatActivity {
                     mainFilter.setDone(false);
                     mainFilter.setSubmitted(false);
                     mainFilter.setTab(UNDONE_TAB);
-                    mainFilter.setStartHour(currentHourFilter);
-                    mainFilter.setStartMinute(currentMinuteFilter);
-                    filter(mainFilter);
+                    //filter(mainFilter);
                     submitButton.setVisibility(View.GONE);
                 }
 
