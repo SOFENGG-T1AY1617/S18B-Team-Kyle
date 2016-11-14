@@ -200,7 +200,7 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
         }
 
         ArrayList<Attendance> assignedAttendance = new ArrayList<>();
-        Log.i("tagg", "DB.getAssignedAttendance query is  " + f.getSubmitted());
+        //Log.i("tagg", "DB.getAssignedAttendance query is  "+query+"\n" + f.getSubmitted());
 
         if(!f.getSubmitted()) {
 
@@ -236,7 +236,7 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
                     a.setPic(pic);
                     a.setId(id);
                     a.setCode(aCode);
-                    Log.i("tagg", "DB.getAssignedAttendance() " + a.toString());
+                    //Log.i("tagg", "DB.getAssignedAttendance() " + a.toString());
                     assignedAttendance.add(a);
 
                     c.moveToNext();

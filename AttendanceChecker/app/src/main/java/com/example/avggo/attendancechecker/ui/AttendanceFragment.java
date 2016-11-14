@@ -119,7 +119,7 @@ public class AttendanceFragment extends android.support.v4.app.Fragment implemen
                 Attendance item = (Attendance) data.getSerializableExtra("CODED_ATTENDANCE_ITEM");
                 db.updateAttendance(item);
                 listData.remove(most_recent_item);
-                this.getLoaderManager();
+
                 recView.removeViewAt(most_recent_item);
                 adapter.removeItem(most_recent_item);
                 //adapter.notifyItemRemoved(most_recent_item);

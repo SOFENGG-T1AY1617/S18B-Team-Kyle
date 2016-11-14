@@ -9,6 +9,7 @@ public class Filter {
     private int startHour, startMinute;
     private boolean done;
     private boolean submitted;
+    private  int tab;
 
     public Filter(){
         startHour = -1;
@@ -16,6 +17,7 @@ public class Filter {
         status = "";
         done = false;
         submitted = false;
+        tab = 0;
     }
 
     public String getRID() {
@@ -70,7 +72,11 @@ public class Filter {
         return submitted;
     }
 
-    public void setSubmitted(boolean b){
-        this.submitted = b;
+    public void setSubmitted(boolean b){this.submitted = b;}
+
+    public int getTab(){
+        return tab;
     }
+
+    public void setTab(int i){this.tab = i;}
 }

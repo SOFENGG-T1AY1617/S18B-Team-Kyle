@@ -55,7 +55,11 @@ public class MainActivity extends AppCompatActivity {
     ArrayList<Integer> buldingIDs = new ArrayList<Integer>();
     ArrayList<Attendance> listData;
     public static final int TAB_NUMBERS = 3;
+
+    public static final int UNDONE_TAB = 0;
     public static final int DONE_TAB = 1;
+    public static final int SUBMITTED_TAB = 2;
+
 
     //navigation items
     String TITLES[] = {"Help", "Logout"};
@@ -127,14 +131,30 @@ public class MainActivity extends AppCompatActivity {
             // This method will be invoked when a new page becomes selected.
             @Override
             public void onPageSelected(int position) {
+
                 if(position == DONE_TAB) {
+
                     submitButton.setVisibility(View.VISIBLE);
+
+                    //filter(mainFilter);
                     if (db.getAssignedAttendance(mainFilter).size() == 0)
                         submitButton.setEnabled(true);
                     else
                         submitButton.setEnabled(false);
-                }else
+                }else if(position == SUBMITTED_TAB){
+                    mainFilter.setSubmitted(true);
+                    mainFilter.setDone(true);
+                    mainFilter.setTab(SUBMITTED_TAB);
+                    //filter(mainFilter);
+                }
+                else if (position == UNDONE_TAB){
+                    mainFilter.setDone(false);
+                    mainFilter.setSubmitted(false);
+                    mainFilter.setTab(UNDONE_TAB);
+                    //filter(mainFilter);
                     submitButton.setVisibility(View.GONE);
+                }
+
             }
 
             // This method will be invoked when the current page is scrolled
@@ -228,7 +248,7 @@ public class MainActivity extends AppCompatActivity {
         viewPager = (ViewPager) findViewById(R.id.pager);
         viewPager.setAdapter(pagerAdapter);
         viewPager.setPageTransformer(true, new AccordionTransformer());
-        viewPager.setCurrentItem(0);
+        viewPager.setCurrentItem(filter.getTab());
         tabSlider = (SlidingTabLayout) findViewById(R.id.tabs);
         tabSlider.setDistributeEvenly(true);
         tabSlider.setCustomTabColorizer(new SlidingTabLayout.TabColorizer() {

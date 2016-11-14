@@ -112,7 +112,7 @@ public class DetailActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String code = getSelectedItem();
-                if (!code.equals("null")){
+                if (code != null){
                     item.setCode(code);
 
                     Intent intent = new Intent();
@@ -135,7 +135,7 @@ public class DetailActivity extends AppCompatActivity {
        // Toast.makeText(DetailActivity.this,
         //        radioButton.getText(), Toast.LENGTH_SHORT).show();
 
-        return (String) radioButton.getText();
+        return radioButton != null ? (String) radioButton.getText() : null;
     }
 
     private RadioGroup.OnCheckedChangeListener listener1 = new RadioGroup.OnCheckedChangeListener() {
