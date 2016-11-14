@@ -59,6 +59,8 @@ public class MainActivity extends AppCompatActivity {
     public static final int UNDONE_TAB = 0;
     public static final int DONE_TAB = 1;
     public static final int SUBMITTED_TAB = 2;
+    int currentHourFilter;
+    int currentMinuteFilter;
 
 
     //navigation items
@@ -135,8 +137,12 @@ public class MainActivity extends AppCompatActivity {
                 if(position == DONE_TAB) {
 
                     submitButton.setVisibility(View.VISIBLE);
-
-                    //filter(mainFilter);
+                    mainFilter.setTab(DONE_TAB);
+                    mainFilter.setStartHour(-1);
+                    mainFilter.setDone(true);
+                    mainFilter.setSubmitted(false);
+                    mainFilter.setStartMinute(-1);
+                    filter(mainFilter);
                     if (db.getAssignedAttendance(mainFilter).size() == 0)
                         submitButton.setEnabled(true);
                     else
@@ -151,7 +157,9 @@ public class MainActivity extends AppCompatActivity {
                     mainFilter.setDone(false);
                     mainFilter.setSubmitted(false);
                     mainFilter.setTab(UNDONE_TAB);
-                    //filter(mainFilter);
+                    mainFilter.setStartHour(currentHourFilter);
+                    mainFilter.setStartMinute(currentMinuteFilter);
+                    filter(mainFilter);
                     submitButton.setVisibility(View.GONE);
                 }
 
@@ -387,8 +395,10 @@ public class MainActivity extends AppCompatActivity {
                         Log.i("YES" + listData.size(), "Time Now: " + hourNow + ":" + minuteNow + " Start Time: " + startHour + ":" + startMinute + " End Time: " + endHour + ":" + endMinute);
 
                         if ((startHour == hourNow && minuteNow >= startMinute) || (((hourNow > startHour) && (hourNow < endHour)) || (hourNow == endHour && minuteNow <= endMinute))) {
-                            mainFilter.setStartHour(startHour);
-                            mainFilter.setStartMinute(startMinute);
+                            currentHourFilter = startHour;
+                            currentMinuteFilter = startMinute;
+                            mainFilter.setStartHour(currentHourFilter);
+                            mainFilter.setStartMinute(currentMinuteFilter);
                             showDialog(startHour, startMinute);
                             listData.remove(0);
                             Log.i("REMOVED", "UPDATED");

@@ -41,6 +41,9 @@ public class AttendanceFragment extends android.support.v4.app.Fragment implemen
     AttendanceAdapter adapter;
     ArrayList listData;
     DatabaseOpenHelper db;
+    LayoutInflater li;
+    ViewGroup c;
+    Bundle b;
 
     public static AttendanceFragment newInstance(Filter filter) {
         AttendanceFragment f = new AttendanceFragment();
@@ -62,6 +65,10 @@ public class AttendanceFragment extends android.support.v4.app.Fragment implemen
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.activity_list, container, false);
+
+        this.li = inflater;
+        this. c = container;
+        this. b = savedInstanceState;
 
         //Toast.makeText(v.getContext(), getRID(), Toast.LENGTH_LONG).show();
 
@@ -119,9 +126,9 @@ public class AttendanceFragment extends android.support.v4.app.Fragment implemen
                 Attendance item = (Attendance) data.getSerializableExtra("CODED_ATTENDANCE_ITEM");
                 db.updateAttendance(item);
                 listData.remove(most_recent_item);
-
                 recView.removeViewAt(most_recent_item);
                 adapter.removeItem(most_recent_item);
+                onCreateView(li, c, b);
                 //adapter.notifyItemRemoved(most_recent_item);
                 //adapter.notifyItemRangeChanged(most_recent_item, listData.size());
                 //getLoaderManager().restartLoader(0, null, this);
