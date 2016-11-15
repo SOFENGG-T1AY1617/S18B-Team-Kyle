@@ -10,6 +10,9 @@
     <style name="MyTheme" parent="Theme.AppCompat">
         <item name="drawerArrowStyle">@style/MyDrawerArrowToggle</item>
     </style>
+    <style name="MyDialog" parent="Theme.AppCompat.Dialog">
+        <item name="android:windowNoTitle">true</item>
+    </style>
 
     <style name="MyDrawerArrowToggle" parent="Widget.AppCompat.DrawerArrowToggle">
         <item name="color">#FFFFFF</item>
