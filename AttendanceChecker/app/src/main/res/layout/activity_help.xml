@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_help"
     android:layout_width="match_parent"
@@ -8,13 +8,214 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
+    android:orientation="vertical"
     tools:context="com.example.avggo.attendancechecker.ui.HelpActivity">
 
-    <ListView
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:id="@+id/list" />
-</RelativeLayout>
+    <LinearLayout
+        android:id="@+id/layout_ab"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textAlignment="center"
+            android:text="AB"
+            android:textColor="@color/black_overlay"
+            android:textAppearance="@style/TextAppearance.AppCompat.Headline" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textAlignment="center"
+            android:text="Absent"
+            android:textAppearance="@style/TextAppearance.AppCompat.Subhead" />
+
+        <View style="@style/Divider"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_ed"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textAlignment="center"
+            android:text="ED"
+            android:textColor="@color/black_overlay"
+            android:textAppearance="@style/TextAppearance.AppCompat.Headline" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textAlignment="center"
+            android:text="Early Dismissal"
+            android:textAppearance="@style/TextAppearance.AppCompat.Subhead" />
+
+        <View style="@style/Divider"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_la"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textAlignment="center"
+            android:text="LA"
+            android:textColor="@color/black_overlay"
+            android:textAppearance="@style/TextAppearance.AppCompat.Headline" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textAlignment="center"
+            android:text="Late"
+            android:textAppearance="@style/TextAppearance.AppCompat.Subhead" />
+
+        <View style="@style/Divider"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_pr"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textAlignment="center"
+            android:text="PR"
+            android:textColor="@color/black_overlay"
+            android:textAppearance="@style/TextAppearance.AppCompat.Headline" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textAlignment="center"
+            android:text="Present"
+            android:textAppearance="@style/TextAppearance.AppCompat.Subhead" />
+
+        <View style="@style/Divider"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_sb"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textAlignment="center"
+            android:text="SB"
+            android:textColor="@color/black_overlay"
+            android:textAppearance="@style/TextAppearance.AppCompat.Headline" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textAlignment="center"
+            android:text="Substitute"
+            android:textAppearance="@style/TextAppearance.AppCompat.Subhead" />
+
+        <View style="@style/Divider"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_sw"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textAlignment="center"
+            android:text="SW"
+            android:textColor="@color/black_overlay"
+            android:textAppearance="@style/TextAppearance.AppCompat.Headline" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textAlignment="center"
+            android:text="Seatwork"
+            android:textAppearance="@style/TextAppearance.AppCompat.Subhead" />
+
+        <View style="@style/Divider"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_us"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textAlignment="center"
+            android:text="US"
+            android:textColor="@color/black_overlay"
+            android:textAppearance="@style/TextAppearance.AppCompat.Headline" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textAlignment="center"
+            android:text="Unscheduled"
+            android:textAppearance="@style/TextAppearance.AppCompat.Subhead" />
+
+        <View style="@style/Divider"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_vr"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textAlignment="center"
+            android:text="VR"
+            android:textColor="@color/black_overlay"
+            android:textAppearance="@style/TextAppearance.AppCompat.Headline" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textAlignment="center"
+            android:text="Vacant Room"
+            android:textAppearance="@style/TextAppearance.AppCompat.Subhead" />
+
+        <View style="@style/Divider"/>
+    </LinearLayout>
+</LinearLayout>
