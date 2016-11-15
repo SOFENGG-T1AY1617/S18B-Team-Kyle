@@ -56,4 +56,8 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
     public int getCount() {
         return NumbOfTabs;
     }
+
+    public void setFilter(Filter filter){
+        this.filter = filter;
+    }
 }
