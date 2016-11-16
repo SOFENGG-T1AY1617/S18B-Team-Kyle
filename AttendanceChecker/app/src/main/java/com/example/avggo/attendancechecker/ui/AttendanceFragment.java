@@ -47,6 +47,7 @@ public class AttendanceFragment extends android.support.v4.app.Fragment implemen
     LayoutInflater li;
     ViewGroup c;
     Bundle b;
+    Filter f;
 
     public static AttendanceFragment newInstance(Filter filter) {
         AttendanceFragment f = new AttendanceFragment();
@@ -77,26 +78,10 @@ public class AttendanceFragment extends android.support.v4.app.Fragment implemen
         this. b = savedInstanceState;
 
         //Toast.makeText(v.getContext(), getRID(), Toast.LENGTH_LONG).show();
-
         db = new DatabaseOpenHelper(getContext());
 
-        Filter f = new Filter();
-        f.setBuilding(getBuilding());
-        f.setRID(getRID());
-        f.setStartHour(getStartHour());
-        f.setStartMinute(getStartMinute());
-        f.setDone(getDone());
-        f.setSubmitted(getSubmitted());
+        new AttendanceFragmentTask(getContext(), v, this).execute();
 
-        Log.i("tagg", "AttendanceFragment.onCreateView " + f.getDone());
-
-        listData = (ArrayList) db.getAssignedAttendance(f);
-
-        recView = (RecyclerView) v.findViewById(R.id.rec_list);
-        recView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        adapter = new AttendanceAdapter(db.getAssignedAttendance(f), getActivity());
-        recView.setAdapter(adapter);
-        adapter.setItemClickCallback(this);
 
         return v;
     }
@@ -193,12 +178,22 @@ public class AttendanceFragment extends android.support.v4.app.Fragment implemen
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            pd=ProgressDialog.show(getContext(),"","Please Wait",false);
         }
 
         @Override
         protected String doInBackground(Object... params) {
 
+            f = new Filter();
+            f.setBuilding(getBuilding());
+            f.setRID(getRID());
+            f.setStartHour(getStartHour());
+            f.setStartMinute(getStartMinute());
+            f.setDone(getDone());
+            f.setSubmitted(getSubmitted());
+
+            Log.i("tagg", "AttendanceFragment.onCreateView " + f.getDone());
+
+            listData = (ArrayList) db.getAssignedAttendance(f);
 
             return null;
         }
@@ -206,13 +201,14 @@ public class AttendanceFragment extends android.support.v4.app.Fragment implemen
         @Override
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
-            pd.dismiss();
 
             recView = (RecyclerView) v.findViewById(R.id.rec_list);
             recView.setLayoutManager(new LinearLayoutManager(getActivity()));
-            adapter = new AttendanceAdapter(db.getAssignedAttendance(new Filter()), getActivity());
-            recView.setAdapter(adapter);
-            adapter.setItemClickCallback(it);
+            if(getActivity() != null) {
+                adapter = new AttendanceAdapter(db.getAssignedAttendance(f), getActivity());
+                recView.setAdapter(adapter);
+                adapter.setItemClickCallback(it);
+            }
         }
     }
 }

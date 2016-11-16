@@ -98,7 +98,8 @@
                 android:background="@color/colorDefault"
                 android:gravity="center_horizontal"
                 android:orientation="vertical"
-                android:padding="10dp"
+                android:paddingTop="40dp"
+                android:paddingBottom="40dp"
                 android:layout_height="wrap_content"
                 android:weightSum="1">
 
@@ -113,83 +114,12 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent">
 
-                        <RadioGroup
+                        <Button
                             android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:id="@+id/codeRadioGroup1">
-
-                            <RadioButton
-                                android:text="@string/present"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:id="@+id/radioButton8"
-                                android:textSize="18sp"
-                                android:layout_weight="1" />
-
-                            <RadioButton
-                                android:text="@string/absent"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:id="@+id/radioButton7"
-                                android:textSize="18sp"
-                                android:layout_weight="1" />
-
-                            <RadioButton
-                                android:text="@string/late"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:id="@+id/radioButton6"
-                                android:textSize="18sp"
-                                android:layout_weight="1" />
-
-                            <RadioButton
-                                android:text="@string/substitute"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:id="@+id/radioButton5"
-                                android:textSize="18sp"
-                                android:layout_weight="1" />
-
-                        </RadioGroup>
-
-                        <RadioGroup
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:id="@+id/codeRadioGroup2" >
-
-                            <RadioButton
-                                android:text="@string/seatwork"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:id="@+id/radioButton4"
-                                android:textSize="18sp"
-                                android:layout_weight="1" />
-
-                            <RadioButton
-                                android:text="@string/vacant_room"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:id="@+id/radioButton3"
-                                android:textSize="18sp"
-                                android:layout_weight="1" />
-
-                            <RadioButton
-                                android:text="@string/early_dismissal"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:id="@+id/radioButton2"
-                                android:textSize="18sp"
-                                android:layout_weight="1" />
-
-                            <RadioButton
-                                android:text="@string/unscheduled_class"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:id="@+id/radioButton"
-                                android:elevation="1dp"
-                                android:textSize="18sp"
-                                android:layout_weight="1" />
-                        </RadioGroup>
+                            android:layout_height="50dp"
+                            android:text="Present"
+                            android:padding="15dp"
+                            />
                     </LinearLayout>
 
                     <LinearLayout

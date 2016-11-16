@@ -8,6 +8,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
@@ -15,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.avggo.attendancechecker.DatabaseOpenHelper;
+import com.example.avggo.attendancechecker.MainActivity;
 import com.example.avggo.attendancechecker.R;
 import com.example.avggo.attendancechecker.model.Attendance;
 
@@ -29,7 +31,7 @@ public class DetailActivity extends AppCompatActivity {
     private static final String EXTRA_ATTR = "EXTRA_ATTR";
 
     CircleImageView facultyImage;
-    TextView facultyName, facultyCourse, courseCode, roomName;
+    TextView facultyName, facultyCourse, courseCode, roomName, classTime;
     Attendance item;
 
     Button submitButton;
@@ -59,6 +61,7 @@ public class DetailActivity extends AppCompatActivity {
         facultyName = (TextView) findViewById(R.id.facultyName);
         facultyCourse = (TextView) findViewById(R.id.facultyCourse);
         roomName = (TextView) findViewById(R.id.facultyRoom);
+        classTime = (TextView) findViewById(R.id.classTime);
         submitButton = (Button) findViewById(R.id.submitButton);
 
 
@@ -68,6 +71,7 @@ public class DetailActivity extends AppCompatActivity {
         facultyName.setText(item.getFname());
         facultyCourse.setText(item.getCoursecode());
         roomName.setText(item.getRoom());
+        classTime.setText(item.getStartTime() + " - " + item.getEndTime());
 
         rg1 = (RadioGroup) findViewById(R.id.codeRadioGroup1);
         rg2 = (RadioGroup) findViewById(R.id.codeRadioGroup2);
@@ -78,6 +82,12 @@ public class DetailActivity extends AppCompatActivity {
         rg2.setOnCheckedChangeListener(listener2);
 
         setSelectedCode(item.getCode());
+
+        if(MainActivity.submitted){
+            LinearLayout l = (LinearLayout) findViewById(R.id.middleLayout);
+
+            l.setVisibility(View.GONE);
+        }
 
         setListeners();
     }
