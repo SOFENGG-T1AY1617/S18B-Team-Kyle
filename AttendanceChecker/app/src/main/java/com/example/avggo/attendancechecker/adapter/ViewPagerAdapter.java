@@ -51,6 +51,12 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
             Log.i("tagg", "ViewPagerAdapter.getItem()   -- position TWO called");
             filter.setDone(true);
             filter.setSubmitted(!submitted);
+            Filter temp = new Filter();
+            temp.setDone(filter.getDone());
+            temp.setSubmitted(filter.getSubmitted());
+            temp.setBuilding("NULL");
+            temp.setBuilding(filter.getBuilding());
+            temp.setRID(filter.getRID());
             al = AttendanceFragment.newInstance(filter);
             return al;
         } else return null;

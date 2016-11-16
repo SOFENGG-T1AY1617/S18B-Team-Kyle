@@ -3,6 +3,7 @@ package com.example.avggo.attendancechecker.adapter;
 import android.content.Context;
 import android.graphics.BitmapFactory;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -54,6 +55,12 @@ public class AttendanceAdapter extends RecyclerView.Adapter<AttendanceAdapter.At
         notifyItemRemoved(index);
         notifyItemRangeChanged(index, listData.size());
         //notifyDataSetChanged();
+    }
+
+    public void updateItem(int i, Attendance a){
+        listData.set(i, a);
+
+        notifyItemChanged(i,a);
     }
 
     @Override

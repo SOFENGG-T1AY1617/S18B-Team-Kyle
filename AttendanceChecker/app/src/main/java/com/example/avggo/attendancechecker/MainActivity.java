@@ -141,12 +141,14 @@ public class MainActivity extends AppCompatActivity {
                     temp.setDone(mainFilter.getDone());
                     temp.setSubmitted(mainFilter.getSubmitted());
                     temp.setBuilding("NULL");
-                    temp.setBuilding(mainFilter.getBuilding());
                     temp.setRID(mainFilter.getRID());
+                    temp.setStartMinute(-1);
+                    temp.setStartMinute(-1);
 
                     int size = db.getAssignedAttendance(temp).size();
-                    Log.i("tagg", "size is " + size);
-                    if (size == 0){
+                    Log.i("tagg", "--------------------------------------------------------------"+
+                            "size is " + size + " " +!submitButton.getText().equals("ALREADY SUBMITTED"));
+                    if (size == 0 && !submitButton.getText().equals("ALREADY SUBMITTED")){
                         submitButton.setEnabled(true);
                         submitButton.setText("SUBMIT");
                     }
@@ -192,6 +194,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 submitted = true;
+                submitButton.setText("ALREADY SUBMITTED");
+                pagerAdapter.notifyDataSetChanged();
+                submitButton.setEnabled(false);
                 //pagerAdapter.removeAll();
             }
         });

@@ -137,6 +137,13 @@ public class AttendanceFragment extends android.support.v4.app.Fragment implemen
                 Attendance i = (Attendance) listData.get(most_recent_item);
                 if(i.getCode() == null)
                     adapter.removeItem(most_recent_item);
+                else {
+                    listData.set(most_recent_item, item);
+                    //adapter.setListData(listData);
+                    adapter.updateItem(most_recent_item, item);
+                    //adapter.notifyItemChanged(most_recent_item, i);
+
+                }
                 //onCreateView(li, c, b);
                 //adapter.notifyItemRemoved(most_recent_item);
                 //adapter.notifyItemRangeChanged(most_recent_item, listData.size());
