@@ -8,7 +8,11 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.content.ContextCompat;
+//import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -20,6 +24,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,6 +34,7 @@ import com.example.avggo.attendancechecker.adapter.AttendanceAdapter;
 import com.example.avggo.attendancechecker.adapter.ViewPagerAdapter;
 import com.example.avggo.attendancechecker.model.Attendance;
 import com.example.avggo.attendancechecker.model.Filter;
+import com.example.avggo.attendancechecker.ui.AttendanceFragment;
 import com.example.avggo.attendancechecker.ui.HelpActivity;
 
 import java.text.DateFormat;
@@ -75,12 +81,16 @@ public class MainActivity extends AppCompatActivity {
     DrawerLayout Drawer;                                  // Declaring DrawerLayout
     Button submitButton;
 
+    Filter MainActivityFilter;
+
     ActionBarDrawerToggle mDrawerToggle;                  // Declaring Action Bar Drawer Toggle
 
     private String RID;
     public DatabaseOpenHelper db;
     Timer timer;
     Filter mainFilter;
+
+    AttendanceFragment undoneFragment, doneFragment, submittedFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -133,32 +143,37 @@ public class MainActivity extends AppCompatActivity {
             // This method will be invoked when a new page becomes selected.
             @Override
             public void onPageSelected(int position) {
-
+                //refresh();
+                pagerAdapter.notifyDataSetChanged();
                 if(position == DONE_TAB) {
 
                     submitButton.setVisibility(View.VISIBLE);
-                    mainFilter.setTab(DONE_TAB);
-                    mainFilter.setDone(true);
-                    mainFilter.setSubmitted(false);
-                    pagerAdapter.setFilter(mainFilter);
-                    pagerAdapter.getItem(1);
-                    viewPager.setCurrentItem(1);
-                    //filter(mainFilter);
-                    if (db.getAssignedAttendance(mainFilter).size() == 0)
-                        submitButton.setEnabled(true);
-                    else
-                        submitButton.setEnabled(false);
-                }else if(position == SUBMITTED_TAB){
-                    mainFilter.setSubmitted(true);
-                    mainFilter.setDone(true);
-                    mainFilter.setTab(SUBMITTED_TAB);
-                    //filter(mainFilter);
-                }
-                else if (position == UNDONE_TAB){
                     mainFilter.setDone(false);
                     mainFilter.setSubmitted(false);
-                    mainFilter.setTab(UNDONE_TAB);
+                    mainFilter.setTab(DONE_TAB);
+                    Filter temp = mainFilter;
+                    temp.setBuilding("NULL");
+                    if (db.getAssignedAttendance(temp).size() == 0){
+                        submitButton.setEnabled(true);
+                        submitButton.setText("SUBMIT");
+                    }
+                    else
+                        submitButton.setEnabled(false);
+
+                    Log.i("tagg", "tabSlider.pageListener()  done");
                     //filter(mainFilter);
+                    //Log.i("tagg", "tabSlider.pageListener()  filtered already");
+
+
+                }else if(position == SUBMITTED_TAB){
+                    mainFilter.setTab(SUBMITTED_TAB);
+                    submitButton.setVisibility(View.GONE);
+                }
+                else if (position == UNDONE_TAB){
+                    mainFilter.setTab(UNDONE_TAB);
+                    submitButton.setVisibility(View.GONE);
+                }
+                else {
                     submitButton.setVisibility(View.GONE);
                 }
 
@@ -460,4 +475,107 @@ public class MainActivity extends AppCompatActivity {
             scheduleTask(getBaseContext());
         }
     }
+
+
+
+
+    private class ViewPagerAdapter extends FragmentStatePagerAdapter {
+        CharSequence Titles[];
+        int NumbOfTabs;
+        Filter filter;
+
+        private AttendanceFragment al;
+        private int currentTab;
+
+        public ViewPagerAdapter(FragmentManager fm, CharSequence mTitles[], int mNumbOfTabsumb, Filter filter) {
+            super(fm);
+            this.Titles = mTitles;
+            this.NumbOfTabs = mNumbOfTabsumb;
+            this.filter = filter;
+            MainActivityFilter = filter;
+            this.currentTab = 0;
+        }
+
+        public Fragment getItem(int position) {
+            //Log.i("tagg", "ViewPagerAdapter.getItem()   -- called");
+            if (position == 0) {
+                Log.i("tagg", "ViewPagerAdapter.getItem()   -- position ZERO called");
+                filter.setDone(false);
+                filter.setSubmitted(submitted);
+                al = AttendanceFragment.newInstance(filter);
+                return al;
+            } else if (position == 1) {
+                Log.i("tagg", "ViewPagerAdapter.getItem()   -- position ONE called");
+                filter.setDone(true);
+                filter.setSubmitted(submitted);
+                al = AttendanceFragment.newInstance(filter);
+                return al;
+            } else if (position == 2) {
+                Log.i("tagg", "ViewPagerAdapter.getItem()   -- position TWO called");
+                filter.setDone(true);
+                filter.setSubmitted(!submitted);
+                al = AttendanceFragment.newInstance(filter);
+                return al;
+            } else return null;
+        }
+
+        @Override
+        public Object instantiateItem(ViewGroup container, int position) {
+            Fragment createdFragment = (AttendanceFragment) super.instantiateItem(container, position);
+            // save the appropriate reference depending on position
+            switch (position) {
+                case 0:
+                    undoneFragment = (AttendanceFragment) createdFragment;
+                    break;
+                case 1:
+                    doneFragment = (AttendanceFragment) createdFragment;
+                    break;
+                case 2:
+                    submittedFragment = (AttendanceFragment) createdFragment;
+            }
+            return createdFragment;
+        }
+
+        @Override
+        public int getItemPosition(Object object) {
+            return POSITION_NONE;
+        }
+
+        public CharSequence getPageTitle(int position) {
+            return Titles[position];
+        }
+
+        public int getCount() {
+            return NumbOfTabs;
+        }
+    }
+/*
+    public void refresh() {
+        // do work on the referenced Fragments, but first check if they
+        // even exist yet, otherwise you'll get an NPE.
+
+        if (undoneFragment != null) {
+            Filter f = new Filter();
+            f.setDone(false);
+            f.setSubmitted(submitted);
+            undoneFragment = AttendanceFragment.newInstance(f);
+            Log.i("tagg", "MainActivity.refresh() undone created");
+        }
+
+        if (doneFragment != null) {
+            Filter f = new Filter();
+            f.setDone(true);
+            f.setSubmitted(submitted);
+            doneFragment = AttendanceFragment.newInstance(f);
+            Log.i("tagg", "MainActivity.refresh() done created");
+        }
+
+        if(submittedFragment != null){
+            Filter f = new Filter();
+            f.setDone(true);
+            f.setSubmitted(!submitted);
+            submittedFragment = AttendanceFragment.newInstance(f);
+            Log.i("tagg", "MainActivity.refresh() submimtted created");
+        }
+    }*/
 }

@@ -39,11 +39,12 @@
                     android:background="@color/colorBackground" />
 
                 <Button
-                    android:text="Submit Sheet"
+                    android:text="You cannot submit yet"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
+                    android:layout_height="wrap_content"
                     android:id="@+id/submitSheetButton"
-                    android:theme="@style/AppTheme.Button"/>
+                    android:elevation="0dp" />
+
 
             </LinearLayout>
 

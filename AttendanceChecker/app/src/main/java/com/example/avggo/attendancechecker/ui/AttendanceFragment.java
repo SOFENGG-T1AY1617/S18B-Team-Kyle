@@ -37,6 +37,9 @@ public class AttendanceFragment extends android.support.v4.app.Fragment implemen
     private static final int ATTENDANCE_FRAGMENT_REQUEST = 1;
     private static int most_recent_item = -1;
 
+    private static int tabID;
+    public static boolean loaded = false;
+
     RecyclerView recView;
     AttendanceAdapter adapter;
     ArrayList listData;
@@ -56,7 +59,10 @@ public class AttendanceFragment extends android.support.v4.app.Fragment implemen
         args.putInt("START_M", filter.getStartMinute());
         args.putBoolean("ISDONE", filter.getDone());
         args.putBoolean("ISSUBMITTED", filter.getSubmitted());
+        args.putInt("TAB_ID", filter.getTab());
         f.setArguments(args);
+
+        tabID = filter.getTab();
 
         return (f);
     }
@@ -125,10 +131,11 @@ public class AttendanceFragment extends android.support.v4.app.Fragment implemen
                 // The Intent's data Uri identifies which contact was selected.
                 Attendance item = (Attendance) data.getSerializableExtra("CODED_ATTENDANCE_ITEM");
                 db.updateAttendance(item);
-                listData.remove(most_recent_item);
-                recView.removeViewAt(most_recent_item);
+                //listData.remove(most_recent_item);
+                //recView.removeViewAt(most_recent_item);
+                adapter.setListData(listData);
                 adapter.removeItem(most_recent_item);
-                onCreateView(li, c, b);
+                //onCreateView(li, c, b);
                 //adapter.notifyItemRemoved(most_recent_item);
                 //adapter.notifyItemRangeChanged(most_recent_item, listData.size());
                 //getLoaderManager().restartLoader(0, null, this);
@@ -159,6 +166,8 @@ public class AttendanceFragment extends android.support.v4.app.Fragment implemen
     boolean getDone(){ return (getArguments().getBoolean("ISDONE"));}
 
     boolean getSubmitted() { return (getArguments().getBoolean("ISSUBMITTED"));}
+
+    int getTab(){ return (getArguments().getInt("TAB_ID"));}
 
     public class AttendanceFragmentTask extends AsyncTask<Object, Void, String> {
         Context context;
