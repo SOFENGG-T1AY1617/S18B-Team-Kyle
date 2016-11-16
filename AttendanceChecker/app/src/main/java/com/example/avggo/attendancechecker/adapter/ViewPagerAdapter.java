@@ -12,6 +12,9 @@ import android.util.Log;
 import com.example.avggo.attendancechecker.model.Filter;
 import com.example.avggo.attendancechecker.ui.AttendanceFragment;
 
+import static com.example.avggo.attendancechecker.MainActivity.DONE_TAB;
+import static com.example.avggo.attendancechecker.MainActivity.SUBMITTED_TAB;
+import static com.example.avggo.attendancechecker.MainActivity.UNDONE_TAB;
 import static com.example.avggo.attendancechecker.MainActivity.submitted;
 
 public class ViewPagerAdapter extends FragmentStatePagerAdapter {
@@ -19,11 +22,15 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
     int NumbOfTabs;
     Filter filter;
 
+    private AttendanceFragment al;
+    private int currentTab;
+
     public ViewPagerAdapter(FragmentManager fm, CharSequence mTitles[], int mNumbOfTabsumb, Filter filter) {
         super(fm);
         this.Titles = mTitles;
         this.NumbOfTabs = mNumbOfTabsumb;
         this.filter = filter;
+        this.currentTab = 0;
     }
 
     public Fragment getItem(int position) {
@@ -32,21 +39,26 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
             Log.i("tagg", "ViewPagerAdapter.getItem()   -- position ZERO called");
             filter.setDone(false);
             filter.setSubmitted(submitted);
-            AttendanceFragment al = AttendanceFragment.newInstance(filter);
+             al = AttendanceFragment.newInstance(filter);
             return al;
         } else if (position == 1) {
             Log.i("tagg", "ViewPagerAdapter.getItem()   -- position ONE called");
             filter.setDone(true);
             filter.setSubmitted(submitted);
-            AttendanceFragment al = AttendanceFragment.newInstance(filter);
+             al = AttendanceFragment.newInstance(filter);
             return al;
         } else if (position == 2) {
             Log.i("tagg", "ViewPagerAdapter.getItem()   -- position TWO called");
             filter.setDone(true);
             filter.setSubmitted(!submitted);
-            AttendanceFragment al = AttendanceFragment.newInstance(filter);
+            al = AttendanceFragment.newInstance(filter);
             return al;
         } else return null;
+    }
+
+    @Override
+    public int getItemPosition(Object object) {
+        return POSITION_NONE;
     }
 
     public CharSequence getPageTitle(int position) {
@@ -55,9 +67,5 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
 
     public int getCount() {
         return NumbOfTabs;
-    }
-
-    public void setFilter(Filter filter){
-        this.filter = filter;
     }
 }

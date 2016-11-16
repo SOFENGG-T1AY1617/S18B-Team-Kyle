@@ -1,6 +1,5 @@
 package com.example.avggo.attendancechecker;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -18,8 +17,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
@@ -27,25 +24,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.ToxicBakery.viewpager.transforms.AccordionTransformer;
-import com.example.avggo.attendancechecker.adapter.AttendanceAdapter;
 import com.example.avggo.attendancechecker.adapter.ViewPagerAdapter;
 import com.example.avggo.attendancechecker.model.Attendance;
 import com.example.avggo.attendancechecker.model.Filter;
 import com.example.avggo.attendancechecker.ui.AttendanceFragment;
 import com.example.avggo.attendancechecker.ui.HelpActivity;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.logging.Handler;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -68,14 +59,9 @@ public class MainActivity extends AppCompatActivity {
     int currentHourFilter;
     int currentMinuteFilter;
 
-
-    //navigation items
-    String TITLES[] = {"Help", "Logout"};
-    int ICONS[] = {R.drawable.ic_help_black_24dp, R.drawable.ic_input_black_24dp};
     //header
     String NAME;
     String EMAIL;
-    int PROFILE = R.drawable.dummy_pic;
 
     NavigationView mNavigationView;
     DrawerLayout Drawer;                                  // Declaring DrawerLayout
@@ -144,16 +130,23 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onPageSelected(int position) {
                 //refresh();
-                pagerAdapter.notifyDataSetChanged();
+
                 if(position == DONE_TAB) {
 
                     submitButton.setVisibility(View.VISIBLE);
                     mainFilter.setDone(false);
                     mainFilter.setSubmitted(false);
                     mainFilter.setTab(DONE_TAB);
-                    Filter temp = mainFilter;
+                    Filter temp = new Filter();
+                    temp.setDone(mainFilter.getDone());
+                    temp.setSubmitted(mainFilter.getSubmitted());
                     temp.setBuilding("NULL");
-                    if (db.getAssignedAttendance(temp).size() == 0){
+                    temp.setBuilding(mainFilter.getBuilding());
+                    temp.setRID(mainFilter.getRID());
+
+                    int size = db.getAssignedAttendance(temp).size();
+                    Log.i("tagg", "size is " + size);
+                    if (size == 0){
                         submitButton.setEnabled(true);
                         submitButton.setText("SUBMIT");
                     }
@@ -176,6 +169,8 @@ public class MainActivity extends AppCompatActivity {
                 else {
                     submitButton.setVisibility(View.GONE);
                 }
+
+                pagerAdapter.notifyDataSetChanged();
 
             }
 
@@ -478,8 +473,8 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-
-    private class ViewPagerAdapter extends FragmentStatePagerAdapter {
+/*
+    private class ViewPagerAdapter1 extends FragmentStatePagerAdapter {
         CharSequence Titles[];
         int NumbOfTabs;
         Filter filter;
@@ -487,7 +482,7 @@ public class MainActivity extends AppCompatActivity {
         private AttendanceFragment al;
         private int currentTab;
 
-        public ViewPagerAdapter(FragmentManager fm, CharSequence mTitles[], int mNumbOfTabsumb, Filter filter) {
+        public ViewPagerAdapter1(FragmentManager fm, CharSequence mTitles[], int mNumbOfTabsumb, Filter filter) {
             super(fm);
             this.Titles = mTitles;
             this.NumbOfTabs = mNumbOfTabsumb;
@@ -548,7 +543,7 @@ public class MainActivity extends AppCompatActivity {
         public int getCount() {
             return NumbOfTabs;
         }
-    }
+    }*/
 /*
     public void refresh() {
         // do work on the referenced Fragments, but first check if they
