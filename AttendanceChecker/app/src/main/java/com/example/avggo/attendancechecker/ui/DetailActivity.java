@@ -85,10 +85,6 @@ public class DetailActivity extends AppCompatActivity {
 
         if(MainActivity.submitted){
             LinearLayout l = (LinearLayout) findViewById(R.id.middleLayout);
-<<<<<<< HEAD
-
-=======
->>>>>>> 9bc38492a8695b17faa212731aa3448e00c9010f
             l.setVisibility(View.GONE);
         }
 

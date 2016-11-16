@@ -310,15 +310,15 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case R.id.nav_allbuildings:
                         mainFilter.setBuilding("NULL");
-                        //filter(mainFilter);
+                        filter(mainFilter);
                         break;
                     case R.id.nav_gokongwei:
                         mainFilter.setBuilding("Gokongwei");
-                        //filter(mainFilter);
+                        filter(mainFilter);
                         break;
                     case R.id.nav_andrew:
                         mainFilter.setBuilding("Andrew");
-                        //filter(mainFilter);
+                        filter(mainFilter);
                         break;
                     case R.id.nav_help:
                         Intent help = new Intent();

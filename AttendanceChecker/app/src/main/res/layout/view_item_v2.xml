@@ -204,12 +204,8 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
-<<<<<<< HEAD
                             android:text="save"
-=======
-                            android:text="SAVE"
->>>>>>> 9bc38492a8695b17faa212731aa3448e00c9010f
-                            android:theme="@style/AppTheme.Button" />
+                        />
                     </LinearLayout>
 
                 </LinearLayout>
