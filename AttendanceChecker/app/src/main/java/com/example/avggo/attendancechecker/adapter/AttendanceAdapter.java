@@ -38,6 +38,8 @@ public class AttendanceAdapter extends RecyclerView.Adapter<AttendanceAdapter.At
         void onSecondaryClick(int p);
     }
 
+
+
     public void setItemClickCallback(final ItemClickCallback itemClickCallback) {
         this.itemClickCallback = itemClickCallback;
     }
@@ -51,7 +53,7 @@ public class AttendanceAdapter extends RecyclerView.Adapter<AttendanceAdapter.At
         listData.remove(index);
         notifyItemRemoved(index);
         notifyItemRangeChanged(index, listData.size());
-        notifyDataSetChanged();
+        //notifyDataSetChanged();
     }
 
     @Override
