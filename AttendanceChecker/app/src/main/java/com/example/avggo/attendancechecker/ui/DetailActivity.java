@@ -103,7 +103,10 @@ public class DetailActivity extends AppCompatActivity {
         us = (Button) findViewById(R.id.usBtn);
         vr = (Button) findViewById(R.id.vrBtn);
 
-        setListeners();
+        if(!MainActivity.submitted){
+            setListeners();
+            submitButton.setVisibility(View.GONE);
+        }
         setSelectedCode(item.getCode());
     }
 

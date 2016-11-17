@@ -157,8 +157,14 @@ public class MainActivity extends AppCompatActivity {
                     Log.i("tagg", "--------------------------------------------------------------"+
                             "size is " + size + " " +!submitButton.getText().equals("ALREADY SUBMITTED"));
                     if (size == 0 && !submitButton.getText().equals("ALREADY SUBMITTED")){
-                        submitButton.setEnabled(true);
-                        submitButton.setText("SUBMIT");
+                        temp.setDone(true);
+                        if(db.getAssignedAttendance(temp).size() > 0){
+                            submitButton.setEnabled(true);
+                            submitButton.setText("SUBMIT");
+                        }
+                        else{
+                            submitButton.setText("HUH  NO LIST  HUH");
+                        }
                     }
                     else
                         submitButton.setEnabled(false);
