@@ -38,7 +38,7 @@ public class DetailActivity extends AppCompatActivity {
     Attendance item;
 
     Button submitButton, ab, ed, la, pr, sb, sw, us, vr;
-
+    String currentCode;
 
     RadioGroup rg1, rg2;
 
@@ -107,6 +107,7 @@ public class DetailActivity extends AppCompatActivity {
         ab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                currentCode = ab.getText().toString();
                 ab.setTextColor(Color.WHITE);
                 ab.getBackground().setColorFilter(Color.rgb(10, 153, 61), PorterDuff.Mode.MULTIPLY);
                 ed.setTextColor(Color.BLACK);
@@ -128,6 +129,7 @@ public class DetailActivity extends AppCompatActivity {
         ed.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                currentCode = ed.getText().toString();
                 ed.setTextColor(Color.WHITE);
                 ed.getBackground().setColorFilter(Color.rgb(10, 153, 61), PorterDuff.Mode.MULTIPLY);
                 ab.setTextColor(Color.BLACK);
@@ -149,6 +151,7 @@ public class DetailActivity extends AppCompatActivity {
         la.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                currentCode = la.getText().toString();
                 la.setTextColor(Color.WHITE);
                 la.getBackground().setColorFilter(Color.rgb(10, 153, 61), PorterDuff.Mode.MULTIPLY);
                 ed.setTextColor(Color.BLACK);
@@ -170,6 +173,7 @@ public class DetailActivity extends AppCompatActivity {
         pr.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                currentCode = pr.getText().toString();
                 pr.setTextColor(Color.WHITE);
                 pr.getBackground().setColorFilter(Color.rgb(10, 153, 61), PorterDuff.Mode.MULTIPLY);
                 ed.setTextColor(Color.BLACK);
@@ -191,6 +195,7 @@ public class DetailActivity extends AppCompatActivity {
         sb.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                currentCode = sb.getText().toString();
                 sb.setTextColor(Color.WHITE);
                 sb.getBackground().setColorFilter(Color.rgb(10, 153, 61), PorterDuff.Mode.MULTIPLY);
                 ed.setTextColor(Color.BLACK);
@@ -212,6 +217,7 @@ public class DetailActivity extends AppCompatActivity {
         sw.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                currentCode = sw.getText().toString();
                 sw.setTextColor(Color.WHITE);
                 sw.getBackground().setColorFilter(Color.rgb(10, 153, 61), PorterDuff.Mode.MULTIPLY);
                 ed.setTextColor(Color.BLACK);
@@ -233,6 +239,7 @@ public class DetailActivity extends AppCompatActivity {
         us.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                currentCode = us.getText().toString();
                 us.setTextColor(Color.WHITE);
                 us.getBackground().setColorFilter(Color.rgb(10, 153, 61), PorterDuff.Mode.MULTIPLY);
                 ed.setTextColor(Color.BLACK);
@@ -254,6 +261,7 @@ public class DetailActivity extends AppCompatActivity {
         vr.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                currentCode = vr.getText().toString();
                 vr.setTextColor(Color.WHITE);
                 vr.getBackground().setColorFilter(Color.rgb(10, 153, 61), PorterDuff.Mode.MULTIPLY);
                 ed.setTextColor(Color.BLACK);
