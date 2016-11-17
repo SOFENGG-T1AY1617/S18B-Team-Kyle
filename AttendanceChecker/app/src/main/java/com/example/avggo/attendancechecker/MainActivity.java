@@ -3,8 +3,10 @@ package com.example.avggo.attendancechecker;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.IdRes;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -132,6 +134,12 @@ public class MainActivity extends AppCompatActivity {
         //initialize drawer
         initializeDrawer();
 
+        SharedPreferences app_preferences =
+                PreferenceManager.getDefaultSharedPreferences(this);
+
+        // Get the value for the run counter
+        submitted = app_preferences.getBoolean("submitted", false);// The 0 is there for if the checker hasn't clicked the submit yet
+
         tabSlider.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
 
             // This method will be invoked when a new page becomes selected.
@@ -158,9 +166,13 @@ public class MainActivity extends AppCompatActivity {
                             "size is " + size + " " +!submitButton.getText().equals("ALREADY SUBMITTED"));
                     if (size == 0 && !submitButton.getText().equals("ALREADY SUBMITTED")){
                         temp.setDone(true);
-                        if(db.getAssignedAttendance(temp).size() > 0){
+                        if(db.getAssignedAttendance(temp).size() > 0 && !submitted){
                             submitButton.setEnabled(true);
                             submitButton.setText("SUBMIT");
+                        }
+                        else if(submitted){
+                            submitButton.setEnabled(false);
+                            submitButton.setText("ALREADY SUBMITTED");
                         }
                         else{
                             submitButton.setText("HUH  NO LIST  HUH");
@@ -214,7 +226,8 @@ public class MainActivity extends AppCompatActivity {
                 mainFilter.setStartHour(-1);
                 mainFilter.setStartMinute(-1);
                 pagerAdapter.notifyDataSetChanged();
-                //pagerAdapter.removeAll();
+
+                saveVariables();
             }
         });
 
@@ -232,6 +245,15 @@ public class MainActivity extends AppCompatActivity {
             if (hour > hourNow || (hour == hourNow && minute > minuteNow))
                 scheduleTask(getBaseContext(), hour, minute);
         }*/
+    }
+
+    public void saveVariables(){
+        SharedPreferences app_preferences =
+                PreferenceManager.getDefaultSharedPreferences(this);
+
+        SharedPreferences.Editor editor = app_preferences.edit();
+        editor.putBoolean("submitted", submitted);
+        editor.commit(); // Very important
     }
 
     public int getStartHour(Attendance a){
