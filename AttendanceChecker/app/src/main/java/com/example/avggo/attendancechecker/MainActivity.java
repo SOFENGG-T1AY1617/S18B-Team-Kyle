@@ -32,9 +32,11 @@ import com.example.avggo.attendancechecker.model.Filter;
 import com.example.avggo.attendancechecker.ui.AttendanceFragment;
 import com.example.avggo.attendancechecker.ui.HelpActivity;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -75,6 +77,7 @@ public class MainActivity extends AppCompatActivity {
     public DatabaseOpenHelper db;
     Timer timer;
     Filter mainFilter;
+    String day;
 
     AttendanceFragment undoneFragment, doneFragment, submittedFragment;
 
@@ -82,6 +85,11 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        SimpleDateFormat dayFormat = new SimpleDateFormat("EEEE", Locale.US);
+
+        Calendar calendar = Calendar.getInstance();
+        day = dayFormat.format(calendar.getTime());
 
         RID = getIntent().getStringExtra("RID");
 
@@ -197,6 +205,9 @@ public class MainActivity extends AppCompatActivity {
                 submitButton.setText("ALREADY SUBMITTED");
                 pagerAdapter.notifyDataSetChanged();
                 submitButton.setEnabled(false);
+                mainFilter.setStartHour(-1);
+                mainFilter.setStartMinute(-1);
+                pagerAdapter.notifyDataSetChanged();
                 //pagerAdapter.removeAll();
             }
         });
@@ -398,6 +409,18 @@ public class MainActivity extends AppCompatActivity {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
+                    SimpleDateFormat dayFormat = new SimpleDateFormat("EEEE", Locale.US);
+                    Log.i("tagg", "current day: " + dayFormat.format(Calendar.getInstance().getTime()));
+
+                    if(!day.equals(dayFormat.format(Calendar.getInstance().getTime()))){
+                        day = dayFormat.format(Calendar.getInstance().getTime());
+                        MainActivity.submitted = false;
+                        Filter initialFilter = new Filter();
+                        initialFilter.setBuilding("NULL");
+                        initialFilter.setRID(RID);
+                        initialFilter.setStatus("unique");
+                        listData = db.getAssignedAttendance(initialFilter);
+                    }
                     if(listData.size() > 0) {
                         Calendar c = GregorianCalendar.getInstance();
                         int startHour = getStartHour(listData.get(0));
@@ -423,8 +446,10 @@ public class MainActivity extends AppCompatActivity {
                             Log.i("REMOVED", "EXCEEDED");
                         }
                     }
-                    else
-                        timer.cancel();
+                    else {
+                        Log.i("tagg", "TIMER");
+                        //timer.cancel();
+                    }
                 }
             });
         }
