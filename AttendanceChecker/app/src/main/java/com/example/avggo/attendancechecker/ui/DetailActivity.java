@@ -51,6 +51,7 @@ public class DetailActivity extends AppCompatActivity {
         setContentView(R.layout.view_item_v3);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.detailToolbar);
+        toolbar.setTitle("Class Details");
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
