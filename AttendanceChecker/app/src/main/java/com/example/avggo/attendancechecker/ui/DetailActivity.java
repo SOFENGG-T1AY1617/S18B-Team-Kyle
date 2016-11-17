@@ -26,6 +26,7 @@ import com.example.avggo.attendancechecker.model.Attendance;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
+import static com.example.avggo.attendancechecker.R.id.middleLayout;
 import static com.example.avggo.attendancechecker.R.id.radioButton;
 
 public class DetailActivity extends AppCompatActivity {
@@ -103,11 +104,26 @@ public class DetailActivity extends AppCompatActivity {
         us = (Button) findViewById(R.id.usBtn);
         vr = (Button) findViewById(R.id.vrBtn);
 
-        if(!MainActivity.submitted){
-            setListeners();
+        if(MainActivity.submitted){
+            disableButtons();
+            remark.setEnabled(false);
             submitButton.setVisibility(View.GONE);
+            //submitButton.setVisibility(View.GONE);
         }
+        setListeners();
         setSelectedCode(item.getCode());
+    }
+
+    public void disableButtons(){
+        ab.setEnabled(false);
+        ed.setEnabled(false);
+        la.setEnabled(false);
+        pr.setEnabled(false);
+        pr.setEnabled(false);
+        sb.setEnabled(false);
+        sw.setEnabled(false);
+        us.setEnabled(false);
+        vr.setEnabled(false);
     }
 
     public void setListeners(){
