@@ -116,6 +116,7 @@ public class AttendanceFragment extends android.support.v4.app.Fragment implemen
                 // The Intent's data Uri identifies which contact was selected.
                 Attendance item = (Attendance) data.getSerializableExtra("CODED_ATTENDANCE_ITEM");
                 db.updateAttendance(item);
+                db.updateAttendanceRemark(item);
                 //listData.remove(most_recent_item);
                 //recView.removeViewAt(most_recent_item);
                 adapter.setListData(listData);

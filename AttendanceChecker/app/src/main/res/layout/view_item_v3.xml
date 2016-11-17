@@ -7,6 +7,15 @@
     android:focusableInTouchMode="true"
     android:orientation="vertical">
 
+    <android.support.v7.widget.Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        android:minHeight="?attr/actionBarSize"
+        app:titleEnabled="false"
+        android:id="@+id/detailToolbar" />
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -16,15 +25,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-
-            <android.support.v7.widget.Toolbar
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="?attr/colorPrimary"
-                app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-                android:minHeight="?attr/actionBarSize"
-                app:titleEnabled="false"
-                android:id="@+id/detailToolbar" />
 
             <LinearLayout
                 android:id="@+id/upperLayout"
@@ -221,6 +221,7 @@
                         android:paddingTop="15dp">
 
                         <EditText
+                            android:id="@+id/remarkField"
                             android:layout_width="match_parent"
                             android:textSize="14sp"
                             android:inputType="textMultiLine"

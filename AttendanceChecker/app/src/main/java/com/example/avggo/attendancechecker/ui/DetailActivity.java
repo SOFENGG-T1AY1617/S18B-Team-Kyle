@@ -11,6 +11,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -39,6 +40,7 @@ public class DetailActivity extends AppCompatActivity {
 
     Button submitButton, ab, ed, la, pr, sb, sw, us, vr;
     String currentCode;
+    EditText remark;
 
     RadioGroup rg1, rg2;
 
@@ -66,6 +68,7 @@ public class DetailActivity extends AppCompatActivity {
         roomName = (TextView) findViewById(R.id.facultyRoom);
         classTime = (TextView) findViewById(R.id.classTime);
         submitButton = (Button) findViewById(R.id.submitButton);
+        remark = (EditText) findViewById(R.id.remarkField);
 
 
         item = (Attendance) getIntent().getSerializableExtra("ATTENDANCE_ITEM");
@@ -101,6 +104,7 @@ public class DetailActivity extends AppCompatActivity {
         vr = (Button) findViewById(R.id.vrBtn);
 
         setListeners();
+        setSelectedCode(item.getCode());
     }
 
     public void setListeners(){
@@ -280,6 +284,49 @@ public class DetailActivity extends AppCompatActivity {
                 ab.getBackground().setColorFilter(Color.WHITE, PorterDuff.Mode.MULTIPLY);
             }
         });
+        submitButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (currentCode != null){
+                    item.setCode(currentCode);
+                    item.setRemarks(remark.getText().toString());
+                    Intent intent = new Intent();
+                    intent.putExtra("CODED_ATTENDANCE_ITEM", item);
+                    setResult(RESULT_OK, intent);
+                    finish();
+                }
+            }
+        });
+    }
+
+    private void setSelectedCode(String code){
+        remark.setText(item.getRemarks());
+        if(code != null){
+            if(code.equals("Absent")){
+                ab.performClick();
+            }
+            else if(code.equals("Early Dismissal")){
+                ed.performClick();
+            }
+            else if(code.equals("Late")){
+                la.performClick();
+            }
+            else if(code.equals("Present")){
+                pr.performClick();
+            }
+            else if(code.equals("Seatwork")){
+                sw.performClick();
+            }
+            else if(code.equals("Substitute")){
+                sb.performClick();
+            }
+            else if(code.equals("Unscheduled")){
+                us.performClick();
+            }
+            else if(code.equals("Vacant Room")){
+                vr.performClick();
+            }
+        }
     }
 
     /*private void setSelectedCode(String code){
