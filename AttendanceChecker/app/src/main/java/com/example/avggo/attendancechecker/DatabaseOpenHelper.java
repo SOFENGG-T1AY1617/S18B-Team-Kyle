@@ -133,6 +133,9 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
         sql = "INSERT INTO CheckerAccount (\"first_name\", \"middle_name\", \"last_name\", \"user_name\", \"email\", \"password\", \"rotation_id\" ) VALUES ('Vince', 'Gornal', 'Gonzales', 'test', 'test@gmail.com', 'test', 'A');";
         db.execSQL(sql);
 
+        sql = "INSERT INTO CheckerAccount (\"first_name\", \"middle_name\", \"last_name\", \"user_name\", \"email\", \"password\", \"rotation_id\" ) VALUES ('Bryan', 'Huh', 'Alburo', 'test2', 'test2@gmail.com', 'test', 'B');";
+        db.execSQL(sql);
+
         initializeDBData(db);
     }
 

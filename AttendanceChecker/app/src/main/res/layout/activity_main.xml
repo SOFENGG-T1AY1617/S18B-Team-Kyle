@@ -42,6 +42,8 @@
                     android:text="You cannot submit yet"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:theme="@style/AppTheme.Button"
+                    android:height="50dp"
                     android:id="@+id/submitSheetButton"
                     android:elevation="0dp" />
 

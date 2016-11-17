@@ -2,6 +2,9 @@ package com.example.avggo.attendancechecker.ui;
 
 import android.content.Intent;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.LightingColorFilter;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -34,7 +37,7 @@ public class DetailActivity extends AppCompatActivity {
     TextView facultyName, facultyCourse, courseCode, roomName, classTime;
     Attendance item;
 
-    Button submitButton;
+    Button submitButton, ab, ed, la, pr, sb, sw, us, vr;
 
 
     RadioGroup rg1, rg2;
@@ -42,7 +45,7 @@ public class DetailActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.view_item_v2);
+        setContentView(R.layout.view_item_v3);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.detailToolbar);
         setSupportActionBar(toolbar);
@@ -73,7 +76,7 @@ public class DetailActivity extends AppCompatActivity {
         roomName.setText(item.getRoom());
         classTime.setText(item.getStartTime() + " - " + item.getEndTime());
 
-        rg1 = (RadioGroup) findViewById(R.id.codeRadioGroup1);
+        /*rg1 = (RadioGroup) findViewById(R.id.codeRadioGroup1);
         rg2 = (RadioGroup) findViewById(R.id.codeRadioGroup2);
 
         rg1.clearCheck(); // this is so we can start fresh, with no selection on both RadioGroups
@@ -86,18 +89,198 @@ public class DetailActivity extends AppCompatActivity {
         if(MainActivity.submitted){
             LinearLayout l = (LinearLayout) findViewById(R.id.middleLayout);
             l.setVisibility(View.GONE);
-        }
+        }*/
+
+        ab = (Button) findViewById(R.id.abBtn);
+        ed = (Button) findViewById(R.id.edBtn);
+        la = (Button) findViewById(R.id.laBtn);
+        pr = (Button) findViewById(R.id.prBtn);
+        sb = (Button) findViewById(R.id.sbBtn);
+        sw = (Button) findViewById(R.id.swBtn);
+        us = (Button) findViewById(R.id.usBtn);
+        vr = (Button) findViewById(R.id.vrBtn);
 
         setListeners();
     }
 
-    private void setSelectedCode(String code){
+    public void setListeners(){
+        ab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ab.setTextColor(Color.WHITE);
+                ab.getBackground().setColorFilter(Color.rgb(10, 153, 61), PorterDuff.Mode.MULTIPLY);
+                ed.setTextColor(Color.BLACK);
+                ed.getBackground().setColorFilter(Color.WHITE, PorterDuff.Mode.MULTIPLY);
+                la.setTextColor(Color.BLACK);
+                la.getBackground().setColorFilter(Color.WHITE, PorterDuff.Mode.MULTIPLY);
+                pr.setTextColor(Color.BLACK);
+                pr.getBackground().setColorFilter(Color.WHITE, PorterDuff.Mode.MULTIPLY);
+                sb.setTextColor(Color.BLACK);
+                sb.getBackground().setColorFilter(Color.WHITE, PorterDuff.Mode.MULTIPLY);
+                sw.setTextColor(Color.BLACK);
+                sw.getBackground().setColorFilter(Color.WHITE, PorterDuff.Mode.MULTIPLY);
+                us.setTextColor(Color.BLACK);
+                us.getBackground().setColorFilter(Color.WHITE, PorterDuff.Mode.MULTIPLY);
+                vr.setTextColor(Color.BLACK);
+                vr.getBackground().setColorFilter(Color.WHITE, PorterDuff.Mode.MULTIPLY);
+            }
+        });
+        ed.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ed.setTextColor(Color.WHITE);
+                ed.getBackground().setColorFilter(Color.rgb(10, 153, 61), PorterDuff.Mode.MULTIPLY);
+                ab.setTextColor(Color.BLACK);
+                ab.getBackground().setColorFilter(Color.WHITE, PorterDuff.Mode.MULTIPLY);
+                la.setTextColor(Color.BLACK);
+                la.getBackground().setColorFilter(Color.WHITE, PorterDuff.Mode.MULTIPLY);
+                pr.setTextColor(Color.BLACK);
+                pr.getBackground().setColorFilter(Color.WHITE, PorterDuff.Mode.MULTIPLY);
+                sb.setTextColor(Color.BLACK);
+                sb.getBackground().setColorFilter(Color.WHITE, PorterDuff.Mode.MULTIPLY);
+                sw.setTextColor(Color.BLACK);
+                sw.getBackground().setColorFilter(Color.WHITE, PorterDuff.Mode.MULTIPLY);
+                us.setTextColor(Color.BLACK);
+                us.getBackground().setColorFilter(Color.WHITE, PorterDuff.Mode.MULTIPLY);
+                vr.setTextColor(Color.BLACK);
+                vr.getBackground().setColorFilter(Color.WHITE, PorterDuff.Mode.MULTIPLY);
+            }
+        });
+        la.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                la.setTextColor(Color.WHITE);
+                la.getBackground().setColorFilter(Color.rgb(10, 153, 61), PorterDuff.Mode.MULTIPLY);
+                ed.setTextColor(Color.BLACK);
+                ed.getBackground().setColorFilter(Color.WHITE, PorterDuff.Mode.MULTIPLY);
+                ab.setTextColor(Color.BLACK);
+                ab.getBackground().setColorFilter(Color.WHITE, PorterDuff.Mode.MULTIPLY);
+                pr.setTextColor(Color.BLACK);
+                pr.getBackground().setColorFilter(Color.WHITE, PorterDuff.Mode.MULTIPLY);
+                sb.setTextColor(Color.BLACK);
+                sb.getBackground().setColorFilter(Color.WHITE, PorterDuff.Mode.MULTIPLY);
+                sw.setTextColor(Color.BLACK);
+                sw.getBackground().setColorFilter(Color.WHITE, PorterDuff.Mode.MULTIPLY);
+                us.setTextColor(Color.BLACK);
+                us.getBackground().setColorFilter(Color.WHITE, PorterDuff.Mode.MULTIPLY);
+                vr.setTextColor(Color.BLACK);
+                vr.getBackground().setColorFilter(Color.WHITE, PorterDuff.Mode.MULTIPLY);
+            }
+        });
+        pr.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                pr.setTextColor(Color.WHITE);
+                pr.getBackground().setColorFilter(Color.rgb(10, 153, 61), PorterDuff.Mode.MULTIPLY);
+                ed.setTextColor(Color.BLACK);
+                ed.getBackground().setColorFilter(Color.WHITE, PorterDuff.Mode.MULTIPLY);
+                la.setTextColor(Color.BLACK);
+                la.getBackground().setColorFilter(Color.WHITE, PorterDuff.Mode.MULTIPLY);
+                ab.setTextColor(Color.BLACK);
+                ab.getBackground().setColorFilter(Color.WHITE, PorterDuff.Mode.MULTIPLY);
+                sb.setTextColor(Color.BLACK);
+                sb.getBackground().setColorFilter(Color.WHITE, PorterDuff.Mode.MULTIPLY);
+                sw.setTextColor(Color.BLACK);
+                sw.getBackground().setColorFilter(Color.WHITE, PorterDuff.Mode.MULTIPLY);
+                us.setTextColor(Color.BLACK);
+                us.getBackground().setColorFilter(Color.WHITE, PorterDuff.Mode.MULTIPLY);
+                vr.setTextColor(Color.BLACK);
+                vr.getBackground().setColorFilter(Color.WHITE, PorterDuff.Mode.MULTIPLY);
+            }
+        });
+        sb.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sb.setTextColor(Color.WHITE);
+                sb.getBackground().setColorFilter(Color.rgb(10, 153, 61), PorterDuff.Mode.MULTIPLY);
+                ed.setTextColor(Color.BLACK);
+                ed.getBackground().setColorFilter(Color.WHITE, PorterDuff.Mode.MULTIPLY);
+                la.setTextColor(Color.BLACK);
+                la.getBackground().setColorFilter(Color.WHITE, PorterDuff.Mode.MULTIPLY);
+                pr.setTextColor(Color.BLACK);
+                pr.getBackground().setColorFilter(Color.WHITE, PorterDuff.Mode.MULTIPLY);
+                ab.setTextColor(Color.BLACK);
+                ab.getBackground().setColorFilter(Color.WHITE, PorterDuff.Mode.MULTIPLY);
+                sw.setTextColor(Color.BLACK);
+                sw.getBackground().setColorFilter(Color.WHITE, PorterDuff.Mode.MULTIPLY);
+                us.setTextColor(Color.BLACK);
+                us.getBackground().setColorFilter(Color.WHITE, PorterDuff.Mode.MULTIPLY);
+                vr.setTextColor(Color.BLACK);
+                vr.getBackground().setColorFilter(Color.WHITE, PorterDuff.Mode.MULTIPLY);
+            }
+        });
+        sw.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sw.setTextColor(Color.WHITE);
+                sw.getBackground().setColorFilter(Color.rgb(10, 153, 61), PorterDuff.Mode.MULTIPLY);
+                ed.setTextColor(Color.BLACK);
+                ed.getBackground().setColorFilter(Color.WHITE, PorterDuff.Mode.MULTIPLY);
+                la.setTextColor(Color.BLACK);
+                la.getBackground().setColorFilter(Color.WHITE, PorterDuff.Mode.MULTIPLY);
+                pr.setTextColor(Color.BLACK);
+                pr.getBackground().setColorFilter(Color.WHITE, PorterDuff.Mode.MULTIPLY);
+                sb.setTextColor(Color.BLACK);
+                sb.getBackground().setColorFilter(Color.WHITE, PorterDuff.Mode.MULTIPLY);
+                ab.setTextColor(Color.BLACK);
+                ab.getBackground().setColorFilter(Color.WHITE, PorterDuff.Mode.MULTIPLY);
+                us.setTextColor(Color.BLACK);
+                us.getBackground().setColorFilter(Color.WHITE, PorterDuff.Mode.MULTIPLY);
+                vr.setTextColor(Color.BLACK);
+                vr.getBackground().setColorFilter(Color.WHITE, PorterDuff.Mode.MULTIPLY);
+            }
+        });
+        us.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                us.setTextColor(Color.WHITE);
+                us.getBackground().setColorFilter(Color.rgb(10, 153, 61), PorterDuff.Mode.MULTIPLY);
+                ed.setTextColor(Color.BLACK);
+                ed.getBackground().setColorFilter(Color.WHITE, PorterDuff.Mode.MULTIPLY);
+                la.setTextColor(Color.BLACK);
+                la.getBackground().setColorFilter(Color.WHITE, PorterDuff.Mode.MULTIPLY);
+                pr.setTextColor(Color.BLACK);
+                pr.getBackground().setColorFilter(Color.WHITE, PorterDuff.Mode.MULTIPLY);
+                sb.setTextColor(Color.BLACK);
+                sb.getBackground().setColorFilter(Color.WHITE, PorterDuff.Mode.MULTIPLY);
+                sw.setTextColor(Color.BLACK);
+                sw.getBackground().setColorFilter(Color.WHITE, PorterDuff.Mode.MULTIPLY);
+                ab.setTextColor(Color.BLACK);
+                ab.getBackground().setColorFilter(Color.WHITE, PorterDuff.Mode.MULTIPLY);
+                vr.setTextColor(Color.BLACK);
+                vr.getBackground().setColorFilter(Color.WHITE, PorterDuff.Mode.MULTIPLY);
+            }
+        });
+        vr.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                vr.setTextColor(Color.WHITE);
+                vr.getBackground().setColorFilter(Color.rgb(10, 153, 61), PorterDuff.Mode.MULTIPLY);
+                ed.setTextColor(Color.BLACK);
+                ed.getBackground().setColorFilter(Color.WHITE, PorterDuff.Mode.MULTIPLY);
+                la.setTextColor(Color.BLACK);
+                la.getBackground().setColorFilter(Color.WHITE, PorterDuff.Mode.MULTIPLY);
+                pr.setTextColor(Color.BLACK);
+                pr.getBackground().setColorFilter(Color.WHITE, PorterDuff.Mode.MULTIPLY);
+                sb.setTextColor(Color.BLACK);
+                sb.getBackground().setColorFilter(Color.WHITE, PorterDuff.Mode.MULTIPLY);
+                sw.setTextColor(Color.BLACK);
+                sw.getBackground().setColorFilter(Color.WHITE, PorterDuff.Mode.MULTIPLY);
+                us.setTextColor(Color.BLACK);
+                us.getBackground().setColorFilter(Color.WHITE, PorterDuff.Mode.MULTIPLY);
+                ab.setTextColor(Color.BLACK);
+                ab.getBackground().setColorFilter(Color.WHITE, PorterDuff.Mode.MULTIPLY);
+            }
+        });
+    }
+
+    /*private void setSelectedCode(String code){
         if(code != null){
             //loop through buttons
             int count = rg1.getChildCount();
             for (int i=0;i<count;i++) {
                 RadioButton btn = (RadioButton) rg1.getChildAt(i);
-                //Log.i("tagg", (String)btn.getText() + "----------" + i);
+                Log.i("tagg", (String)btn.getText() + "----------" + i);
                 if(btn.getText().equals(code)) {
                     btn.setChecked(true);
                     break;
@@ -171,5 +354,5 @@ public class DetailActivity extends AppCompatActivity {
                 //Log.e("XXX2", "do the work");
             }
         }
-    };
+    }*/
 }
