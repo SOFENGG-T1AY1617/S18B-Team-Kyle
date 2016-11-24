@@ -33,4 +33,5 @@ dependencies {
     compile 'com.ToxicBakery.viewpager.transforms:view-pager-transforms:1.2.32@aar'
     compile 'de.hdodenhof:circleimageview:1.2.1'
     compile 'com.android.support:multidex:1.0.0'
+    compile 'com.google.code.gson:gson:2.8.0'
 }

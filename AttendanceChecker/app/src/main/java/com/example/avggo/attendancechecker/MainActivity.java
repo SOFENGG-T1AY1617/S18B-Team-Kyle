@@ -29,6 +29,7 @@ import android.widget.TextView;
 
 import com.ToxicBakery.viewpager.transforms.AccordionTransformer;
 import com.example.avggo.attendancechecker.adapter.ViewPagerAdapter;
+import com.example.avggo.attendancechecker.meneger.SebmetMeneger;
 import com.example.avggo.attendancechecker.model.Attendance;
 import com.example.avggo.attendancechecker.model.Filter;
 import com.example.avggo.attendancechecker.ui.AttendanceFragment;
@@ -84,6 +85,21 @@ public class MainActivity extends AppCompatActivity {
     AttendanceFragment undoneFragment, doneFragment, submittedFragment;
 
     @Override
+    protected void onPause(){
+        SebmetMeneger.saveState(this);
+    }
+
+    @Override
+    protected void onDestroy(){
+        SebmetMeneger.saveState(this);
+    }
+
+    @Override
+    protected void onResume(){
+        SebmetMeneger.resumeState(this);
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -133,6 +149,8 @@ public class MainActivity extends AppCompatActivity {
         curBuildings = db.getAssignedBuildings(RID);
         //initialize drawer
         initializeDrawer();
+
+        SebmetMeneger.resumeState(this);
 
         SharedPreferences app_preferences =
                 PreferenceManager.getDefaultSharedPreferences(this);
@@ -470,6 +488,7 @@ public class MainActivity extends AppCompatActivity {
                             Log.i("REMOVED", "UPDATED");
                         }
                         else if(startHour < hourNow && endHour < hourNow || (hourNow == endHour && minuteNow > endMinute)) {
+                            listData.get(0).setCode("CHECKER ERRER");
                             listData.remove(0);
                             Log.i("REMOVED", "EXCEEDED");
                         }
