@@ -246,6 +246,7 @@ public class MainActivity extends AppCompatActivity {
                 submitted = true;
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
                 String date = sdf.format(Calendar.getInstance().getTime());
+                Log.i("DATE", date);
                 SebmetMeneger.submitToDate(date);
                 submitButton.setText("ALREADY SUBMITTED");
                 pagerAdapter.notifyDataSetChanged();

@@ -28,6 +28,7 @@ public class Attendance implements Serializable{
     private String email;
     private String remarks;
     private String college;
+    private String reason;
     private byte[] pic;
 
     public Attendance() {
@@ -145,5 +146,13 @@ public class Attendance implements Serializable{
 
     public void setCollege(String college) {
         this.college = college;
+    }
+
+    public String getReason() {
+        return reason;
+    }
+
+    public void setReason(String reason) {
+        this.reason = reason;
     }
 }

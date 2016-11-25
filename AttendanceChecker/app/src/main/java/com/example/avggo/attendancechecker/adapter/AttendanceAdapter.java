@@ -76,6 +76,8 @@ public class AttendanceAdapter extends RecyclerView.Adapter<AttendanceAdapter.At
         holder.subTitle.setText(item.getFname());
         byte[] arrImage = item.getPic();
         holder.thumbnail.setImageBitmap(BitmapFactory.decodeByteArray(arrImage, 0, arrImage.length));
+        if(item.getReason() != null)
+            holder.reason.setText(item.getReason());
     }
 
     @Override
@@ -87,6 +89,7 @@ public class AttendanceAdapter extends RecyclerView.Adapter<AttendanceAdapter.At
 
         private TextView title;
         private TextView subTitle;
+        private TextView reason;
         private CircleImageView thumbnail;
         private View container;
 
@@ -95,6 +98,7 @@ public class AttendanceAdapter extends RecyclerView.Adapter<AttendanceAdapter.At
 
             title = (TextView) itemView.findViewById(R.id.lbl_item_text);
             subTitle = (TextView) itemView.findViewById(R.id.lbl_item_sub_title);
+            reason = (TextView) itemView.findViewById(R.id.lbl_item_reason);
             thumbnail = (CircleImageView) itemView.findViewById(R.id.im_item_icon);
             container = itemView.findViewById(R.id.cont_item_root);
             container.setOnClickListener(this);

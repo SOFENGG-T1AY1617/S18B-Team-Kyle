@@ -129,6 +129,23 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
                 + "id INTEGER PRIMARY KEY AUTOINCREMENT, "
                 + "name TEXT);";
         db.execSQL(sql);
+        sql = "CREATE TABLE MakeupClass ("
+                + "id INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + "new_start_time TEXT, "
+                + "new_end_time TEXT, "
+                + "date TEXT, "
+                + "new_rm_id INTEGER, "
+                + "status_id INTEGER DEFAULT NULL, "
+                + "reason TEXT, "
+                + "attendance_id INTEGER"
+                + "remarks TEXT DEFAULT NULL);";
+        db.execSQL(sql);
+        sql = "CREATE TABLE Substitute ("
+                + "id INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + "faculty_id TEXT, "
+                + "courseoffering_id TEXT"
+                + "date TEXT);";
+        db.execSQL(sql);
 
         sql = "INSERT INTO CheckerAccount (\"first_name\", \"middle_name\", \"last_name\", \"user_name\", \"email\", \"password\", \"rotation_id\" ) VALUES ('Vince', 'Gornal', 'Gonzales', 'test', 'test@gmail.com', 'test', 'A');";
         db.execSQL(sql);
@@ -155,50 +172,55 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
 
         if (f.getBuilding().equals("NULL")) {
             if(f.getStartHour() != -1) {
-                query = "select f.first_name, f.middle_name, f.last_name, f.college, c.code, c.name 'course_name', co.time_start, co.time_end, r.name 'room_name', f.pic, a.remarks, a.id 'id', (SELECT ats.name from attendancestatus ats where a.status_id = ats.id) 'acode' \n" +
+                query = "select f.first_name, f.middle_name, f.last_name, f.college, c.code, c.name 'course_name', co.time_start, co.time_end, r.name 'room_name', f.pic, a.remarks, a.id 'id', m.reason, m.date, (SELECT ats.name from attendancestatus ats where a.status_id = ats.id) 'acode' \n" +
                         "from attendance a inner join courseoffering co on a.courseoffering_id = co.id \n" +
                         "inner join faculty f on f.id = co.faculty_id \n" +
                         "inner join course c on c.id = co.course_id \n" +
                         "inner join room r on co.room_id = r.id \n" +
                         "inner join rotationroom rr on r.id = rr.room_id \n" +
+                        "left join makeupclass m on m.attendance_id = a.id \n" +
                         "where rr.rotation_id = '" + f.getRID() + "' and co.days like '%" + weekDay + "%' and a.status_id is "+ isDone +" null and co.time_start LIKE '%" + f.getStartHour() + ":" + f.getStartMinute() + "%' order by co.time_start;";
             }
             else if(f.getStatus().equals("unique")){
-                query = "select co.time_start, co.time_end, f.first_name, f.middle_name, f.last_name, f.college, c.code, a.remarks, a.id 'id', (SELECT name from attendancestatus ats where a.status_id = ats.id) 'acode', c.name 'course_name', r.name 'room_name', f.pic " +
+                query = "select co.time_start, co.time_end, f.first_name, f.middle_name, f.last_name, f.college, c.code, a.remarks, a.id 'id', m.reason, m.date, (SELECT name from attendancestatus ats where a.status_id = ats.id) 'acode', c.name 'course_name', r.name 'room_name', f.pic " +
                         "from attendance a inner join courseoffering co on a.courseoffering_id = co.id " +
                         "inner join faculty f on f.id = co.faculty_id " +
                         "inner join course c on c.id = co.course_id " +
                         "inner join room r on co.room_id = r.id " +
                         "inner join rotationroom rr on r.id = rr.room_id " +
+                        "left join makeupclass m on m.attendance_id = a.id \n" +
                         "where rr.rotation_id = '" + f.getRID() + "' and co.days like '%" + weekDay + "%' and a.status_id is null group by 1 order by co.time_start;";
             }
             else
-                query = "select f.first_name, f.middle_name, f.last_name, f.college, c.code, c.name 'course_name', co.time_start, co.time_end, r.name 'room_name', f.pic, a.remarks, a.id 'id', (SELECT name from attendancestatus ats where a.status_id = ats.id) 'acode' \n" +
+                query = "select f.first_name, f.middle_name, f.last_name, f.college, c.code, c.name 'course_name', co.time_start, co.time_end, r.name 'room_name', f.pic, a.remarks, a.id 'id', m.reason, m.date, (SELECT name from attendancestatus ats where a.status_id = ats.id) 'acode' \n" +
                         "from attendance a inner join courseoffering co on a.courseoffering_id = co.id \n" +
                         "inner join faculty f on f.id = co.faculty_id \n" +
                         "inner join course c on c.id = co.course_id \n" +
                         "inner join room r on co.room_id = r.id \n" +
                         "inner join rotationroom rr on r.id = rr.room_id \n" +
+                        "left join makeupclass m on m.attendance_id = a.id \n" +
                         "where rr.rotation_id = '" + f.getRID() + "' and co.days like '%" + weekDay + "%' and a.status_id is "+ isDone +"null order by co.time_start;";
         } else {
             if(f.getStartHour() != -1) {
-                query = "select f.first_name, f.middle_name, f.last_name, f.college, c.code, c.name 'course_name', co.time_start, co.time_end, r.name 'room_name', f.pic, b.name 'bname', a.remarks, a.id 'id', (SELECT name from attendancestatus ats where a.status_id = ats.id) 'acode' \n" +
+                query = "select f.first_name, f.middle_name, f.last_name, f.college, c.code, c.name 'course_name', co.time_start, co.time_end, r.name 'room_name', f.pic, b.name 'bname', a.remarks, a.id 'id', m.reason, m.date, (SELECT name from attendancestatus ats where a.status_id = ats.id) 'acode' \n" +
                         "from attendance a inner join courseoffering co on a.courseoffering_id = co.id\n" +
                         "inner join faculty f on f.id = co.faculty_id\n" +
                         "inner join course c on c.id = co.course_id\n" +
                         "inner join room r on co.room_id = r.id\n" +
                         "inner join rotationroom rr on r.id = rr.room_id\n" +
                         "inner join building b on r.building_id = b.id\n" +
+                        "left join makeupclass m on m.attendance_id = a.id \n" +
                         "where rr.rotation_id = '" + f.getRID() + "' and co.days like '%" + weekDay + "%' and a.status_id is "+ isDone +" null and bname = '" + f.getBuilding() + "' and co.time_start LIKE '%" + f.getStartHour() + ":" + f.getStartMinute() + "%' order by co.time_start;";
             }
             else
-                query = "select f.first_name, f.middle_name, f.last_name, f.college, c.code, c.name 'course_name', co.time_start, co.time_end, r.name 'room_name', f.pic, b.name 'bname', a.remarks, a.id 'id', (SELECT name from attendancestatus ats where a.status_id = ats.id) 'acode' \n" +
+                query = "select f.first_name, f.middle_name, f.last_name, f.college, c.code, c.name 'course_name', co.time_start, co.time_end, r.name 'room_name', f.pic, b.name 'bname', a.remarks, a.id 'id', m.reason, m.date, (SELECT name from attendancestatus ats where a.status_id = ats.id) 'acode' \n" +
                         "from attendance a inner join courseoffering co on a.courseoffering_id = co.id\n" +
                         "inner join faculty f on f.id = co.faculty_id\n" +
                         "inner join course c on c.id = co.course_id\n" +
                         "inner join room r on co.room_id = r.id\n" +
                         "inner join rotationroom rr on r.id = rr.room_id\n" +
                         "inner join building b on r.building_id = b.id\n" +
+                        "left join makeupclass m on m.attendance_id = a.id \n" +
                         "where rr.rotation_id = '" + f.getRID() + "' and co.days like '%" + weekDay + "%' and a.status_id is "+ isDone +" null and bname = '" + f.getBuilding() + "' order by co.time_start;";
         }
 
@@ -241,6 +263,8 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
                     a.setId(id);
                     a.setCode(aCode);
                     a.setRemarks(remark);
+                    if(c.getString(c.getColumnIndex("date")) != null && c.getString(c.getColumnIndex("date")).equals(new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime())))
+                        a.setReason(c.getString(c.getColumnIndex("reason")));
                     //Log.i("tagg", "DB.getAssignedAttendance() " + a.toString());
                     assignedAttendance.add(a);
 
@@ -513,6 +537,9 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
                 "inner join RotationRoom rr on r.id = rr.room_id;";
 
         db.execSQL(query);
+
+        sql = "INSERT INTO MakeupClass (\"new_start_time\", \"new_end_time\", \"date\", \"new_rm_id\", \"reason\", \"attendance_id\") VALUES ('12:45', '14:45', '2016-11-26', '1', 'AC', '3');";
+        db.execSQL(sql);
     }
 
     private byte[] drawableToByteArray(Drawable dr) {
