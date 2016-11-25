@@ -263,8 +263,12 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
                     a.setId(id);
                     a.setCode(aCode);
                     a.setRemarks(remark);
-                    if(c.getString(c.getColumnIndex("date")) != null && c.getString(c.getColumnIndex("date")).equals(new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime())))
+                    Log.i("DATE2", new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime()));
+                    if(c.getString(c.getColumnIndex("date")) != null && c.getString(c.getColumnIndex("date")).equals(new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime()))) {
                         a.setReason(c.getString(c.getColumnIndex("reason")));
+                        Log.i("DATE1", c.getString(c.getColumnIndex("date")));
+                        Log.i("DATE2", new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime()));
+                    }
                     //Log.i("tagg", "DB.getAssignedAttendance() " + a.toString());
                     assignedAttendance.add(a);
 
@@ -538,7 +542,7 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
 
         db.execSQL(query);
 
-        sql = "INSERT INTO MakeupClass (\"new_start_time\", \"new_end_time\", \"date\", \"new_rm_id\", \"reason\", \"attendance_id\") VALUES ('12:45', '14:45', '2016-11-26', '1', 'AC', '3');";
+        sql = "INSERT INTO MakeupClass (\"new_start_time\", \"new_end_time\", \"date\", \"new_rm_id\", \"reason\", \"attendance_id\") VALUES ('12:45', '14:45', '2016-11-23', '1', 'AC', '3');";
         db.execSQL(sql);
     }
 
