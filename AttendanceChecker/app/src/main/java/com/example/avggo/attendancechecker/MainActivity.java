@@ -45,7 +45,7 @@ import java.util.TimerTask;
 
 public class MainActivity extends AppCompatActivity {
 
-    public static boolean submitted = false;
+    public static boolean submitted;
 
     private Toolbar toolbar;
     private ViewPager viewPager;
@@ -86,17 +86,22 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onPause(){
+        super.onPause();
         SebmetMeneger.saveState(this);
     }
 
     @Override
     protected void onDestroy(){
+        super.onDestroy();
         SebmetMeneger.saveState(this);
     }
 
     @Override
     protected void onResume(){
+        super.onResume();
         SebmetMeneger.resumeState(this);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        submitted = SebmetMeneger.isSubmittedDate(sdf.format(Calendar.getInstance().getTime()));
     }
 
     @Override
@@ -156,7 +161,8 @@ public class MainActivity extends AppCompatActivity {
                 PreferenceManager.getDefaultSharedPreferences(this);
 
         // Get the value for the run counter
-        submitted = app_preferences.getBoolean("submitted", false);// The 0 is there for if the checker hasn't clicked the submit yet
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        submitted = SebmetMeneger.isSubmittedDate(sdf.format(Calendar.getInstance().getTime()));
 
         tabSlider.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
 
@@ -238,14 +244,15 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 submitted = true;
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                String date = sdf.format(Calendar.getInstance().getTime());
+                SebmetMeneger.submitToDate(date);
                 submitButton.setText("ALREADY SUBMITTED");
                 pagerAdapter.notifyDataSetChanged();
                 submitButton.setEnabled(false);
                 mainFilter.setStartHour(-1);
                 mainFilter.setStartMinute(-1);
                 pagerAdapter.notifyDataSetChanged();
-
-                saveVariables();
             }
         });
 
@@ -263,15 +270,6 @@ public class MainActivity extends AppCompatActivity {
             if (hour > hourNow || (hour == hourNow && minute > minuteNow))
                 scheduleTask(getBaseContext(), hour, minute);
         }*/
-    }
-
-    public void saveVariables(){
-        SharedPreferences app_preferences =
-                PreferenceManager.getDefaultSharedPreferences(this);
-
-        SharedPreferences.Editor editor = app_preferences.edit();
-        editor.putBoolean("submitted", submitted);
-        editor.commit(); // Very important
     }
 
     public int getStartHour(Attendance a){
@@ -456,11 +454,11 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void run() {
                     SimpleDateFormat dayFormat = new SimpleDateFormat("EEEE", Locale.US);
-                    Log.i("tagg", "current day: " + dayFormat.format(Calendar.getInstance().getTime()));
+                    //Log.i("taggs", "current day: " + dayFormat.format(Calendar.getInstance().getTime()));
 
                     if(!day.equals(dayFormat.format(Calendar.getInstance().getTime()))){
                         day = dayFormat.format(Calendar.getInstance().getTime());
-                        MainActivity.submitted = false;
+                        submitted = false;
                         Filter initialFilter = new Filter();
                         initialFilter.setBuilding("NULL");
                         initialFilter.setRID(RID);
@@ -548,107 +546,4 @@ public class MainActivity extends AppCompatActivity {
             scheduleTask(getBaseContext());
         }
     }
-
-
-
-/*
-    private class ViewPagerAdapter1 extends FragmentStatePagerAdapter {
-        CharSequence Titles[];
-        int NumbOfTabs;
-        Filter filter;
-
-        private AttendanceFragment al;
-        private int currentTab;
-
-        public ViewPagerAdapter1(FragmentManager fm, CharSequence mTitles[], int mNumbOfTabsumb, Filter filter) {
-            super(fm);
-            this.Titles = mTitles;
-            this.NumbOfTabs = mNumbOfTabsumb;
-            this.filter = filter;
-            MainActivityFilter = filter;
-            this.currentTab = 0;
-        }
-
-        public Fragment getItem(int position) {
-            //Log.i("tagg", "ViewPagerAdapter.getItem()   -- called");
-            if (position == 0) {
-                Log.i("tagg", "ViewPagerAdapter.getItem()   -- position ZERO called");
-                filter.setDone(false);
-                filter.setSubmitted(submitted);
-                al = AttendanceFragment.newInstance(filter);
-                return al;
-            } else if (position == 1) {
-                Log.i("tagg", "ViewPagerAdapter.getItem()   -- position ONE called");
-                filter.setDone(true);
-                filter.setSubmitted(submitted);
-                al = AttendanceFragment.newInstance(filter);
-                return al;
-            } else if (position == 2) {
-                Log.i("tagg", "ViewPagerAdapter.getItem()   -- position TWO called");
-                filter.setDone(true);
-                filter.setSubmitted(!submitted);
-                al = AttendanceFragment.newInstance(filter);
-                return al;
-            } else return null;
-        }
-
-        @Override
-        public Object instantiateItem(ViewGroup container, int position) {
-            Fragment createdFragment = (AttendanceFragment) super.instantiateItem(container, position);
-            // save the appropriate reference depending on position
-            switch (position) {
-                case 0:
-                    undoneFragment = (AttendanceFragment) createdFragment;
-                    break;
-                case 1:
-                    doneFragment = (AttendanceFragment) createdFragment;
-                    break;
-                case 2:
-                    submittedFragment = (AttendanceFragment) createdFragment;
-            }
-            return createdFragment;
-        }
-
-        @Override
-        public int getItemPosition(Object object) {
-            return POSITION_NONE;
-        }
-
-        public CharSequence getPageTitle(int position) {
-            return Titles[position];
-        }
-
-        public int getCount() {
-            return NumbOfTabs;
-        }
-    }*/
-/*
-    public void refresh() {
-        // do work on the referenced Fragments, but first check if they
-        // even exist yet, otherwise you'll get an NPE.
-
-        if (undoneFragment != null) {
-            Filter f = new Filter();
-            f.setDone(false);
-            f.setSubmitted(submitted);
-            undoneFragment = AttendanceFragment.newInstance(f);
-            Log.i("tagg", "MainActivity.refresh() undone created");
-        }
-
-        if (doneFragment != null) {
-            Filter f = new Filter();
-            f.setDone(true);
-            f.setSubmitted(submitted);
-            doneFragment = AttendanceFragment.newInstance(f);
-            Log.i("tagg", "MainActivity.refresh() done created");
-        }
-
-        if(submittedFragment != null){
-            Filter f = new Filter();
-            f.setDone(true);
-            f.setSubmitted(!submitted);
-            submittedFragment = AttendanceFragment.newInstance(f);
-            Log.i("tagg", "MainActivity.refresh() submimtted created");
-        }
-    }*/
 }

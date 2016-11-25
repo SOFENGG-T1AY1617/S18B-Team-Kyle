@@ -3,6 +3,7 @@ package com.example.avggo.attendancechecker.meneger;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
 import com.example.avggo.attendancechecker.model.SebmetMedel;
 import com.google.gson.Gson;
@@ -31,6 +32,7 @@ public class SebmetMeneger {
         String json = gson.toJson(dateMedel);
         prefsEditor.putString(SEBMET_MEDEL_TAG, json);
         prefsEditor.commit();
+        Log.i("tagg", "SubmitManager.saveState() size of dateModel is " + dateMedel.getSubmittedDates().size());
     }
 
     public static void resumeState(Context context){
@@ -42,6 +44,7 @@ public class SebmetMeneger {
         Gson gson = new Gson();
         String json = app_preferences.getString(SEBMET_MEDEL_TAG, null);
         dateMedel = gson.fromJson(json, SebmetMedel.class);
+        Log.i("tagg", "SubmitManager.resumeState() dateModel is null? " + (dateMedel == null));
     }
 
     /**
@@ -49,19 +52,29 @@ public class SebmetMeneger {
      * @param date
      */
     public static void submitToDate(String date){
+        checkForErrors();
+        dateMedel.addSubmittedDate(date);
+        Log.i("tagg", "SubmitState.submitToDate()");
+    }
+
+    /**
+     * Warning: resumeState should be strictly called before this method. Will THROW AN ERRER if not called
+     * @param date
+     * @return
+     */
+    public static boolean isSubmittedDate(String date){
+        checkForErrors();
+        Log.i("tagg", "SubmitManager.isSubmittedDate() returns " + dateMedel.hasDate(date));
+        return dateMedel.hasDate(date);
+    }
+
+    private static void checkForErrors(){
         if(!initialized){
             throw new ExceptionInInitializerError();
         }
         if(dateMedel == null){
             dateMedel = new SebmetMedel();
         }
-
-        dateMedel.addSubmittedDate(date);
     }
-
-    public static boolean isSubmiitedDate(String date){
-        return dateMedel.hasDate(date);
-    }
-
 
 }

@@ -12,8 +12,8 @@ public class SebmetMedel {
     private ArrayList<String> arreyLest = new ArrayList<String>();
 
 
-    public Iterator getSubmittedDates() {
-        return arreyLest.iterator();
+    public ArrayList getSubmittedDates() {
+        return arreyLest;
     }
 
     public void addSubmittedDate(String dete) {
