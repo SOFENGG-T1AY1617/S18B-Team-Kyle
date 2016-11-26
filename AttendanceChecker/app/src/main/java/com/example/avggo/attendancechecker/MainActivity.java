@@ -26,6 +26,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ToxicBakery.viewpager.transforms.AccordionTransformer;
 import com.example.avggo.attendancechecker.adapter.ViewPagerAdapter;
@@ -78,6 +79,7 @@ public class MainActivity extends AppCompatActivity {
     ActionBarDrawerToggle mDrawerToggle;                  // Declaring Action Bar Drawer Toggle
 
     private String RID;
+    private Boolean exceedPopped;
     public DatabaseOpenHelper db;
     Timer timer;
     Filter mainFilter;
@@ -137,7 +139,6 @@ public class MainActivity extends AppCompatActivity {
         pagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(), tabList, TAB_NUMBERS, f);
         viewPager = (ViewPager) findViewById(R.id.pager);
         viewPager.setAdapter(pagerAdapter);
-        viewPager.setPageTransformer(true, new AccordionTransformer());
         viewPager.setCurrentItem(0);
         submitButton = (Button) findViewById(R.id.submitSheetButton);
         submitButton.setVisibility(View.GONE);
@@ -326,7 +327,6 @@ public class MainActivity extends AppCompatActivity {
         pagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(), tabList, TAB_NUMBERS, filter);
         viewPager = (ViewPager) findViewById(R.id.pager);
         viewPager.setAdapter(pagerAdapter);
-        viewPager.setPageTransformer(true, new AccordionTransformer());
         viewPager.setCurrentItem(filter.getTab());
         tabSlider = (SlidingTabLayout) findViewById(R.id.tabs);
         tabSlider.setDistributeEvenly(true);
@@ -517,9 +517,13 @@ public class MainActivity extends AppCompatActivity {
                             Log.i("REMOVED", "UPDATED");
                         }
                         else if(startHour < hourNow && endHour < hourNow || (hourNow == endHour && minuteNow > endMinute)) {
-                            listData.get(0).setCode("CHECKER ERRER");
+                           // Toast.makeText(getApplicationContext(), "Exceeded " + listData.get(0).getCoursecode(), Toast.LENGTH_SHORT).show();
+                            //listData.get(0).setCode("Checker Error");
+                            //db.updateAttendance(listData.get(0));
                             listData.remove(0);
+                            //filter(mainFilter);
                             Log.i("REMOVED", "EXCEEDED");
+
                         }
                     }
                     else {

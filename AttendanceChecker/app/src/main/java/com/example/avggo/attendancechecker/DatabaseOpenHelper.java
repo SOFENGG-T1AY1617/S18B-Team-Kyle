@@ -275,7 +275,8 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
                         Log.i("DATE2", new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime()));
                     }
                     //Log.i("tagg", "DB.getAssignedAttendance() " + a.toString());
-                    assignedAttendance.add(a);
+                    if(a.getCode() == null || !a.getCode().equals("Checker Error"))
+                        assignedAttendance.add(a);
 
                     c.moveToNext();
 
@@ -500,6 +501,8 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
         sql = "INSERT INTO attendancestatus (\"code\", \"name\", \"description\") VALUES ('US', 'Unscheduled Class', 'A room is occupied by a faculty and their students without prior notice.');";
         db.execSQL(sql);
         sql = "INSERT INTO attendancestatus (\"code\", \"name\", \"description\") VALUES ('VR', 'Vacant Room', 'Both the faculty and the students are not in class.');";
+        db.execSQL(sql);
+        sql = "INSERT INTO attendancestatus (\"code\", \"name\", \"description\") VALUES ('CE', 'Checker Error', 'Exceeded class time.');";
         db.execSQL(sql);
 
         ContentValues cv = new ContentValues();
