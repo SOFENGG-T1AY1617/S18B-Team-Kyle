@@ -29,6 +29,11 @@ public class Attendance implements Serializable{
     private String remarks;
     private String college;
     private String reason;
+    public String subName;
+    private String new_start_time;
+    private String new_end_time;
+    private String new_room;
+    private byte[] subPic;
     private byte[] pic;
 
     public Attendance() {
@@ -154,5 +159,45 @@ public class Attendance implements Serializable{
 
     public void setReason(String reason) {
         this.reason = reason;
+    }
+
+    public String getNew_start_time() {
+        return new_start_time;
+    }
+
+    public void setNew_start_time(String new_start_time) {
+        this.new_start_time = new_start_time;
+    }
+
+    public String getNew_end_time() {
+        return new_end_time;
+    }
+
+    public void setNew_end_time(String new_end_time) {
+        this.new_end_time = new_end_time;
+    }
+
+    public String getNew_room() {
+        return new_room;
+    }
+
+    public void setNew_room(String new_room) {
+        this.new_room = new_room;
+    }
+
+    public byte[] getSubPic() {
+        return subPic;
+    }
+
+    public void setSubPic(byte[] subPic) {
+        this.subPic = subPic;
+    }
+
+    public String getSubName() {
+        return subName;
+    }
+
+    public void setSubName(String subName) {
+        this.subName = subName;
     }
 }

@@ -34,6 +34,7 @@ import com.example.avggo.attendancechecker.model.Attendance;
 import com.example.avggo.attendancechecker.model.Filter;
 import com.example.avggo.attendancechecker.ui.AttendanceFragment;
 import com.example.avggo.attendancechecker.ui.HelpActivity;
+import com.example.avggo.attendancechecker.ui.ReportUCActivity;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -376,10 +377,39 @@ public class MainActivity extends AppCompatActivity {
                         mainFilter.setBuilding("Andrew");
                         filter(mainFilter);
                         break;
+                    case R.id.nav_lasallehall:
+                        mainFilter.setBuilding("La Salle Hall");
+                        filter(mainFilter);
+                        break;
+                    case R.id.nav_miguel:
+                        mainFilter.setBuilding("Miguel");
+                        filter(mainFilter);
+                        break;
+                    case R.id.nav_razon:
+                        mainFilter.setBuilding("Razon");
+                        filter(mainFilter);
+                        break;
+                    case R.id.nav_saintjoseph:
+                        mainFilter.setBuilding("Saint Joseph");
+                        filter(mainFilter);
+                        break;
+                    case R.id.nav_yuchengco:
+                        mainFilter.setBuilding("Yuchengco");
+                        filter(mainFilter);
+                        break;
+                    case R.id.nav_velasco:
+                        mainFilter.setBuilding("Velasco");
+                        filter(mainFilter);
+                        break;
                     case R.id.nav_help:
                         Intent help = new Intent();
                         help.setClass(getBaseContext(), HelpActivity.class);
                         startActivity(help);
+                        break;
+                    case R.id.report_uc:
+                        Intent report = new Intent();
+                        report.setClass(getBaseContext(), ReportUCActivity.class);
+                        startActivity(report);
                         break;
                 }
                 pagerAdapter.notifyDataSetChanged();

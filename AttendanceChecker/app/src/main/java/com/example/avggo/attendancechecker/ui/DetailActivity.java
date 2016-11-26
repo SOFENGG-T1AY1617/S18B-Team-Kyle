@@ -39,7 +39,7 @@ public class DetailActivity extends AppCompatActivity {
     TextView facultyName, facultyCourse, courseCode, roomName, classTime;
     Attendance item;
 
-    Button submitButton, ab, ed, la, pr, sb, sw, us, vr;
+    Button submitButton, ab, ed, la, pr, sb, sw, us, vr, left, right;
     String currentCode;
     EditText remark;
 
@@ -71,15 +71,43 @@ public class DetailActivity extends AppCompatActivity {
         classTime = (TextView) findViewById(R.id.classTime);
         submitButton = (Button) findViewById(R.id.submitButton);
         remark = (EditText) findViewById(R.id.remarkField);
-
+        right = (Button) findViewById(R.id.rightBtn);
 
         item = (Attendance) getIntent().getSerializableExtra("ATTENDANCE_ITEM");
 
-        facultyImage.setImageBitmap(BitmapFactory.decodeByteArray(item.getPic(), 0, item.getPic().length));//sFacultyImage, 0, sFacultyImage.length));
-        facultyName.setText(item.getFname());
+        if(item.getReason() != null) {
+            facultyImage.setImageBitmap(BitmapFactory.decodeByteArray(item.getSubPic(), 0, item.getSubPic().length));//sFacultyImage, 0, sFacultyImage.length));
+            facultyName.setText(item.getSubName());
+
+            right.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(right.getText().toString().equals("see substitute prof")){
+                        right.setText("see original prof");
+                        roomName.setText(item.getRoom());
+                        classTime.setText(item.getStartTime() + " - " + item.getEndTime());
+                        facultyImage.setImageBitmap(BitmapFactory.decodeByteArray(item.getSubPic(), 0, item.getSubPic().length));
+                        facultyName.setText(item.getSubName());
+                    }
+                    else{
+                        right.setText("see substitute prof");
+                        roomName.setText(item.getNew_room());
+                        classTime.setText(item.getNew_start_time() + " - " + item.getNew_end_time());
+                        facultyImage.setImageBitmap(BitmapFactory.decodeByteArray(item.getPic(), 0, item.getPic().length));
+                        facultyName.setText(item.getFname());
+                    }
+                }
+            });
+        }
+        else {
+            facultyImage.setImageBitmap(BitmapFactory.decodeByteArray(item.getPic(), 0, item.getPic().length));//sFacultyImage, 0, sFacultyImage.length));
+            facultyName.setText(item.getFname());
+            right.setVisibility(View.GONE);
+        }
         facultyCourse.setText(item.getCoursecode());
         roomName.setText(item.getRoom());
         classTime.setText(item.getStartTime() + " - " + item.getEndTime());
+
 
         /*rg1 = (RadioGroup) findViewById(R.id.codeRadioGroup1);
         rg2 = (RadioGroup) findViewById(R.id.codeRadioGroup2);

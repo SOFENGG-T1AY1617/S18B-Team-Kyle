@@ -137,14 +137,14 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
                 + "new_rm_id INTEGER, "
                 + "status_id INTEGER DEFAULT NULL, "
                 + "reason TEXT, "
-                + "attendance_id INTEGER"
+                + "attendance_id INTEGER, "
+                + "sub_id INTEGER, "
                 + "remarks TEXT DEFAULT NULL);";
         db.execSQL(sql);
         sql = "CREATE TABLE Substitute ("
                 + "id INTEGER PRIMARY KEY AUTOINCREMENT, "
-                + "faculty_id TEXT, "
-                + "courseoffering_id TEXT"
-                + "date TEXT);";
+                + "faculty_id INTEGER, "
+                + "date TEXT DEFAULT NULL);";
         db.execSQL(sql);
 
         sql = "INSERT INTO CheckerAccount (\"first_name\", \"middle_name\", \"last_name\", \"user_name\", \"email\", \"password\", \"rotation_id\" ) VALUES ('Vince', 'Gornal', 'Gonzales', 'test', 'test@gmail.com', 'test', 'A');";
@@ -172,7 +172,7 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
 
         if (f.getBuilding().equals("NULL")) {
             if(f.getStartHour() != -1) {
-                query = "select f.first_name, f.middle_name, f.last_name, f.college, c.code, c.name 'course_name', co.time_start, co.time_end, r.name 'room_name', f.pic, a.remarks, a.id 'id', m.reason, m.date, (SELECT ats.name from attendancestatus ats where a.status_id = ats.id) 'acode' \n" +
+                query = "select f.first_name, f.middle_name, f.last_name, f.college, c.code, c.name 'course_name', co.time_start, co.time_end, r.name 'room_name', f.pic, a.remarks, a.id 'id', m.reason, m.date, m.new_start_time, m.new_end_time, (select r2.name from room r2 where r2.id = m.new_rm_id) new_room, (select f1.first_name from substitute s inner join faculty f1 on s.faculty_id = f1.id) sfname, (select f1.middle_name from substitute s inner join faculty f1 on s.faculty_id = f1.id) smname, (select f1.last_name from substitute s inner join faculty f1 on s.faculty_id = f1.id) slname, (select f1.pic from substitute s inner join faculty f1 on s.faculty_id = f1.id) spic, (SELECT ats.name from attendancestatus ats where a.status_id = ats.id) 'acode' \n" +
                         "from attendance a inner join courseoffering co on a.courseoffering_id = co.id \n" +
                         "inner join faculty f on f.id = co.faculty_id \n" +
                         "inner join course c on c.id = co.course_id \n" +
@@ -182,7 +182,7 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
                         "where rr.rotation_id = '" + f.getRID() + "' and co.days like '%" + weekDay + "%' and a.status_id is "+ isDone +" null and co.time_start LIKE '%" + f.getStartHour() + ":" + f.getStartMinute() + "%' order by co.time_start;";
             }
             else if(f.getStatus().equals("unique")){
-                query = "select co.time_start, co.time_end, f.first_name, f.middle_name, f.last_name, f.college, c.code, a.remarks, a.id 'id', m.reason, m.date, (SELECT name from attendancestatus ats where a.status_id = ats.id) 'acode', c.name 'course_name', r.name 'room_name', f.pic " +
+                query = "select co.time_start, co.time_end, f.first_name, f.middle_name, f.last_name, f.college, c.code, a.remarks, a.id 'id', m.reason, m.date, m.new_start_time, m.new_end_time, (select r2.name from room r2 where r2.id = m.new_rm_id) new_room, (select f1.first_name from substitute s inner join faculty f1 on s.faculty_id = f1.id) sfname, (select f1.middle_name from substitute s inner join faculty f1 on s.faculty_id = f1.id) smname, (select f1.last_name from substitute s inner join faculty f1 on s.faculty_id = f1.id) slname, (select f1.pic from substitute s inner join faculty f1 on s.faculty_id = f1.id) spic, (SELECT name from attendancestatus ats where a.status_id = ats.id) 'acode', c.name 'course_name', r.name 'room_name', f.pic " +
                         "from attendance a inner join courseoffering co on a.courseoffering_id = co.id " +
                         "inner join faculty f on f.id = co.faculty_id " +
                         "inner join course c on c.id = co.course_id " +
@@ -192,7 +192,7 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
                         "where rr.rotation_id = '" + f.getRID() + "' and co.days like '%" + weekDay + "%' and a.status_id is null group by 1 order by co.time_start;";
             }
             else
-                query = "select f.first_name, f.middle_name, f.last_name, f.college, c.code, c.name 'course_name', co.time_start, co.time_end, r.name 'room_name', f.pic, a.remarks, a.id 'id', m.reason, m.date, (SELECT name from attendancestatus ats where a.status_id = ats.id) 'acode' \n" +
+                query = "select f.first_name, f.middle_name, f.last_name, f.college, c.code, c.name 'course_name', co.time_start, co.time_end, r.name 'room_name', f.pic, a.remarks, a.id 'id', m.reason, m.date, m.new_start_time, m.new_end_time, (select r2.name from room r2 where r2.id = m.new_rm_id) new_room, (select f1.first_name from substitute s inner join faculty f1 on s.faculty_id = f1.id) sfname, (select f1.middle_name from substitute s inner join faculty f1 on s.faculty_id = f1.id) smname, (select f1.last_name from substitute s inner join faculty f1 on s.faculty_id = f1.id) slname, (select f1.pic from substitute s inner join faculty f1 on s.faculty_id = f1.id) spic, (SELECT name from attendancestatus ats where a.status_id = ats.id) 'acode' \n" +
                         "from attendance a inner join courseoffering co on a.courseoffering_id = co.id \n" +
                         "inner join faculty f on f.id = co.faculty_id \n" +
                         "inner join course c on c.id = co.course_id \n" +
@@ -202,7 +202,7 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
                         "where rr.rotation_id = '" + f.getRID() + "' and co.days like '%" + weekDay + "%' and a.status_id is "+ isDone +"null order by co.time_start;";
         } else {
             if(f.getStartHour() != -1) {
-                query = "select f.first_name, f.middle_name, f.last_name, f.college, c.code, c.name 'course_name', co.time_start, co.time_end, r.name 'room_name', f.pic, b.name 'bname', a.remarks, a.id 'id', m.reason, m.date, (SELECT name from attendancestatus ats where a.status_id = ats.id) 'acode' \n" +
+                query = "select f.first_name, f.middle_name, f.last_name, f.college, c.code, c.name 'course_name', co.time_start, co.time_end, r.name 'room_name', f.pic, b.name 'bname', a.remarks, a.id 'id', m.reason, m.date, m.new_start_time, m.new_end_time, (select r2.name from room r2 where r2.id = m.new_rm_id) new_room, (select f1.first_name from substitute s inner join faculty f1 on s.faculty_id = f1.id) sfname, (select f1.middle_name from substitute s inner join faculty f1 on s.faculty_id = f1.id) smname, (select f1.last_name from substitute s inner join faculty f1 on s.faculty_id = f1.id) slname, (select f1.pic from substitute s inner join faculty f1 on s.faculty_id = f1.id) spic, (SELECT name from attendancestatus ats where a.status_id = ats.id) 'acode' \n" +
                         "from attendance a inner join courseoffering co on a.courseoffering_id = co.id\n" +
                         "inner join faculty f on f.id = co.faculty_id\n" +
                         "inner join course c on c.id = co.course_id\n" +
@@ -213,7 +213,7 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
                         "where rr.rotation_id = '" + f.getRID() + "' and co.days like '%" + weekDay + "%' and a.status_id is "+ isDone +" null and bname = '" + f.getBuilding() + "' and co.time_start LIKE '%" + f.getStartHour() + ":" + f.getStartMinute() + "%' order by co.time_start;";
             }
             else
-                query = "select f.first_name, f.middle_name, f.last_name, f.college, c.code, c.name 'course_name', co.time_start, co.time_end, r.name 'room_name', f.pic, b.name 'bname', a.remarks, a.id 'id', m.reason, m.date, (SELECT name from attendancestatus ats where a.status_id = ats.id) 'acode' \n" +
+                query = "select f.first_name, f.middle_name, f.last_name, f.college, c.code, c.name 'course_name', co.time_start, co.time_end, r.name 'room_name', f.pic, b.name 'bname', a.remarks, a.id 'id', m.reason, m.date, m.new_start_time, m.new_end_time, (select r2.name from room r2 where r2.id = m.new_rm_id) new_room, (select f1.first_name from substitute s inner join faculty f1 on s.faculty_id = f1.id) sfname, (select f1.middle_name from substitute s inner join faculty f1 on s.faculty_id = f1.id) smname, (select f1.last_name from substitute s inner join faculty f1 on s.faculty_id = f1.id) slname, (select f1.pic from substitute s inner join faculty f1 on s.faculty_id = f1.id) spic, (SELECT name from attendancestatus ats where a.status_id = ats.id) 'acode' \n" +
                         "from attendance a inner join courseoffering co on a.courseoffering_id = co.id\n" +
                         "inner join faculty f on f.id = co.faculty_id\n" +
                         "inner join course c on c.id = co.course_id\n" +
@@ -266,6 +266,11 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
                     Log.i("DATE2", new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime()));
                     if(c.getString(c.getColumnIndex("date")) != null && c.getString(c.getColumnIndex("date")).equals(new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime()))) {
                         a.setReason(c.getString(c.getColumnIndex("reason")));
+                        a.setNew_start_time(c.getString(c.getColumnIndex("new_start_time")));
+                        a.setNew_end_time(c.getString(c.getColumnIndex("new_end_time")));
+                        a.setNew_room(c.getString(c.getColumnIndex("new_room")));
+                        a.setSubName(c.getString(c.getColumnIndex("sfname")) + " " + c.getString(c.getColumnIndex("smname")) + " " + c.getString(c.getColumnIndex("slname")));
+                        a.setSubPic(c.getBlob(c.getColumnIndex("spic")));
                         Log.i("DATE1", c.getString(c.getColumnIndex("date")));
                         Log.i("DATE2", new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime()));
                     }
@@ -542,7 +547,10 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
 
         db.execSQL(query);
 
-        sql = "INSERT INTO MakeupClass (\"new_start_time\", \"new_end_time\", \"date\", \"new_rm_id\", \"reason\", \"attendance_id\") VALUES ('12:45', '14:45', '2016-11-23', '1', 'AC', '3');";
+        sql = "INSERT INTO Substitute (\"faculty_id\") VALUES ('2');";
+        db.execSQL(sql);
+
+        sql = "INSERT INTO MakeupClass (\"new_start_time\", \"new_end_time\", \"date\", \"new_rm_id\", \"reason\", \"attendance_id\", \"sub_id\") VALUES ('12:45', '14:45', '2016-11-23', '1', 'AC', '3', '2');";
         db.execSQL(sql);
     }
 

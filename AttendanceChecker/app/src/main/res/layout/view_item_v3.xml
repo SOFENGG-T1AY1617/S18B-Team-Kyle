@@ -36,12 +36,21 @@
                 android:paddingTop="40dp"
                 android:paddingBottom="40dp">
 
-                <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/facultyImage"
-                    android:layout_width="145dp"
-                    android:layout_height="145dp"
-                    android:layout_gravity="center_horizontal"
-                    android:src="@drawable/winfred"/>
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center">
+
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/facultyImage"
+                        android:layout_width="145dp"
+                        android:layout_height="145dp"
+                        android:layout_gravity="center_horizontal"
+                        android:src="@drawable/winfred"/>
+
+
+
+                </LinearLayout>
 
                 <TextView
                     android:id="@+id/facultyName"
@@ -89,6 +98,15 @@
                         android:layout_marginLeft="20dp"
                         android:textAlignment="center" />
                 </LinearLayout>
+
+                <Button
+                    android:id="@+id/rightBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="10dp"
+                    android:theme="@style/AppTheme.Button"
+                    android:text="see original prof"/>
 
             </LinearLayout>
 
