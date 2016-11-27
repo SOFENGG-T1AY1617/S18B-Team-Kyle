@@ -100,7 +100,8 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
                 + CheckerAccount.COL_UN + " TEXT, "
                 + CheckerAccount.COL_EMAIL + " TEXT, "
                 + CheckerAccount.COL_PW + " TEXT, "
-                + CheckerAccount.COL_RID + " TEXT);";
+                + CheckerAccount.COL_RID + " TEXT, "
+                + CheckerAccount.COL_PIC + " BLOB);";
         db.execSQL(sql);
         sql = "CREATE TABLE RotationRoom ("
                 + "rotation_id INTEGER, "
@@ -147,11 +148,23 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
                 + "date TEXT DEFAULT NULL);";
         db.execSQL(sql);
 
-        sql = "INSERT INTO CheckerAccount (\"first_name\", \"middle_name\", \"last_name\", \"user_name\", \"email\", \"password\", \"rotation_id\" ) VALUES ('Vince', 'Gornal', 'Gonzales', 'test', 'test@gmail.com', 'test', 'A');";
-        db.execSQL(sql);
+//        sql = "INSERT INTO CheckerAccount (\"first_name\", \"middle_name\", \"last_name\", \"user_name\", \"email\", \"password\", \"rotation_id\" ) VALUES ('Vince', 'Gornal', 'Gonzales', 'test', 'test@gmail.com', 'test', 'A');";
+//        db.execSQL(sql);
+//
+//        sql = "INSERT INTO CheckerAccount (\"first_name\", \"middle_name\", \"last_name\", \"user_name\", \"email\", \"password\", \"rotation_id\" ) VALUES ('Bryan', 'Huh', 'Alburo', 'test2', 'test2@gmail.com', 'test', 'B');";
+//        db.execSQL(sql);
+        ContentValues cv;
 
-        sql = "INSERT INTO CheckerAccount (\"first_name\", \"middle_name\", \"last_name\", \"user_name\", \"email\", \"password\", \"rotation_id\" ) VALUES ('Bryan', 'Huh', 'Alburo', 'test2', 'test2@gmail.com', 'test', 'B');";
-        db.execSQL(sql);
+        cv = new ContentValues();
+        cv.put(CheckerAccount.COL_FNAME, "Vince");
+        cv.put(CheckerAccount.COL_MNAME, "Gornal");
+        cv.put(CheckerAccount.COL_LNAME, "Gonzales");
+        cv.put(CheckerAccount.COL_UN, "test");
+        cv.put(CheckerAccount.COL_EMAIL, "test@gmail.com");
+        cv.put(CheckerAccount.COL_PW, "test");
+        cv.put(CheckerAccount.COL_RID, "A");
+        cv.put(CheckerAccount.COL_PIC, drawableToByteArray(ContextCompat.getDrawable(context, R.drawable.dummy_pic)));
+        db.insert(CheckerAccount.TABLE_NAME, null, cv);
 
         initializeDBData(db);
     }
@@ -505,7 +518,7 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
         sql = "INSERT INTO attendancestatus (\"code\", \"name\", \"description\") VALUES ('CE', 'Checker Error', 'Exceeded class time.');";
         db.execSQL(sql);
 
-        ContentValues cv = new ContentValues();
+        ContentValues cv;
 
         cv = new ContentValues();
         cv.put(Faculty.COL_FNAME, "Remedios");
@@ -586,6 +599,7 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
             u.setEmail(c.getString(c.getColumnIndex(CheckerAccount.COL_EMAIL)));
             u.setPw(c.getString(c.getColumnIndex(CheckerAccount.COL_PW)));
             u.setRid(c.getString(c.getColumnIndex(CheckerAccount.COL_RID)));
+            u.setPic(c.getBlob(c.getColumnIndex(CheckerAccount.COL_PIC)));
 
         } else {
             u = null;

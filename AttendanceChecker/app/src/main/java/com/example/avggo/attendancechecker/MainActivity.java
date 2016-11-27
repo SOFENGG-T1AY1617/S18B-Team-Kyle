@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -45,6 +47,8 @@ import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class MainActivity extends AppCompatActivity {
 
     public static boolean submitted;
@@ -69,6 +73,7 @@ public class MainActivity extends AppCompatActivity {
     //header
     String NAME;
     String EMAIL;
+    Bitmap PIC;
 
     NavigationView mNavigationView;
     DrawerLayout Drawer;                                  // Declaring DrawerLayout
@@ -130,9 +135,10 @@ public class MainActivity extends AppCompatActivity {
         f.setRID(RID);
         f.setBuilding("NULL");
 
-        //SET NAVIGATION TEXT
+        //SET NAVIGATION PARAMETERS
         NAME = getIntent().getStringExtra("DISPLAY_NAME");
         EMAIL = getIntent().getStringExtra("EMAIL");
+        PIC = BitmapFactory.decodeByteArray(getIntent().getByteArrayExtra("PIC"), 0, getIntent().getByteArrayExtra("PIC").length);
         toolbar = (Toolbar) findViewById(R.id.tool_bar);
         toolbar.setTitle("Attendance");
         setSupportActionBar(toolbar);
@@ -431,6 +437,8 @@ public class MainActivity extends AppCompatActivity {
                 name.setText(NAME);
                 TextView email = (TextView) findViewById(R.id.email);
                 email.setText(EMAIL);
+                CircleImageView pic = (CircleImageView) findViewById(R.id.circleView);
+                pic.setImageBitmap(PIC);
             }
 
             @Override
