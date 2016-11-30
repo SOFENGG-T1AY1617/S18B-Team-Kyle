@@ -26,20 +26,79 @@
         android:layout_centerInParent="true"
         >
 
-        <EditText
-            android:id="@+id/roomNameReport"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:hint="Enter room name..."/>
+            android:id="@+id/upper">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Room Name:"
+                android:textSize="18dp"
+                android:textColor="@color/black_overlay"
+                />
+
+            <EditText
+                android:id="@+id/roomNameReport"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:textSize="18dp"
+                android:hint="Enter room name..."/>
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/upper"
+            android:id="@+id/mid">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Faculty Name:"
+                android:textSize="18dp"
+                android:textColor="@color/black_overlay"
+                />
+
+            <EditText
+                android:id="@+id/facultyNameReport"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="Enter faculty name..."/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/mid"
+            android:id="@+id/bot">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Faculty Name:"
+            android:textSize="18dp"
+            android:textColor="@color/black_overlay"
+            />
 
         <EditText
-            android:id="@+id/facultyNameReport"
+            android:id="@+id/remarkReport"
             android:layout_width="wrap_content"
-            android:layout_below="@id/roomNameReport"
-            android:layout_marginTop="20dp"
             android:layout_height="wrap_content"
-            android:hint="Enter faculty name..."/>
+            android:hint="Enter remark..."/>
+        </LinearLayout>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:theme="@style/AppTheme.Button"
+            android:layout_below="@id/bot"
+            android:layout_centerHorizontal="true"
+            android:text="submit"/>
+
     </RelativeLayout>
 
 </RelativeLayout>

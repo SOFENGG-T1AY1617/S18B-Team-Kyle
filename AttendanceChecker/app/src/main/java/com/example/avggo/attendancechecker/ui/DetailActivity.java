@@ -135,7 +135,7 @@ public class DetailActivity extends AppCompatActivity {
 
         if(MainActivity.submitted){
             disableButtons();
-            remark.setEnabled(false);
+            remark.setVisibility(View.GONE);
             submitButton.setVisibility(View.GONE);
             //submitButton.setVisibility(View.GONE);
         }
