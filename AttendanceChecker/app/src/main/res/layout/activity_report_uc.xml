@@ -88,10 +88,11 @@
             android:id="@+id/remarkReport"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:hint="Enter remark..."/>
+            android:hint="Enter remarks..."/>
         </LinearLayout>
 
         <Button
+            android:id="@+id/submitUC"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:theme="@style/AppTheme.Button"

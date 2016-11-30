@@ -16,6 +16,7 @@ import com.example.avggo.attendancechecker.model.Attendance;
 import com.example.avggo.attendancechecker.model.CheckerAccount;
 import com.example.avggo.attendancechecker.model.Faculty;
 import com.example.avggo.attendancechecker.model.Filter;
+import com.example.avggo.attendancechecker.model.UnscheduledClass;
 
 import java.io.ByteArrayOutputStream;
 import java.text.SimpleDateFormat;
@@ -145,6 +146,12 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
                 + "id INTEGER PRIMARY KEY AUTOINCREMENT, "
                 + "faculty_id INTEGER, "
                 + "date TEXT DEFAULT NULL);";
+        db.execSQL(sql);
+        sql = "CREATE TABLE UnscheduledClass ("
+                + "id INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + "room_id INTEGER, "
+                + "faculty_id INTEGER, "
+                + "remarks TEXT DEFAULT NULL);";
         db.execSQL(sql);
 
         sql = "INSERT INTO CheckerAccount (\"first_name\", \"middle_name\", \"last_name\", \"user_name\", \"email\", \"password\", \"rotation_id\" ) VALUES ('Vince', 'Gornal', 'Gonzales', 'test', 'test@gmail.com', 'test', 'A');";
@@ -288,6 +295,69 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
         }
 
         return assignedAttendance;
+    }
+
+    public void addUnscheduledClass(UnscheduledClass uc){
+        SQLiteDatabase db = getReadableDatabase();
+
+        String query = "SELECT id as 'huh' from room r where r.name LIKE '%" + uc.getRoomName() +"%';";
+
+        Cursor c = db.rawQuery(query, null);
+        Log.i("tagg", "DB.updateAttendance() query is " + query);
+
+        int room_id = 1;
+
+        if (c.moveToFirst()) {
+            room_id = c.getInt(c.getColumnIndex("huh"));
+            Log.i("tagg", room_id + "-id");
+        }
+        c.close();
+
+        int faculty_id;
+
+        query = "SELECT id as 'huh' from faculty f where f.last_name LIKE '%" + uc.getFaculty() +"%';";
+
+        c = db.rawQuery(query, null);
+        Log.i("tagg", "DB.updateAttendance() query is " + query);
+
+        faculty_id = 1;
+
+        if (c.moveToFirst()) {
+            faculty_id = c.getInt(c.getColumnIndex("huh"));
+            Log.i("tagg", faculty_id + "-id");
+        }
+        c.close();
+
+        query = "INSERT INTO UnscheduledClass (\"room_id\", \"faculty_id\", \"remarks\") VALUES ('" + room_id + "', '" + faculty_id + "', '" + uc.getRemarks() + "');";
+        db.execSQL(query);
+    }
+
+    public Boolean roomFound(String roomName){
+        SQLiteDatabase db = getReadableDatabase();
+        String query = "SELECT id as 'huh' from room r where r.name LIKE '%" + roomName +"%';";
+
+        Cursor c = db.rawQuery(query, null);
+        Log.i("tagg", "DB.updateAttendance() query is " + query);
+
+        if (!c.moveToFirst()) {
+            return false;
+        }
+        else
+            return true;
+    }
+
+    public Boolean facultyFound(String faculty){
+        SQLiteDatabase db = getReadableDatabase();
+        String query = "SELECT id as 'huh' from faculty f where f.last_name LIKE '%" + faculty +"%';";
+
+        Cursor c = db.rawQuery(query, null);
+        Log.i("tagg", "DB.updateAttendance() query is " + query);
+
+        if (!c.moveToFirst()) {
+            return false;
+        }
+        else
+            return true;
     }
 
     public void updateAttendance(Attendance a){
