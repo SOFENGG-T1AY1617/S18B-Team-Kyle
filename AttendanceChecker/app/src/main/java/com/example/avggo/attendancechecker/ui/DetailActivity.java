@@ -348,7 +348,10 @@ public class DetailActivity extends AppCompatActivity {
     }
 
     private void setSelectedCode(String code){
-        remark.setText(item.getRemarks());
+        if (!item.getRemarks().isEmpty())
+            remark.setText(item.getRemarks());
+        else
+            remark.setVisibility(View.GONE);
         if(code != null){
             if(code.equals("Absent")){
                 ab.performClick();

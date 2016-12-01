@@ -29,7 +29,7 @@ public class Attendance implements Serializable{
     private String remarks;
     private String college;
     private String reason;
-    public String subName;
+    private String subName;
     private String new_start_time;
     private String new_end_time;
     private String new_room;
