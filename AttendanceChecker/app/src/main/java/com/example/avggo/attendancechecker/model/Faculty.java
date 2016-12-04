@@ -1,5 +1,8 @@
 package com.example.avggo.attendancechecker.model;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+
 /**
  * Created by avggo on 10/9/2016.
  */
@@ -16,83 +19,68 @@ public class Faculty {
     public static final String COL_MOBNUM = "mobile_number";
     public static final String COL_DEPT = "department";
 
-    private String fname, mname, lname, college, email, mobnum, dept;
-    private byte[] image;
+    private String fname, mname, lname, college;
+    private Bitmap pic;
 
     public Faculty() {
     }
 
-    public Faculty(String fname, String mname, String lname, String college, String email, String mobnum, String dept) {
+    public Faculty(String fname, String mname, String lname, String college, byte[] pic) {
         this.fname = fname;
         this.mname = mname;
         this.lname = lname;
         this.college = college;
-        this.email = email;
-        this.mobnum = mobnum;
-        this.dept = dept;
+        this.pic = BitmapFactory.decodeByteArray(pic, 0, pic.length);
+    }
+
+    public String getFullName() {
+        return fname + " " + mname + " " + lname;
     }
 
     public String getFname() {
         return fname;
     }
 
-    public String getMname() {
-        return mname;
-    }
-
-    public String getLname() {
-        return lname;
-    }
-
-    public String getCollege() {
-        return college;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public String getMobnum() {
-        return mobnum;
-    }
-
-    public String getDept() {
-        return dept;
-    }
-
     public void setFname(String fname) {
         this.fname = fname;
+    }
+
+    public String getMname() {
+        return mname;
     }
 
     public void setMname(String mname) {
         this.mname = mname;
     }
 
+    public String getLname() {
+        return lname;
+    }
+
     public void setLname(String lname) {
         this.lname = lname;
+    }
+
+    public String getCollege() {
+        return college;
     }
 
     public void setCollege(String college) {
         this.college = college;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public Bitmap getPic() {
+        return pic;
     }
 
-    public void setMobnum(String mobnum) {
-        this.mobnum = mobnum;
+    public void setPic(byte[] pic) {
+        this.pic = BitmapFactory.decodeByteArray(pic, 0, pic.length);
     }
 
-    public void setDept(String dept) {
-        this.dept = dept;
-    }
-
-    public byte[] getImage() {
-        return image;
-    }
-
-    public void setImage(byte[] image) {
-        this.image = image;
+    @Override
+    public boolean equals(Object o) {
+        return this.fname == ((Faculty) o).fname &&
+                this.mname == ((Faculty) o).mname &&
+                this.lname == ((Faculty) o).lname;
     }
 }
