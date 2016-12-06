@@ -387,10 +387,6 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
 
         query = "UPDATE attendance " +
                 "SET status_id =  " + id + ", date = " + date + " " +
-<<<<<<< HEAD
-=======
-                "SET status_id =  " + id + " " +
->>>>>>> origin/master
                 "WHERE id = " + a.getId() + ";";
 
         Log.i("tagg", "DB.updateAttendance() query is " + query);
