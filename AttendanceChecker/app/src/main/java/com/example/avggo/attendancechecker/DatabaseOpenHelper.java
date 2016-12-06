@@ -373,11 +373,7 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
         String date = sdf.format(Calendar.getInstance().getTime());
 
         query = "UPDATE attendance " +
-<<<<<<< HEAD
                 "SET status_id =  " + id + ", date = " + date + " " +
-=======
-                "SET status_id =  " + id + " " +
->>>>>>> 7829467f88e9c8273a18e6301eb96a015e36200a
                 "WHERE id = " + a.getId() + ";";
 
         Log.i("tagg", "DB.updateAttendance() query is " + query);
