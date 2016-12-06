@@ -377,9 +377,12 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
         }
         c.close();
 
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String date = sdf.format(Calendar.getInstance().getTime());
+
         query = "UPDATE attendance " +
-                "SET status_id =  "+id+" " +
-                "WHERE id = "+ a.getId() +";";
+                "SET status_id =  " + id + ", date = " + date + " " +
+                "WHERE id = " + a.getId() + ";";
 
         Log.i("tagg", "DB.updateAttendance() query is " + query);
 
@@ -495,39 +498,74 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
         sql = "INSERT INTO Room (\"name\", \"building_id\") VALUES ('A1105', '2');"; //15
         db.execSQL(sql);
 
-        sql = "INSERT INTO CourseOffering (\"course_id\", \"faculty_id\", \"term_id\", \"section\", \"time_start\", \"time_end\", \"days\", \"room_id\") VALUES ('1', '1', '1', 'S17', '12:45', '14:15', 'TH', '1');";
+        sql = "INSERT INTO CourseOffering (\"course_id\", \"faculty_id\", \"term_id\", \"section\", \"time_start\", \"time_end\", \"days\", \"room_id\") VALUES ('1', '1', '1', 'S17', '12:45', '14:15', 'H', '1');";
         db.execSQL(sql);
-        sql = "INSERT INTO CourseOffering (\"course_id\", \"faculty_id\", \"term_id\", \"section\", \"time_start\", \"time_end\", \"days\", \"room_id\") VALUES ('1', '1', '1', 'S18', '14:30', '16:00', 'TH', '2');";
+        sql = "INSERT INTO CourseOffering (\"course_id\", \"faculty_id\", \"term_id\", \"section\", \"time_start\", \"time_end\", \"days\", \"room_id\") VALUES ('1', '1', '1', 'S18', '14:30', '16:00', 'H', '2');";
         db.execSQL(sql);
-        sql = "INSERT INTO CourseOffering (\"course_id\", \"faculty_id\", \"term_id\", \"section\", \"time_start\", \"time_end\", \"days\", \"room_id\") VALUES ('1', '1', '1', 'S19', '12:45', '14:15', 'MW', '3');";
+        sql = "INSERT INTO CourseOffering (\"course_id\", \"faculty_id\", \"term_id\", \"section\", \"time_start\", \"time_end\", \"days\", \"room_id\") VALUES ('1', '1', '1', 'S19', '12:45', '14:15', 'M', '3');";
         db.execSQL(sql);
-        sql = "INSERT INTO CourseOffering (\"course_id\", \"faculty_id\", \"term_id\", \"section\", \"time_start\", \"time_end\", \"days\", \"room_id\") VALUES ('2', '2', '1', 'S17', '14:30', '16:00', 'MW', '11');";
+        sql = "INSERT INTO CourseOffering (\"course_id\", \"faculty_id\", \"term_id\", \"section\", \"time_start\", \"time_end\", \"days\", \"room_id\") VALUES ('2', '2', '1', 'S17', '14:30', '16:00', 'M', '11');";
         db.execSQL(sql);
-        sql = "INSERT INTO CourseOffering (\"course_id\", \"faculty_id\", \"term_id\", \"section\", \"time_start\", \"time_end\", \"days\", \"room_id\") VALUES ('2', '2', '1', 'S18', '09:15', '10:45', 'MW', '12');";
+        sql = "INSERT INTO CourseOffering (\"course_id\", \"faculty_id\", \"term_id\", \"section\", \"time_start\", \"time_end\", \"days\", \"room_id\") VALUES ('2', '2', '1', 'S18', '09:15', '10:45', 'M', '12');";
         db.execSQL(sql);
-        sql = "INSERT INTO CourseOffering (\"course_id\", \"faculty_id\", \"term_id\", \"section\", \"time_start\", \"time_end\", \"days\", \"room_id\") VALUES ('2', '2', '1', 'S19', '12:45', '14:15', 'MW', '6');";
+        sql = "INSERT INTO CourseOffering (\"course_id\", \"faculty_id\", \"term_id\", \"section\", \"time_start\", \"time_end\", \"days\", \"room_id\") VALUES ('2', '2', '1', 'S19', '12:45', '14:15', 'M', '6');";
         db.execSQL(sql);
-        sql = "INSERT INTO CourseOffering (\"course_id\", \"faculty_id\", \"term_id\", \"section\", \"time_start\", \"time_end\", \"days\", \"room_id\") VALUES ('3', '2', '1', 'S11A', '09:15', '10:45', 'MW', '5');";
+        sql = "INSERT INTO CourseOffering (\"course_id\", \"faculty_id\", \"term_id\", \"section\", \"time_start\", \"time_end\", \"days\", \"room_id\") VALUES ('3', '2', '1', 'S11A', '09:15', '10:45', 'M', '5');";
         db.execSQL(sql);
-        sql = "INSERT INTO CourseOffering (\"course_id\", \"faculty_id\", \"term_id\", \"section\", \"time_start\", \"time_end\", \"days\", \"room_id\") VALUES ('3', '2', '1', 'S17A', '11:00', '12:30', 'MW', '5');";
+        sql = "INSERT INTO CourseOffering (\"course_id\", \"faculty_id\", \"term_id\", \"section\", \"time_start\", \"time_end\", \"days\", \"room_id\") VALUES ('3', '2', '1', 'S17A', '11:00', '12:30', 'M', '5');";
         db.execSQL(sql);
-        sql = "INSERT INTO CourseOffering (\"course_id\", \"faculty_id\", \"term_id\", \"section\", \"time_start\", \"time_end\", \"days\", \"room_id\") VALUES ('3', '2', '1', 'S18A', '12:45', '14:15', 'TH', '6');";
+        sql = "INSERT INTO CourseOffering (\"course_id\", \"faculty_id\", \"term_id\", \"section\", \"time_start\", \"time_end\", \"days\", \"room_id\") VALUES ('3', '2', '1', 'S18A', '12:45', '14:15', 'H', '6');";
         db.execSQL(sql);
-        sql = "INSERT INTO CourseOffering (\"course_id\", \"faculty_id\", \"term_id\", \"section\", \"time_start\", \"time_end\", \"days\", \"room_id\") VALUES ('4', '3', '1', 'S17', '12:45', '14:15', 'TH', '7');";
+        sql = "INSERT INTO CourseOffering (\"course_id\", \"faculty_id\", \"term_id\", \"section\", \"time_start\", \"time_end\", \"days\", \"room_id\") VALUES ('4', '3', '1', 'S17', '12:45', '14:15', 'H', '7');";
         db.execSQL(sql);
-        sql = "INSERT INTO CourseOffering (\"course_id\", \"faculty_id\", \"term_id\", \"section\", \"time_start\", \"time_end\", \"days\", \"room_id\") VALUES ('4', '3', '1', 'S18', '11:00', '12:30', 'MW', '8');";
+        sql = "INSERT INTO CourseOffering (\"course_id\", \"faculty_id\", \"term_id\", \"section\", \"time_start\", \"time_end\", \"days\", \"room_id\") VALUES ('4', '3', '1', 'S18', '11:00', '12:30', 'M', '8');";
         db.execSQL(sql);
-        sql = "INSERT INTO CourseOffering (\"course_id\", \"faculty_id\", \"term_id\", \"section\", \"time_start\", \"time_end\", \"days\", \"room_id\") VALUES ('4', '3', '1', 'S19', '11:00', '12:30', 'TH', '8');";
+        sql = "INSERT INTO CourseOffering (\"course_id\", \"faculty_id\", \"term_id\", \"section\", \"time_start\", \"time_end\", \"days\", \"room_id\") VALUES ('4', '3', '1', 'S19', '11:00', '12:30', 'H', '8');";
         db.execSQL(sql);
-        sql = "INSERT INTO CourseOffering (\"course_id\", \"faculty_id\", \"term_id\", \"section\", \"time_start\", \"time_end\", \"days\", \"room_id\") VALUES ('5', '3', '1', 'S17', '12:45', '14:15', 'TH', '7');";
+        sql = "INSERT INTO CourseOffering (\"course_id\", \"faculty_id\", \"term_id\", \"section\", \"time_start\", \"time_end\", \"days\", \"room_id\") VALUES ('5', '3', '1', 'S17', '12:45', '14:15', 'H', '7');";
         db.execSQL(sql);
-        sql = "INSERT INTO CourseOffering (\"course_id\", \"faculty_id\", \"term_id\", \"section\", \"time_start\", \"time_end\", \"days\", \"room_id\") VALUES ('5', '3', '1', 'S18', '12:45', '14:15', 'MW', '9');";
+        sql = "INSERT INTO CourseOffering (\"course_id\", \"faculty_id\", \"term_id\", \"section\", \"time_start\", \"time_end\", \"days\", \"room_id\") VALUES ('5', '3', '1', 'S18', '12:45', '14:15', 'M', '9');";
         db.execSQL(sql);
-        sql = "INSERT INTO CourseOffering (\"course_id\", \"faculty_id\", \"term_id\", \"section\", \"time_start\", \"time_end\", \"days\", \"room_id\") VALUES ('5', '3', '1', 'S19', '11:00', '12:30', 'TH', '8');";
+        sql = "INSERT INTO CourseOffering (\"course_id\", \"faculty_id\", \"term_id\", \"section\", \"time_start\", \"time_end\", \"days\", \"room_id\") VALUES ('5', '3', '1', 'S19', '11:00', '12:30', 'H', '8');";
         db.execSQL(sql);
-        sql = "INSERT INTO CourseOffering (\"course_id\", \"faculty_id\", \"term_id\", \"section\", \"time_start\", \"time_end\", \"days\", \"room_id\") VALUES ('5', '3', '1', 'S21', '14:30', '16:00', 'MW', '4');";
+        sql = "INSERT INTO CourseOffering (\"course_id\", \"faculty_id\", \"term_id\", \"section\", \"time_start\", \"time_end\", \"days\", \"room_id\") VALUES ('5', '3', '1', 'S21', '14:30', '16:00', 'M', '4');";
         db.execSQL(sql);
-        sql = "INSERT INTO CourseOffering (\"course_id\", \"faculty_id\", \"term_id\", \"section\", \"time_start\", \"time_end\", \"days\", \"room_id\") VALUES ('5', '3', '1', 'S21', '16:15', '17:45', 'MW', '5');";
+        sql = "INSERT INTO CourseOffering (\"course_id\", \"faculty_id\", \"term_id\", \"section\", \"time_start\", \"time_end\", \"days\", \"room_id\") VALUES ('5', '3', '1', 'S21', '16:15', '17:45', 'M', '5');";
+        db.execSQL(sql);
+
+        sql = "INSERT INTO CourseOffering (\"course_id\", \"faculty_id\", \"term_id\", \"section\", \"time_start\", \"time_end\", \"days\", \"room_id\") VALUES ('1', '1', '1', 'S17', '12:45', '14:15', 'T', '1');";
+        db.execSQL(sql);
+        sql = "INSERT INTO CourseOffering (\"course_id\", \"faculty_id\", \"term_id\", \"section\", \"time_start\", \"time_end\", \"days\", \"room_id\") VALUES ('1', '1', '1', 'S18', '14:30', '16:00', 'T', '2');";
+        db.execSQL(sql);
+        sql = "INSERT INTO CourseOffering (\"course_id\", \"faculty_id\", \"term_id\", \"section\", \"time_start\", \"time_end\", \"days\", \"room_id\") VALUES ('1', '1', '1', 'S19', '12:45', '14:15', 'W', '3');";
+        db.execSQL(sql);
+        sql = "INSERT INTO CourseOffering (\"course_id\", \"faculty_id\", \"term_id\", \"section\", \"time_start\", \"time_end\", \"days\", \"room_id\") VALUES ('2', '2', '1', 'S17', '14:30', '16:00', 'W', '11');";
+        db.execSQL(sql);
+        sql = "INSERT INTO CourseOffering (\"course_id\", \"faculty_id\", \"term_id\", \"section\", \"time_start\", \"time_end\", \"days\", \"room_id\") VALUES ('2', '2', '1', 'S18', '09:15', '10:45', 'W', '12');";
+        db.execSQL(sql);
+        sql = "INSERT INTO CourseOffering (\"course_id\", \"faculty_id\", \"term_id\", \"section\", \"time_start\", \"time_end\", \"days\", \"room_id\") VALUES ('2', '2', '1', 'S19', '12:45', '14:15', 'W', '6');";
+        db.execSQL(sql);
+        sql = "INSERT INTO CourseOffering (\"course_id\", \"faculty_id\", \"term_id\", \"section\", \"time_start\", \"time_end\", \"days\", \"room_id\") VALUES ('3', '2', '1', 'S11A', '09:15', '10:45', 'W', '5');";
+        db.execSQL(sql);
+        sql = "INSERT INTO CourseOffering (\"course_id\", \"faculty_id\", \"term_id\", \"section\", \"time_start\", \"time_end\", \"days\", \"room_id\") VALUES ('3', '2', '1', 'S17A', '11:00', '12:30', 'W', '5');";
+        db.execSQL(sql);
+        sql = "INSERT INTO CourseOffering (\"course_id\", \"faculty_id\", \"term_id\", \"section\", \"time_start\", \"time_end\", \"days\", \"room_id\") VALUES ('3', '2', '1', 'S18A', '12:45', '14:15', 'T', '6');";
+        db.execSQL(sql);
+        sql = "INSERT INTO CourseOffering (\"course_id\", \"faculty_id\", \"term_id\", \"section\", \"time_start\", \"time_end\", \"days\", \"room_id\") VALUES ('4', '3', '1', 'S17', '12:45', '14:15', 'T', '7');";
+        db.execSQL(sql);
+        sql = "INSERT INTO CourseOffering (\"course_id\", \"faculty_id\", \"term_id\", \"section\", \"time_start\", \"time_end\", \"days\", \"room_id\") VALUES ('4', '3', '1', 'S18', '11:00', '12:30', 'W', '8');";
+        db.execSQL(sql);
+        sql = "INSERT INTO CourseOffering (\"course_id\", \"faculty_id\", \"term_id\", \"section\", \"time_start\", \"time_end\", \"days\", \"room_id\") VALUES ('4', '3', '1', 'S19', '11:00', '12:30', 'T', '8');";
+        db.execSQL(sql);
+        sql = "INSERT INTO CourseOffering (\"course_id\", \"faculty_id\", \"term_id\", \"section\", \"time_start\", \"time_end\", \"days\", \"room_id\") VALUES ('5', '3', '1', 'S17', '12:45', '14:15', 'T', '7');";
+        db.execSQL(sql);
+        sql = "INSERT INTO CourseOffering (\"course_id\", \"faculty_id\", \"term_id\", \"section\", \"time_start\", \"time_end\", \"days\", \"room_id\") VALUES ('5', '3', '1', 'S18', '12:45', '14:15', 'W', '9');";
+        db.execSQL(sql);
+        sql = "INSERT INTO CourseOffering (\"course_id\", \"faculty_id\", \"term_id\", \"section\", \"time_start\", \"time_end\", \"days\", \"room_id\") VALUES ('5', '3', '1', 'S19', '11:00', '12:30', 'T', '8');";
+        db.execSQL(sql);
+        sql = "INSERT INTO CourseOffering (\"course_id\", \"faculty_id\", \"term_id\", \"section\", \"time_start\", \"time_end\", \"days\", \"room_id\") VALUES ('5', '3', '1', 'S21', '14:30', '16:00', 'W', '4');";
+        db.execSQL(sql);
+        sql = "INSERT INTO CourseOffering (\"course_id\", \"faculty_id\", \"term_id\", \"section\", \"time_start\", \"time_end\", \"days\", \"room_id\") VALUES ('5', '3', '1', 'S21', '16:15', '17:45', 'W', '5');";
         db.execSQL(sql);
 
         sql = "INSERT INTO Rotation (\"id\") VALUES ('A');";
