@@ -32,6 +32,7 @@ import android.widget.Toast;
 
 import com.ToxicBakery.viewpager.transforms.AccordionTransformer;
 import com.example.avggo.attendancechecker.adapter.ViewPagerAdapter;
+import com.example.avggo.attendancechecker.meneger.AttendanceDateManager;
 import com.example.avggo.attendancechecker.meneger.SebmetMeneger;
 import com.example.avggo.attendancechecker.model.Attendance;
 import com.example.avggo.attendancechecker.model.Filter;
@@ -157,7 +158,9 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         tabSlider.setViewPager(viewPager);
+        AttendanceDateManager.resumeState(this);
         db = new DatabaseOpenHelper(getBaseContext());
+        AttendanceDateManager.saveState(this);
 
         curBuildings = db.getAssignedBuildings(RID);
         //initialize drawer
@@ -529,6 +532,12 @@ public class MainActivity extends AppCompatActivity {
                             //listData.get(0).setCode("Checker Error");
                             //db.updateAttendance(listData.get(0));
                             listData.remove(0);
+                            if(listData.size() > 0) {
+                                mainFilter.setStartHour(getStartHour(listData.get(0)));
+                                mainFilter.setStartMinute(getStartMinute(listData.get(0)));
+                                filter(mainFilter);
+                                mNavigationView.getMenu().performIdentifierAction(R.id.nav_allbuildings, 0);
+                            }
                             //filter(mainFilter);
                             Log.i("REMOVED", "EXCEEDED");
 

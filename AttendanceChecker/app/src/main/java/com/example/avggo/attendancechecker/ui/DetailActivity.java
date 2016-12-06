@@ -76,7 +76,7 @@ public class DetailActivity extends AppCompatActivity {
         item = (Attendance) getIntent().getSerializableExtra("ATTENDANCE_ITEM");
 
         if(item.getReason() != null) {
-            facultyImage.setImageBitmap(BitmapFactory.decodeByteArray(item.getSubPic(), 0, item.getSubPic().length));//sFacultyImage, 0, sFacultyImage.length));
+            facultyImage.setImageBitmap(item.getSubPic());//sFacultyImage, 0, sFacultyImage.length));
             facultyName.setText(item.getSubName());
 
             right.setOnClickListener(new View.OnClickListener() {
@@ -86,22 +86,22 @@ public class DetailActivity extends AppCompatActivity {
                         right.setText("see original prof");
                         roomName.setText(item.getRoom());
                         classTime.setText(item.getStartTime() + " - " + item.getEndTime());
-                        facultyImage.setImageBitmap(BitmapFactory.decodeByteArray(item.getSubPic(), 0, item.getSubPic().length));
+                        facultyImage.setImageBitmap(item.getSubPic());
                         facultyName.setText(item.getSubName());
                     }
                     else{
                         right.setText("see substitute prof");
                         roomName.setText(item.getNew_room());
                         classTime.setText(item.getNew_start_time() + " - " + item.getNew_end_time());
-                        facultyImage.setImageBitmap(BitmapFactory.decodeByteArray(item.getPic(), 0, item.getPic().length));
-                        facultyName.setText(item.getFname());
+                        facultyImage.setImageBitmap(item.getFacultyList().get(0).getPic());
+                        facultyName.setText(item.getFacultyList().get(0).getFullName());
                     }
                 }
             });
         }
         else {
-            facultyImage.setImageBitmap(BitmapFactory.decodeByteArray(item.getPic(), 0, item.getPic().length));//sFacultyImage, 0, sFacultyImage.length));
-            facultyName.setText(item.getFname());
+            facultyImage.setImageBitmap(item.getFacultyList().get(0).getPic());//sFacultyImage, 0, sFacultyImage.length));
+            facultyName.setText(item.getFacultyList().get(0).getFullName());
             right.setVisibility(View.GONE);
         }
         facultyCourse.setText(item.getCoursecode());
@@ -135,7 +135,7 @@ public class DetailActivity extends AppCompatActivity {
 
         if(MainActivity.submitted){
             disableButtons();
-            remark.setEnabled(false);
+            remark.setVisibility(View.GONE);
             submitButton.setVisibility(View.GONE);
             //submitButton.setVisibility(View.GONE);
         }
