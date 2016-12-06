@@ -101,7 +101,8 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
                 + CheckerAccount.COL_UN + " TEXT, "
                 + CheckerAccount.COL_EMAIL + " TEXT, "
                 + CheckerAccount.COL_PW + " TEXT, "
-                + CheckerAccount.COL_RID + " TEXT);";
+                + CheckerAccount.COL_RID + " TEXT, "
+                + CheckerAccount.COL_PIC + " BLOB);";
         db.execSQL(sql);
         sql = "CREATE TABLE RotationRoom ("
                 + "rotation_id INTEGER, "
@@ -154,11 +155,23 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
                 + "remarks TEXT DEFAULT NULL);";
         db.execSQL(sql);
 
-        sql = "INSERT INTO CheckerAccount (\"first_name\", \"middle_name\", \"last_name\", \"user_name\", \"email\", \"password\", \"rotation_id\" ) VALUES ('Vince', 'Gornal', 'Gonzales', 'test', 'test@gmail.com', 'test', 'A');";
-        db.execSQL(sql);
+//        sql = "INSERT INTO CheckerAccount (\"first_name\", \"middle_name\", \"last_name\", \"user_name\", \"email\", \"password\", \"rotation_id\" ) VALUES ('Vince', 'Gornal', 'Gonzales', 'test', 'test@gmail.com', 'test', 'A');";
+//        db.execSQL(sql);
+//
+//        sql = "INSERT INTO CheckerAccount (\"first_name\", \"middle_name\", \"last_name\", \"user_name\", \"email\", \"password\", \"rotation_id\" ) VALUES ('Bryan', 'Huh', 'Alburo', 'test2', 'test2@gmail.com', 'test', 'B');";
+//        db.execSQL(sql);
+        ContentValues cv;
 
-        sql = "INSERT INTO CheckerAccount (\"first_name\", \"middle_name\", \"last_name\", \"user_name\", \"email\", \"password\", \"rotation_id\" ) VALUES ('Bryan', 'Huh', 'Alburo', 'test2', 'test2@gmail.com', 'test', 'B');";
-        db.execSQL(sql);
+        cv = new ContentValues();
+        cv.put(CheckerAccount.COL_FNAME, "Vince");
+        cv.put(CheckerAccount.COL_MNAME, "Gornal");
+        cv.put(CheckerAccount.COL_LNAME, "Gonzales");
+        cv.put(CheckerAccount.COL_UN, "test");
+        cv.put(CheckerAccount.COL_EMAIL, "test@gmail.com");
+        cv.put(CheckerAccount.COL_PW, "test");
+        cv.put(CheckerAccount.COL_RID, "A");
+        cv.put(CheckerAccount.COL_PIC, drawableToByteArray(ContextCompat.getDrawable(context, R.drawable.dummy_pic)));
+        db.insert(CheckerAccount.TABLE_NAME, null, cv);
 
         initializeDBData(db);
     }
@@ -374,6 +387,10 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
 
         query = "UPDATE attendance " +
                 "SET status_id =  " + id + ", date = " + date + " " +
+<<<<<<< HEAD
+=======
+                "SET status_id =  " + id + " " +
+>>>>>>> origin/master
                 "WHERE id = " + a.getId() + ";";
 
         Log.i("tagg", "DB.updateAttendance() query is " + query);
@@ -605,7 +622,7 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
         sql = "INSERT INTO attendancestatus (\"code\", \"name\", \"description\") VALUES ('CE', 'Checker Error', 'Exceeded class time.');";
         db.execSQL(sql);
 
-        ContentValues cv = new ContentValues();
+        ContentValues cv;
 
         cv = new ContentValues();
         cv.put(Faculty.COL_FNAME, "Remedios");
@@ -642,11 +659,14 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
 
         String query;
 
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String date = sdf.format(Calendar.getInstance().getTime());
+
         query = "INSERT INTO Attendance " +
-                "(courseoffering_id) " +
-                "SELECT co.id " +
+                "(courseoffering_id, date) values " +
+                "(SELECT co.id " +
                 "from CourseOffering co inner join Room r on co.room_id = r.id " +
-                "inner join RotationRoom rr on r.id = rr.room_id;";
+                "inner join RotationRoom rr on r.id = rr.room_id, "+ date +");";
 
         db.execSQL(query);
 
@@ -656,6 +676,25 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
         sql = "INSERT INTO MakeupClass (\"new_start_time\", \"new_end_time\", \"date\", \"new_rm_id\", \"reason\", \"attendance_id\", \"sub_id\") VALUES ('12:45', '14:45', '2016-11-23', '1', 'AC', '3', '2');";
         db.execSQL(sql);
     }
+
+
+    private void insertAttendance(SQLiteDatabase db){
+
+
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String date = sdf.format(Calendar.getInstance().getTime());
+
+        String query = "INSERT INTO Attendance " +
+                "(courseoffering_id, date) values " +
+                "(SELECT co.id " +
+                "from CourseOffering co inner join Room r on co.room_id = r.id " +
+                "inner join RotationRoom rr on r.id = rr.room_id, "+ date +");";
+
+        db.execSQL(query);
+    }
+
+
 
     private byte[] drawableToByteArray(Drawable dr) {
         Bitmap bitmap = ((BitmapDrawable) dr).getBitmap();
@@ -685,6 +724,7 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
             u.setEmail(c.getString(c.getColumnIndex(CheckerAccount.COL_EMAIL)));
             u.setPw(c.getString(c.getColumnIndex(CheckerAccount.COL_PW)));
             u.setRid(c.getString(c.getColumnIndex(CheckerAccount.COL_RID)));
+            u.setPic(c.getBlob(c.getColumnIndex(CheckerAccount.COL_PIC)));
 
         } else {
             u = null;

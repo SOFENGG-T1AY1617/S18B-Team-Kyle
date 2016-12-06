@@ -30,6 +30,10 @@ public class Attendance implements Serializable {
     private String code;
     private String remarks;
     private String reason;
+<<<<<<< HEAD
+    private String subName;
+=======
+>>>>>>> origin/implemented_usncheduled_report
     private String new_start_time;
     private String new_end_time;
     private String new_room;

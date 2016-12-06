@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -30,6 +32,7 @@ import android.widget.Toast;
 
 import com.ToxicBakery.viewpager.transforms.AccordionTransformer;
 import com.example.avggo.attendancechecker.adapter.ViewPagerAdapter;
+import com.example.avggo.attendancechecker.meneger.AttendanceDateManager;
 import com.example.avggo.attendancechecker.meneger.SebmetMeneger;
 import com.example.avggo.attendancechecker.model.Attendance;
 import com.example.avggo.attendancechecker.model.Filter;
@@ -44,6 +47,8 @@ import java.util.GregorianCalendar;
 import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -69,6 +74,7 @@ public class MainActivity extends AppCompatActivity {
     //header
     String NAME;
     String EMAIL;
+    Bitmap PIC;
 
     NavigationView mNavigationView;
     DrawerLayout Drawer;                                  // Declaring DrawerLayout
@@ -130,9 +136,10 @@ public class MainActivity extends AppCompatActivity {
         f.setRID(RID);
         f.setBuilding("NULL");
 
-        //SET NAVIGATION TEXT
+        //SET NAVIGATION PARAMETERS
         NAME = getIntent().getStringExtra("DISPLAY_NAME");
         EMAIL = getIntent().getStringExtra("EMAIL");
+        PIC = BitmapFactory.decodeByteArray(getIntent().getByteArrayExtra("PIC"), 0, getIntent().getByteArrayExtra("PIC").length);
         toolbar = (Toolbar) findViewById(R.id.tool_bar);
         toolbar.setTitle("Attendance");
         setSupportActionBar(toolbar);
@@ -151,7 +158,9 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         tabSlider.setViewPager(viewPager);
+        AttendanceDateManager.resumeState(this);
         db = new DatabaseOpenHelper(getBaseContext());
+        AttendanceDateManager.saveState(this);
 
         curBuildings = db.getAssignedBuildings(RID);
         //initialize drawer
@@ -431,6 +440,8 @@ public class MainActivity extends AppCompatActivity {
                 name.setText(NAME);
                 TextView email = (TextView) findViewById(R.id.email);
                 email.setText(EMAIL);
+                CircleImageView pic = (CircleImageView) findViewById(R.id.circleView);
+                pic.setImageBitmap(PIC);
             }
 
             @Override
