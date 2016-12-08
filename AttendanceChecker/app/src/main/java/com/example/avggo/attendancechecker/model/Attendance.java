@@ -4,7 +4,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 
 /**
  * Created by avggo on 10/10/2016.
@@ -21,7 +20,7 @@ public class Attendance implements Serializable {
     public static final String COL_TIME_SET = "time_set";
 
     private int id;
-    private ArrayList<Faculty> facultyList;
+    private Faculty faculty;
     private String room;
     private String coursecode;
     private String coursename;
@@ -35,11 +34,9 @@ public class Attendance implements Serializable {
     private String new_room;
     private String subName;
     private Bitmap subPic;
-    private Bitmap pic;
 
-    public Attendance(Faculty f, int id, String room, String coursecode, String coursename, String startTime, String endTime, String code, String remarks) {
-        facultyList = new ArrayList<>();
-        facultyList.add(f);
+    public Attendance(Faculty faculty, int id, String room, String coursecode, String coursename, String startTime, String endTime, String code, String remarks) {
+        this.faculty = faculty;
         this.id = id;
         this.room = room;
         this.coursecode = coursecode;
@@ -72,8 +69,12 @@ public class Attendance implements Serializable {
 
     }
 
-    public ArrayList<Faculty> getFacultyList() {
-        return facultyList;
+    public void setFaculty(Faculty faculty) {
+        this.faculty = faculty;
+    }
+
+    public Faculty getFaculty() {
+        return faculty;
     }
 
 //    public String toString() {
@@ -192,13 +193,6 @@ public class Attendance implements Serializable {
 
     public void setSubName(String subName) {
         this.subName = subName;
-    }
-
-    public void addFaculty(Faculty f) {
-        if (facultyList == null)
-            facultyList = new ArrayList<>();
-
-        facultyList.add(f);
     }
 
     @Override

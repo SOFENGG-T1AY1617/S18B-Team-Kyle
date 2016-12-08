@@ -1,14 +1,11 @@
 package com.example.avggo.attendancechecker.adapter;
 
 import android.content.Context;
-import android.graphics.BitmapFactory;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.avggo.attendancechecker.R;
 import com.example.avggo.attendancechecker.model.Attendance;
@@ -72,8 +69,8 @@ public class AttendanceAdapter extends RecyclerView.Adapter<AttendanceAdapter.At
     @Override
     public void onBindViewHolder(AttendanceHolder holder, int position) {
         Attendance item = listData.get(position);
-        holder.subTitle.setText(item.getFacultyList().get(0).getFullName());
-        holder.thumbnail.setImageBitmap(item.getFacultyList().get(0).getPic());
+        holder.subTitle.setText(item.getFaculty().getFullName());
+        holder.thumbnail.setImageBitmap(item.getFaculty().getPic());
         if(item.getReason() != null) {
             holder.reason.setText(item.getReason());
             holder.title.setText(item.getRoom());

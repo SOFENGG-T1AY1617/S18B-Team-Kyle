@@ -1,33 +1,22 @@
 package com.example.avggo.attendancechecker.ui;
 
 import android.content.Intent;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.graphics.LightingColorFilter;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.example.avggo.attendancechecker.DatabaseOpenHelper;
 import com.example.avggo.attendancechecker.MainActivity;
 import com.example.avggo.attendancechecker.R;
 import com.example.avggo.attendancechecker.model.Attendance;
 
 import de.hdodenhof.circleimageview.CircleImageView;
-
-import static com.example.avggo.attendancechecker.R.id.middleLayout;
-import static com.example.avggo.attendancechecker.R.id.radioButton;
 
 public class DetailActivity extends AppCompatActivity {
 
@@ -93,15 +82,15 @@ public class DetailActivity extends AppCompatActivity {
                         right.setText("see substitute prof");
                         roomName.setText(item.getNew_room());
                         classTime.setText(item.getNew_start_time() + " - " + item.getNew_end_time());
-                        facultyImage.setImageBitmap(item.getFacultyList().get(0).getPic());
-                        facultyName.setText(item.getFacultyList().get(0).getFullName());
+                        facultyImage.setImageBitmap(item.getFaculty().getPic());
+                        facultyName.setText(item.getFaculty().getFullName());
                     }
                 }
             });
         }
         else {
-            facultyImage.setImageBitmap(item.getFacultyList().get(0).getPic());//sFacultyImage, 0, sFacultyImage.length));
-            facultyName.setText(item.getFacultyList().get(0).getFullName());
+            facultyImage.setImageBitmap(item.getFaculty().getPic());//sFacultyImage, 0, sFacultyImage.length));
+            facultyName.setText(item.getFaculty().getFullName());
             right.setVisibility(View.GONE);
         }
         facultyCourse.setText(item.getCoursecode());

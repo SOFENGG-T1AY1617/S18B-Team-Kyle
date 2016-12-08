@@ -254,32 +254,24 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
                     String aCode = c.getString(c.getColumnIndex("acode"));
                     String remark = c.getString(c.getColumnIndex("remarks"));
 
-                    Attendance a = new Attendance(id, room_name, code, course_name, time_start, time_end, aCode, remark);
+                    Attendance a = new Attendance(new Faculty(first_name, middle_name, last_name, college, pic),
+                            id, room_name, code, course_name, time_start, time_end, aCode, remark);
 
-                    if (assignedAttendance.contains(a)) { //if contains, just add prof to class
-                        for (int i = 0; i < assignedAttendance.size(); i++) {
-                            if (a.equals(assignedAttendance.get(i))) {
-                                assignedAttendance.get(i).addFaculty(new Faculty(first_name, middle_name, last_name, college, pic));
-                            }
-                        }
-                    } else { // add the attendance to the database
-                        a.addFaculty(new Faculty(first_name, middle_name, last_name, college, pic));
-
+                    Log.i("DATE2", new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime()));
+                    if (c.getString(c.getColumnIndex("date")) != null && c.getString(c.getColumnIndex("date")).equals(new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime()))) {
+                        a.setReason(c.getString(c.getColumnIndex("reason")));
+                        a.setNew_start_time(c.getString(c.getColumnIndex("new_start_time")));
+                        a.setNew_end_time(c.getString(c.getColumnIndex("new_end_time")));
+                        a.setNew_room(c.getString(c.getColumnIndex("new_room")));
+                        a.setSubName(c.getString(c.getColumnIndex("sfname")) + " " + c.getString(c.getColumnIndex("smname")) + " " + c.getString(c.getColumnIndex("slname")));
+                        a.setSubPic(c.getBlob(c.getColumnIndex("spic")));
+                        Log.i("DATE1", c.getString(c.getColumnIndex("date")));
                         Log.i("DATE2", new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime()));
-                        if (c.getString(c.getColumnIndex("date")) != null && c.getString(c.getColumnIndex("date")).equals(new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime()))) {
-                            a.setReason(c.getString(c.getColumnIndex("reason")));
-                            a.setNew_start_time(c.getString(c.getColumnIndex("new_start_time")));
-                            a.setNew_end_time(c.getString(c.getColumnIndex("new_end_time")));
-                            a.setNew_room(c.getString(c.getColumnIndex("new_room")));
-                            a.setSubName(c.getString(c.getColumnIndex("sfname")) + " " + c.getString(c.getColumnIndex("smname")) + " " + c.getString(c.getColumnIndex("slname")));
-                            a.setSubPic(c.getBlob(c.getColumnIndex("spic")));
-                            Log.i("DATE1", c.getString(c.getColumnIndex("date")));
-                            Log.i("DATE2", new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime()));
-                        }
-                        //Log.i("tagg", "DB.getAssignedAttendance() " + a.toString());
-                        if (a.getCode() == null || !a.getCode().equals("Checker Error"))
-                            assignedAttendance.add(a);
                     }
+                    //Log.i("tagg", "DB.getAssignedAttendance() " + a.toString());
+                    if (a.getCode() == null || !a.getCode().equals("Checker Error"))
+                        assignedAttendance.add(a);
+
                     c.moveToNext();
                 }
             }
