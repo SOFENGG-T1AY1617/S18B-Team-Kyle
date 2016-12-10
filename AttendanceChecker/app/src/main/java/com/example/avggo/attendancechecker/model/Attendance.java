@@ -6,7 +6,7 @@ import java.io.Serializable;
  * Created by avggo on 10/10/2016.
  */
 
-public class Attendance implements Serializable{
+public class Attendance implements Serializable {
     public static final String TABLE_NAME = "Attendance";
     public static final String COL_ID = "id";
     public static final String COL_COID = "courseoffering_id";
@@ -16,109 +16,94 @@ public class Attendance implements Serializable{
     public static final String COL_DATE = "date";
     public static final String COL_TIME_SET = "time_set";
 
-
-    private int id;
+    public String subName;
+    private Faculty faculty;
     private String room;
     private String coursecode;
     private String coursename;
     private String startTime;
     private String endTime;
-    private String fname;
     private String code;
-    private String email;
     private String remarks;
-    private String college;
     private String reason;
-    public String subName;
     private String new_start_time;
     private String new_end_time;
     private String new_room;
     private byte[] subPic;
-    private byte[] pic;
 
     public Attendance() {
     }
 
-    public Attendance(String room, String coursecode, String coursename, String startTime, String endTime, String fname, String code, String email, String remarks, byte[] pic) {
+    public Attendance(int id,
+                      byte[] pic,
+                      String fname,
+                      String mname,
+                      String lname,
+                      String college,
+                      String coursename,
+                      String coursecode,
+                      String startTime,
+                      String endTime,
+                      String room,
+                      String code,
+                      String remarks) {
+        this.faculty = new Faculty(id, pic, fname, mname, lname, college);
         this.room = room;
         this.coursecode = coursecode;
         this.coursename = coursename;
         this.startTime = startTime;
         this.endTime = endTime;
-        this.fname = fname;
         this.code = code;
-        this.email = email;
         this.remarks = remarks;
-        this.pic = pic;
     }
 
-    public String toString(){
-        return "id: " +id+" name: "+fname+" coursecode: "+coursecode+" startTime: "+startTime+" endTime: "+endTime+" room: "
-                +room+" code: "+code;
-    }
+//    public String toString() {
+//        return "id: " + id + " name: " + fname + " coursecode: " + coursecode + " startTime: " + startTime + " endTime: " + endTime + " room: "
+//                + room + " code: " + code;
+//    }
 
     public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
+        return faculty.getId();
     }
 
     public String getRoom() {
         return room;
     }
 
-    public String getCoursecode() {
-        return coursecode;
-    }
-
-    public String getFname() {
-        return fname;
-    }
-
-    public String getCode() {
-        return code;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public String getRemarks() {
-        return remarks;
-    }
-
-    public byte[] getPic() {
-        return pic;
-    }
-
     public void setRoom(String room) {
         this.room = room;
+    }
+
+    public String getCoursecode() {
+        return coursecode;
     }
 
     public void setCoursecode(String coursecode) {
         this.coursecode = coursecode;
     }
 
-    public void setFname(String fname) {
-        this.fname = fname;
+    public String getFname() {
+        return faculty.getFname() + " " + faculty.getMname() + " " + faculty.getLname();
+    }
+
+    public String getCode() {
+        return code;
     }
 
     public void setCode(String code) {
         this.code = code;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public String getRemarks() {
+        return remarks;
     }
 
     public void setRemarks(String remarks) {
         this.remarks = remarks;
     }
 
-    public void setPic(byte[] pic) {
-        this.pic = pic;
+    public byte[] getPic() {
+        return faculty.getPic();
     }
 
     public String getCoursename() {
@@ -146,11 +131,7 @@ public class Attendance implements Serializable{
     }
 
     public String getCollege() {
-        return college;
-    }
-
-    public void setCollege(String college) {
-        this.college = college;
+        return faculty.getCollege();
     }
 
     public String getReason() {

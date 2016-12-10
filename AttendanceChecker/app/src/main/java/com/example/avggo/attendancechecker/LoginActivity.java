@@ -33,6 +33,8 @@ public class LoginActivity extends AppCompatActivity {
         db = new DatabaseOpenHelper(getBaseContext());
         usernameET = (EditText) findViewById(R.id.username_et);
         passwordET = (EditText) findViewById(R.id.password_et);
+        usernameET.setText("test");
+        passwordET.setText("test");
 
         usernameET.setOnTouchListener(new View.OnTouchListener() {
             @Override

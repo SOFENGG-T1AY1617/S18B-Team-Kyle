@@ -257,19 +257,20 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
                     String aCode = c.getString(c.getColumnIndex("acode"));
                     String remark = c.getString(c.getColumnIndex("remarks"));
 
-                    Attendance a = new Attendance();
+                    Attendance a = new Attendance(id,
+                                                  pic,
+                                                  first_name,
+                                                  middle_name,
+                                                  last_name,
+                                                  college,
+                                                  course_name,
+                                                  code,
+                                                  time_start,
+                                                  time_end,
+                                                  room_name,
+                                                  aCode,
+                                                  remark);
 
-                    a.setFname(first_name + " " + middle_name + " " + last_name);
-                    a.setCollege(college);
-                    a.setCoursecode(code);
-                    a.setCoursename(course_name);
-                    a.setStartTime(time_start);
-                    a.setEndTime(time_end);
-                    a.setRoom(room_name);
-                    a.setPic(pic);
-                    a.setId(id);
-                    a.setCode(aCode);
-                    a.setRemarks(remark);
                     Log.i("DATE2", new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime()));
                     if(c.getString(c.getColumnIndex("date")) != null && c.getString(c.getColumnIndex("date")).equals(new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime()))) {
                         a.setReason(c.getString(c.getColumnIndex("reason")));
