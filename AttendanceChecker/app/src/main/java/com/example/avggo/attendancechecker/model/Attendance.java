@@ -1,12 +1,16 @@
 package com.example.avggo.attendancechecker.model;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+
 import java.io.Serializable;
+import java.util.ArrayList;
 
 /**
  * Created by avggo on 10/10/2016.
  */
 
-public class Attendance implements Serializable{
+public class Attendance implements Serializable {
     public static final String TABLE_NAME = "Attendance";
     public static final String COL_ID = "id";
     public static final String COL_COID = "courseoffering_id";
@@ -16,28 +20,55 @@ public class Attendance implements Serializable{
     public static final String COL_DATE = "date";
     public static final String COL_TIME_SET = "time_set";
 
-
     private int id;
+    private ArrayList<Faculty> facultyList;
     private String room;
     private String coursecode;
     private String coursename;
     private String startTime;
     private String endTime;
-    private String fname;
     private String code;
-    private String email;
     private String remarks;
-    private String college;
     private String reason;
-    public String subName;
+<<<<<<< HEAD
+    private String subName;
+=======
+>>>>>>> origin/implemented_usncheduled_report
     private String new_start_time;
     private String new_end_time;
     private String new_room;
+<<<<<<< HEAD
     private byte[] subPic;
     private byte[] pic;
     private String date;
+=======
+    private String subName;
+    private Bitmap subPic;
+    private Bitmap pic;
+>>>>>>> 5fe7be902c9a14a2a6ddc352a15413b18ad0dd8f
 
-    public Attendance() {
+    public Attendance(Faculty f, int id, String room, String coursecode, String coursename, String startTime, String endTime, String code, String remarks) {
+        facultyList = new ArrayList<>();
+        facultyList.add(f);
+        this.id = id;
+        this.room = room;
+        this.coursecode = coursecode;
+        this.coursename = coursename;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.code = code;
+        this.remarks = remarks;
+    }
+
+    public Attendance(int id, String room, String coursecode, String coursename, String startTime, String endTime, String code, String remarks) {
+        this.id = id;
+        this.room = room;
+        this.coursecode = coursecode;
+        this.coursename = coursename;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.code = code;
+        this.remarks = remarks;
     }
 
     public Attendance(String room, String coursecode, String coursename, String startTime, String endTime, String fname, String code, String email, String remarks, byte[] pic) {
@@ -46,17 +77,19 @@ public class Attendance implements Serializable{
         this.coursename = coursename;
         this.startTime = startTime;
         this.endTime = endTime;
-        this.fname = fname;
         this.code = code;
-        this.email = email;
         this.remarks = remarks;
-        this.pic = pic;
+
     }
 
-    public String toString(){
-        return "id: " +id+" name: "+fname+" coursecode: "+coursecode+" startTime: "+startTime+" endTime: "+endTime+" room: "
-                +room+" code: "+code;
+    public ArrayList<Faculty> getFacultyList() {
+        return facultyList;
     }
+
+//    public String toString() {
+//        return "id: " + id + " name: " + fname + " coursecode: " + coursecode + " startTime: " + startTime + " endTime: " + endTime + " room: "
+//                + room + " code: " + code;
+//    }
 
     public int getId() {
         return id;
@@ -70,56 +103,32 @@ public class Attendance implements Serializable{
         return room;
     }
 
-    public String getCoursecode() {
-        return coursecode;
-    }
-
-    public String getFname() {
-        return fname;
-    }
-
-    public String getCode() {
-        return code;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public String getRemarks() {
-        return remarks;
-    }
-
-    public byte[] getPic() {
-        return pic;
-    }
-
     public void setRoom(String room) {
         this.room = room;
+    }
+
+    public String getCoursecode() {
+        return coursecode;
     }
 
     public void setCoursecode(String coursecode) {
         this.coursecode = coursecode;
     }
 
-    public void setFname(String fname) {
-        this.fname = fname;
+    public String getCode() {
+        return code;
     }
 
     public void setCode(String code) {
         this.code = code;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public String getRemarks() {
+        return remarks;
     }
 
     public void setRemarks(String remarks) {
         this.remarks = remarks;
-    }
-
-    public void setPic(byte[] pic) {
-        this.pic = pic;
     }
 
     public String getCoursename() {
@@ -144,14 +153,6 @@ public class Attendance implements Serializable{
 
     public void setEndTime(String endTime) {
         this.endTime = endTime;
-    }
-
-    public String getCollege() {
-        return college;
-    }
-
-    public void setCollege(String college) {
-        this.college = college;
     }
 
     public String getReason() {
@@ -186,12 +187,13 @@ public class Attendance implements Serializable{
         this.new_room = new_room;
     }
 
-    public byte[] getSubPic() {
+    public Bitmap getSubPic() {
         return subPic;
     }
 
     public void setSubPic(byte[] subPic) {
-        this.subPic = subPic;
+        this.subPic = BitmapFactory.decodeByteArray(subPic, 0, subPic.length);
+        ;
     }
 
     public String getSubName() {
@@ -202,11 +204,29 @@ public class Attendance implements Serializable{
         this.subName = subName;
     }
 
+<<<<<<< HEAD
     public String getDate() {
         return date;
     }
 
     public void setDate(String date) {
         this.date = date;
+=======
+    public void addFaculty(Faculty f) {
+        if (facultyList == null)
+            facultyList = new ArrayList<>();
+
+        facultyList.add(f);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        Attendance obj = ((Attendance) o);
+        return this.room.equals(obj.room)
+                && this.coursecode.equals(obj.coursecode)
+                && this.coursename.equals(obj.coursename)
+                && this.startTime.equals(obj.startTime)
+                && this.endTime.equals(obj.endTime);
+>>>>>>> 5fe7be902c9a14a2a6ddc352a15413b18ad0dd8f
     }
 }

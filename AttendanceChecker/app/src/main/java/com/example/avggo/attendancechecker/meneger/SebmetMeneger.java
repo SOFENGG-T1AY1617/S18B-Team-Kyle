@@ -8,10 +8,6 @@ import android.util.Log;
 import com.example.avggo.attendancechecker.model.SebmetMedel;
 import com.google.gson.Gson;
 
-import java.util.HashMap;
-
-import static android.content.Context.MODE_PRIVATE;
-
 /**
  * Created by avggo on 11/24/2016.
  */
