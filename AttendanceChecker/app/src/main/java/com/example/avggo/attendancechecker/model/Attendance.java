@@ -40,7 +40,8 @@ public class Attendance implements Serializable{
     public Attendance() {
     }
 
-    public Attendance(String room, String coursecode, String coursename, String startTime, String endTime, String fname, String code, String email, String remarks, byte[] pic) {
+    public Attendance(int id, String room, String coursecode, String coursename, String startTime, String endTime, String fname, String code, String remarks, String college, String date, byte[] pic) {
+        this.id = id;
         this.room = room;
         this.coursecode = coursecode;
         this.coursename = coursename;
@@ -48,8 +49,9 @@ public class Attendance implements Serializable{
         this.endTime = endTime;
         this.fname = fname;
         this.code = code;
-        this.email = email;
         this.remarks = remarks;
+        this.college = college;
+        this.date = date;
         this.pic = pic;
     }
 
