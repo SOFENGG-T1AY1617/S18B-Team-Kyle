@@ -49,7 +49,7 @@ import java.util.TimerTask;
 
 public class MainActivity extends AppCompatActivity {
 
-    public static boolean submitted;
+    public static Boolean submitted;
 
     private Toolbar toolbar;
     private ViewPager viewPager;
@@ -86,6 +86,10 @@ public class MainActivity extends AppCompatActivity {
     private Boolean exceedPopped;
     Boolean alerted = false;
     Boolean timerCanceled = false;
+    Boolean earlyAlerted = false;
+    Boolean initializedFirstTime = false;
+    int first_hour;
+    int first_minute;
     public DatabaseOpenHelper db;
     Timer timer;
     Filter mainFilter;
@@ -177,7 +181,7 @@ public class MainActivity extends AppCompatActivity {
         submitted = SebmetMeneger.isSubmittedDate(sdf.format(Calendar.getInstance().getTime()));
 
         if(!submitted) {
-            timerCanceled = true;
+            //timerCanceled = true;
             new MainTask().execute();
         }
 
@@ -205,9 +209,14 @@ public class MainActivity extends AppCompatActivity {
                     int size = db.getAssignedAttendance(temp).size();
                     Log.i("tagg", "--------------------------------------------------------------"+
                             "size is " + size + " " +!submitButton.getText().equals("ALREADY SUBMITTED"));
-                    if (size == 0 && !submitButton.getText().equals("ALREADY SUBMITTED") || submitted){
+                    if (size == 0 && !submitButton.getText().equals("ALREADY SUBMITTED") || submitted || timerCanceled){
                         temp.setDone(true);
-                        if(db.getAssignedAttendance(temp).size() > 0 && !submitted || timerCanceled && !submitted){
+                        Integer size2 = db.getAssignedAttendance(temp).size();
+
+                        if(db.getAssignedAttendance(temp).size() > 0 && !submitted || (!submitted && timerCanceled)){
+                            Log.i("WEEENT IIN", size2.toString());
+                            Log.i("WEEENT IIN", timerCanceled.toString());
+                            Log.i("WEEENT IIN", submitted.toString());
                             submitButton.setEnabled(true);
                             submitButton.setText("SUBMIT");
                         }
@@ -215,7 +224,7 @@ public class MainActivity extends AppCompatActivity {
                             submitButton.setEnabled(false);
                             submitButton.setText("ALREADY SUBMITTED");
                         }
-                        else{
+                        else if(false){
                             submitButton.setText("HUH  NO LIST  HUH");
                         }
                     }
@@ -551,6 +560,11 @@ public class MainActivity extends AppCompatActivity {
                         int endMinute = getEndMinute(listData.get(0));
                         int hourNow = c.get(Calendar.HOUR_OF_DAY);
                         int minuteNow = c.get(Calendar.MINUTE);
+                        if(!initializedFirstTime) {
+                            initializedFirstTime = true;
+                            first_hour = startHour;
+                            first_minute = startMinute;
+                        }
 
                         Log.i("YES" + listData.size(), "Time Now: " + hourNow + ":" + minuteNow + " Start Time: " + startHour + ":" + startMinute + " End Time: " + endHour + ":" + endMinute);
 
@@ -592,6 +606,16 @@ public class MainActivity extends AppCompatActivity {
                             //filter(mainFilter);
                             Log.i("REMOVED", "EXCEEDED");
                         }
+                        else {
+                            Log.i("EARLY", "TOO EARLY");
+                            if(!earlyAlerted && (hourNow < first_hour || hourNow == first_hour && minuteNow < first_minute)){
+                                alertTooEarly();;
+                                earlyAlerted = true;
+                                mainFilter.setStartMinute(1000);
+                                mainFilter.setStartHour(1000);
+                                filter(mainFilter);
+                            }
+                        }
                     }
                     else {
                         Log.i("tagg", "TIMER");
@@ -606,7 +630,24 @@ public class MainActivity extends AppCompatActivity {
     public void alertMissedAttendance(){
         AlertDialog.Builder adb = new AlertDialog.Builder(this);
 
+        adb.setTitle("Alert");
         adb.setMessage("You have missed several classes and they are automatically removed from the list.");
+        adb.setCancelable(false);
+
+        adb.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which){
+            }
+        });
+
+        adb.show();
+    }
+
+    public void alertTooEarly(){
+        AlertDialog.Builder adb = new AlertDialog.Builder(this);
+
+        adb.setTitle("Alert");
+        adb.setMessage("You are too early. There are no available classes at the moment.");
         adb.setCancelable(false);
 
         adb.setPositiveButton("OK", new DialogInterface.OnClickListener() {
