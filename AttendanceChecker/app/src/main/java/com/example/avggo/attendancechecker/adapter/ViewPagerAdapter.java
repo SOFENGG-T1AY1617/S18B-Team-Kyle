@@ -62,6 +62,10 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
         } else return null;
     }
 
+    public AttendanceFragment getFragment(){
+        return this.al;
+    }
+
     @Override
     public int getItemPosition(Object object) {
         return POSITION_NONE;

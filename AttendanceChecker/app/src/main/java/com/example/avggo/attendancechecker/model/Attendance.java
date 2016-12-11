@@ -35,6 +35,7 @@ public class Attendance implements Serializable{
     private String new_room;
     private byte[] subPic;
     private byte[] pic;
+    private String date;
 
     public Attendance() {
     }
@@ -199,5 +200,13 @@ public class Attendance implements Serializable{
 
     public void setSubName(String subName) {
         this.subName = subName;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
     }
 }

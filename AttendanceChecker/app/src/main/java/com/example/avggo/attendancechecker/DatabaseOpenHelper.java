@@ -12,6 +12,7 @@ import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 
+import com.example.avggo.attendancechecker.meneger.AttendanceDateManager;
 import com.example.avggo.attendancechecker.model.Attendance;
 import com.example.avggo.attendancechecker.model.CheckerAccount;
 import com.example.avggo.attendancechecker.model.Faculty;
@@ -134,7 +135,7 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
                 + "id INTEGER PRIMARY KEY AUTOINCREMENT, "
                 + "new_start_time TEXT, "
                 + "new_end_time TEXT, "
-                + "date TEXT, "
+                + "mdate TEXT, "
                 + "new_rm_id INTEGER, "
                 + "status_id INTEGER DEFAULT NULL, "
                 + "reason TEXT, "
@@ -177,39 +178,42 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
         //Log.i("tagg", String.valueOf(f.getDone()));
         String query;
 
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String cur_date = sdf.format(Calendar.getInstance().getTime());
+
         if (f.getBuilding().equals("NULL")) {
             if(f.getStartHour() != -1) {
-                query = "select f.first_name, f.middle_name, f.last_name, f.college, c.code, c.name 'course_name', co.time_start, co.time_end, r.name 'room_name', f.pic, a.remarks, a.id 'id', m.reason, m.date, m.new_start_time, m.new_end_time, (select r2.name from room r2 where r2.id = m.new_rm_id) new_room, (select f1.first_name from substitute s inner join faculty f1 on s.faculty_id = f1.id) sfname, (select f1.middle_name from substitute s inner join faculty f1 on s.faculty_id = f1.id) smname, (select f1.last_name from substitute s inner join faculty f1 on s.faculty_id = f1.id) slname, (select f1.pic from substitute s inner join faculty f1 on s.faculty_id = f1.id) spic, (SELECT ats.name from attendancestatus ats where a.status_id = ats.id) 'acode' \n" +
+                query = "select f.first_name, f.middle_name, f.last_name, f.college, c.code, c.name 'course_name', co.time_start, co.time_end, r.name 'room_name', f.pic, a.remarks, a.id 'id', m.reason, m.mdate 'mdate', m.new_start_time, m.new_end_time, (select r2.name from room r2 where r2.id = m.new_rm_id) new_room, (select f1.first_name from substitute s inner join faculty f1 on s.faculty_id = f1.id) sfname, (select f1.middle_name from substitute s inner join faculty f1 on s.faculty_id = f1.id) smname, (select f1.last_name from substitute s inner join faculty f1 on s.faculty_id = f1.id) slname, (select f1.pic from substitute s inner join faculty f1 on s.faculty_id = f1.id) spic, (SELECT ats.name from attendancestatus ats where a.status_id = ats.id) 'acode', a.date \n" +
                         "from attendance a inner join courseoffering co on a.courseoffering_id = co.id \n" +
                         "inner join faculty f on f.id = co.faculty_id \n" +
                         "inner join course c on c.id = co.course_id \n" +
                         "inner join room r on co.room_id = r.id \n" +
                         "inner join rotationroom rr on r.id = rr.room_id \n" +
                         "left join makeupclass m on m.attendance_id = a.id \n" +
-                        "where rr.rotation_id = '" + f.getRID() + "' and co.days like '%" + weekDay + "%' and a.status_id is "+ isDone +" null and co.time_start LIKE '%" + f.getStartHour() + ":" + f.getStartMinute() + "%' order by co.time_start;";
+                        "where rr.rotation_id = '" + f.getRID() + "' and co.days like '%" + weekDay + "%' and a.status_id is "+ isDone +" null and co.time_start LIKE '%" + f.getStartHour() + ":" + f.getStartMinute() + "%' and a.date = '" + cur_date + "' order by co.time_start;";
             }
             else if(f.getStatus().equals("unique")){
-                query = "select co.time_start, co.time_end, f.first_name, f.middle_name, f.last_name, f.college, c.code, a.remarks, a.id 'id', m.reason, m.date, m.new_start_time, m.new_end_time, (select r2.name from room r2 where r2.id = m.new_rm_id) new_room, (select f1.first_name from substitute s inner join faculty f1 on s.faculty_id = f1.id) sfname, (select f1.middle_name from substitute s inner join faculty f1 on s.faculty_id = f1.id) smname, (select f1.last_name from substitute s inner join faculty f1 on s.faculty_id = f1.id) slname, (select f1.pic from substitute s inner join faculty f1 on s.faculty_id = f1.id) spic, (SELECT name from attendancestatus ats where a.status_id = ats.id) 'acode', c.name 'course_name', r.name 'room_name', f.pic " +
+                query = "select co.time_start, co.time_end, f.first_name, f.middle_name, f.last_name, f.college, c.code, a.remarks, a.id 'id', m.reason, m.mdate 'mdate', m.new_start_time, m.new_end_time, (select r2.name from room r2 where r2.id = m.new_rm_id) new_room, (select f1.first_name from substitute s inner join faculty f1 on s.faculty_id = f1.id) sfname, (select f1.middle_name from substitute s inner join faculty f1 on s.faculty_id = f1.id) smname, (select f1.last_name from substitute s inner join faculty f1 on s.faculty_id = f1.id) slname, (select f1.pic from substitute s inner join faculty f1 on s.faculty_id = f1.id) spic, (SELECT name from attendancestatus ats where a.status_id = ats.id) 'acode', c.name 'course_name', r.name 'room_name', f.pic, a.date " +
                         "from attendance a inner join courseoffering co on a.courseoffering_id = co.id " +
                         "inner join faculty f on f.id = co.faculty_id " +
                         "inner join course c on c.id = co.course_id " +
                         "inner join room r on co.room_id = r.id " +
                         "inner join rotationroom rr on r.id = rr.room_id " +
                         "left join makeupclass m on m.attendance_id = a.id \n" +
-                        "where rr.rotation_id = '" + f.getRID() + "' and co.days like '%" + weekDay + "%' and a.status_id is null group by 1 order by co.time_start;";
+                        "where rr.rotation_id = '" + f.getRID() + "' and co.days like '%" + weekDay + "%' and a.status_id is null and a.date = '" + cur_date + "' group by 1 order by co.time_start;";
             }
             else
-                query = "select f.first_name, f.middle_name, f.last_name, f.college, c.code, c.name 'course_name', co.time_start, co.time_end, r.name 'room_name', f.pic, a.remarks, a.id 'id', m.reason, m.date, m.new_start_time, m.new_end_time, (select r2.name from room r2 where r2.id = m.new_rm_id) new_room, (select f1.first_name from substitute s inner join faculty f1 on s.faculty_id = f1.id) sfname, (select f1.middle_name from substitute s inner join faculty f1 on s.faculty_id = f1.id) smname, (select f1.last_name from substitute s inner join faculty f1 on s.faculty_id = f1.id) slname, (select f1.pic from substitute s inner join faculty f1 on s.faculty_id = f1.id) spic, (SELECT name from attendancestatus ats where a.status_id = ats.id) 'acode' \n" +
+                query = "select f.first_name, f.middle_name, f.last_name, f.college, c.code, c.name 'course_name', co.time_start, co.time_end, r.name 'room_name', f.pic, a.remarks, a.id 'id', m.reason, m.mdate 'mdate', m.new_start_time, m.new_end_time, (select r2.name from room r2 where r2.id = m.new_rm_id) new_room, (select f1.first_name from substitute s inner join faculty f1 on s.faculty_id = f1.id) sfname, (select f1.middle_name from substitute s inner join faculty f1 on s.faculty_id = f1.id) smname, (select f1.last_name from substitute s inner join faculty f1 on s.faculty_id = f1.id) slname, (select f1.pic from substitute s inner join faculty f1 on s.faculty_id = f1.id) spic, (SELECT name from attendancestatus ats where a.status_id = ats.id) 'acode', a.date \n" +
                         "from attendance a inner join courseoffering co on a.courseoffering_id = co.id \n" +
                         "inner join faculty f on f.id = co.faculty_id \n" +
                         "inner join course c on c.id = co.course_id \n" +
                         "inner join room r on co.room_id = r.id \n" +
                         "inner join rotationroom rr on r.id = rr.room_id \n" +
                         "left join makeupclass m on m.attendance_id = a.id \n" +
-                        "where rr.rotation_id = '" + f.getRID() + "' and co.days like '%" + weekDay + "%' and a.status_id is "+ isDone +"null order by co.time_start;";
+                        "where rr.rotation_id = '" + f.getRID() + "' and co.days like '%" + weekDay + "%' and a.status_id is "+ isDone +"null and date = '" + cur_date + "' order by co.time_start;";
         } else {
             if(f.getStartHour() != -1) {
-                query = "select f.first_name, f.middle_name, f.last_name, f.college, c.code, c.name 'course_name', co.time_start, co.time_end, r.name 'room_name', f.pic, b.name 'bname', a.remarks, a.id 'id', m.reason, m.date, m.new_start_time, m.new_end_time, (select r2.name from room r2 where r2.id = m.new_rm_id) new_room, (select f1.first_name from substitute s inner join faculty f1 on s.faculty_id = f1.id) sfname, (select f1.middle_name from substitute s inner join faculty f1 on s.faculty_id = f1.id) smname, (select f1.last_name from substitute s inner join faculty f1 on s.faculty_id = f1.id) slname, (select f1.pic from substitute s inner join faculty f1 on s.faculty_id = f1.id) spic, (SELECT name from attendancestatus ats where a.status_id = ats.id) 'acode' \n" +
+                query = "select f.first_name, f.middle_name, f.last_name, f.college, c.code, c.name 'course_name', co.time_start, co.time_end, r.name 'room_name', f.pic, b.name 'bname', a.remarks, a.id 'id', m.reason, m.mdate 'mdate', m.new_start_time, m.new_end_time, (select r2.name from room r2 where r2.id = m.new_rm_id) new_room, (select f1.first_name from substitute s inner join faculty f1 on s.faculty_id = f1.id) sfname, (select f1.middle_name from substitute s inner join faculty f1 on s.faculty_id = f1.id) smname, (select f1.last_name from substitute s inner join faculty f1 on s.faculty_id = f1.id) slname, (select f1.pic from substitute s inner join faculty f1 on s.faculty_id = f1.id) spic, (SELECT name from attendancestatus ats where a.status_id = ats.id) 'acode', a.date \n" +
                         "from attendance a inner join courseoffering co on a.courseoffering_id = co.id\n" +
                         "inner join faculty f on f.id = co.faculty_id\n" +
                         "inner join course c on c.id = co.course_id\n" +
@@ -217,10 +221,10 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
                         "inner join rotationroom rr on r.id = rr.room_id\n" +
                         "inner join building b on r.building_id = b.id\n" +
                         "left join makeupclass m on m.attendance_id = a.id \n" +
-                        "where rr.rotation_id = '" + f.getRID() + "' and co.days like '%" + weekDay + "%' and a.status_id is "+ isDone +" null and bname = '" + f.getBuilding() + "' and co.time_start LIKE '%" + f.getStartHour() + ":" + f.getStartMinute() + "%' order by co.time_start;";
+                        "where rr.rotation_id = '" + f.getRID() + "' and co.days like '%" + weekDay + "%' and a.status_id is "+ isDone +" null and bname = '" + f.getBuilding() + "' and co.time_start LIKE '%" + f.getStartHour() + ":" + f.getStartMinute() + "%' and date = '" + cur_date + "' order by co.time_start;";
             }
             else
-                query = "select f.first_name, f.middle_name, f.last_name, f.college, c.code, c.name 'course_name', co.time_start, co.time_end, r.name 'room_name', f.pic, b.name 'bname', a.remarks, a.id 'id', m.reason, m.date, m.new_start_time, m.new_end_time, (select r2.name from room r2 where r2.id = m.new_rm_id) new_room, (select f1.first_name from substitute s inner join faculty f1 on s.faculty_id = f1.id) sfname, (select f1.middle_name from substitute s inner join faculty f1 on s.faculty_id = f1.id) smname, (select f1.last_name from substitute s inner join faculty f1 on s.faculty_id = f1.id) slname, (select f1.pic from substitute s inner join faculty f1 on s.faculty_id = f1.id) spic, (SELECT name from attendancestatus ats where a.status_id = ats.id) 'acode' \n" +
+                query = "select f.first_name, f.middle_name, f.last_name, f.college, c.code, c.name 'course_name', co.time_start, co.time_end, r.name 'room_name', f.pic, b.name 'bname', a.remarks, a.id 'id', m.reason, m.mdate 'mdate', m.new_start_time, m.new_end_time, (select r2.name from room r2 where r2.id = m.new_rm_id) new_room, (select f1.first_name from substitute s inner join faculty f1 on s.faculty_id = f1.id) sfname, (select f1.middle_name from substitute s inner join faculty f1 on s.faculty_id = f1.id) smname, (select f1.last_name from substitute s inner join faculty f1 on s.faculty_id = f1.id) slname, (select f1.pic from substitute s inner join faculty f1 on s.faculty_id = f1.id) spic, (SELECT name from attendancestatus ats where a.status_id = ats.id) 'acode', a.date \n" +
                         "from attendance a inner join courseoffering co on a.courseoffering_id = co.id\n" +
                         "inner join faculty f on f.id = co.faculty_id\n" +
                         "inner join course c on c.id = co.course_id\n" +
@@ -228,7 +232,7 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
                         "inner join rotationroom rr on r.id = rr.room_id\n" +
                         "inner join building b on r.building_id = b.id\n" +
                         "left join makeupclass m on m.attendance_id = a.id \n" +
-                        "where rr.rotation_id = '" + f.getRID() + "' and co.days like '%" + weekDay + "%' and a.status_id is "+ isDone +" null and bname = '" + f.getBuilding() + "' order by co.time_start;";
+                        "where rr.rotation_id = '" + f.getRID() + "' and co.days like '%" + weekDay + "%' and a.status_id is "+ isDone +" null and bname = '" + f.getBuilding() + "' and date = '" + cur_date + "' order by co.time_start;";
         }
 
         ArrayList<Attendance> assignedAttendance = new ArrayList<>();
@@ -256,6 +260,7 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
                     int id = c.getInt(c.getColumnIndex("id"));
                     String aCode = c.getString(c.getColumnIndex("acode"));
                     String remark = c.getString(c.getColumnIndex("remarks"));
+                    String date = c.getString(c.getColumnIndex("date"));
 
                     Attendance a = new Attendance();
 
@@ -270,15 +275,19 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
                     a.setId(id);
                     a.setCode(aCode);
                     a.setRemarks(remark);
+                    a.setDate(date);
                     Log.i("DATE2", new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime()));
-                    if(c.getString(c.getColumnIndex("date")) != null && c.getString(c.getColumnIndex("date")).equals(new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime()))) {
+                    Log.i("DATE MAKEUP", c.getString(c.getColumnIndex("mdate")) + "");
+                    Log.i("DATE ATTENDANCE", c.getString(c.getColumnIndex("date")) + "");
+                    if(c.getString(c.getColumnIndex("mdate")) != null && c.getString(c.getColumnIndex("mdate")).equals(new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime()))) {
+                        //Log.i("DATE MAKEUP", c.getString(c.getColumnIndex("mdate")));
                         a.setReason(c.getString(c.getColumnIndex("reason")));
                         a.setNew_start_time(c.getString(c.getColumnIndex("new_start_time")));
                         a.setNew_end_time(c.getString(c.getColumnIndex("new_end_time")));
                         a.setNew_room(c.getString(c.getColumnIndex("new_room")));
                         a.setSubName(c.getString(c.getColumnIndex("sfname")) + " " + c.getString(c.getColumnIndex("smname")) + " " + c.getString(c.getColumnIndex("slname")));
                         a.setSubPic(c.getBlob(c.getColumnIndex("spic")));
-                        Log.i("DATE1", c.getString(c.getColumnIndex("date")));
+                        Log.i("DATE1", c.getString(c.getColumnIndex("mdate")));
                         Log.i("DATE2", new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime()));
                     }
                     //Log.i("tagg", "DB.getAssignedAttendance() " + a.toString());
@@ -495,39 +504,75 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
         sql = "INSERT INTO Room (\"name\", \"building_id\") VALUES ('A1105', '2');"; //15
         db.execSQL(sql);
 
-        sql = "INSERT INTO CourseOffering (\"course_id\", \"faculty_id\", \"term_id\", \"section\", \"time_start\", \"time_end\", \"days\", \"room_id\") VALUES ('1', '1', '1', 'S17', '12:45', '14:15', 'TH', '1');";
+        sql = "INSERT INTO CourseOffering (\"course_id\", \"faculty_id\", \"term_id\", \"section\", \"time_start\", \"time_end\", \"days\", \"room_id\") VALUES ('1', '1', '1', 'S17', '12:45', '14:15', 'T', '1');";
         db.execSQL(sql);
-        sql = "INSERT INTO CourseOffering (\"course_id\", \"faculty_id\", \"term_id\", \"section\", \"time_start\", \"time_end\", \"days\", \"room_id\") VALUES ('1', '1', '1', 'S18', '14:30', '16:00', 'TH', '2');";
+        sql = "INSERT INTO CourseOffering (\"course_id\", \"faculty_id\", \"term_id\", \"section\", \"time_start\", \"time_end\", \"days\", \"room_id\") VALUES ('1', '1', '1', 'S18', '14:30', '16:00', 'T', '2');";
         db.execSQL(sql);
-        sql = "INSERT INTO CourseOffering (\"course_id\", \"faculty_id\", \"term_id\", \"section\", \"time_start\", \"time_end\", \"days\", \"room_id\") VALUES ('1', '1', '1', 'S19', '12:45', '14:15', 'MW', '3');";
+        sql = "INSERT INTO CourseOffering (\"course_id\", \"faculty_id\", \"term_id\", \"section\", \"time_start\", \"time_end\", \"days\", \"room_id\") VALUES ('1', '1', '1', 'S19', '12:45', '14:15', 'W', '3');";
         db.execSQL(sql);
-        sql = "INSERT INTO CourseOffering (\"course_id\", \"faculty_id\", \"term_id\", \"section\", \"time_start\", \"time_end\", \"days\", \"room_id\") VALUES ('2', '2', '1', 'S17', '14:30', '16:00', 'MW', '11');";
+        sql = "INSERT INTO CourseOffering (\"course_id\", \"faculty_id\", \"term_id\", \"section\", \"time_start\", \"time_end\", \"days\", \"room_id\") VALUES ('2', '2', '1', 'S17', '14:30', '16:00', 'W', '11');";
         db.execSQL(sql);
-        sql = "INSERT INTO CourseOffering (\"course_id\", \"faculty_id\", \"term_id\", \"section\", \"time_start\", \"time_end\", \"days\", \"room_id\") VALUES ('2', '2', '1', 'S18', '09:15', '10:45', 'MW', '12');";
+        sql = "INSERT INTO CourseOffering (\"course_id\", \"faculty_id\", \"term_id\", \"section\", \"time_start\", \"time_end\", \"days\", \"room_id\") VALUES ('2', '2', '1', 'S18', '09:15', '10:45', 'W', '12');";
         db.execSQL(sql);
-        sql = "INSERT INTO CourseOffering (\"course_id\", \"faculty_id\", \"term_id\", \"section\", \"time_start\", \"time_end\", \"days\", \"room_id\") VALUES ('2', '2', '1', 'S19', '12:45', '14:15', 'MW', '6');";
+        sql = "INSERT INTO CourseOffering (\"course_id\", \"faculty_id\", \"term_id\", \"section\", \"time_start\", \"time_end\", \"days\", \"room_id\") VALUES ('2', '2', '1', 'S19', '12:45', '14:15', 'W', '6');";
         db.execSQL(sql);
-        sql = "INSERT INTO CourseOffering (\"course_id\", \"faculty_id\", \"term_id\", \"section\", \"time_start\", \"time_end\", \"days\", \"room_id\") VALUES ('3', '2', '1', 'S11A', '09:15', '10:45', 'MW', '5');";
+        sql = "INSERT INTO CourseOffering (\"course_id\", \"faculty_id\", \"term_id\", \"section\", \"time_start\", \"time_end\", \"days\", \"room_id\") VALUES ('3', '2', '1', 'S11A', '09:15', '10:45', 'W', '5');";
         db.execSQL(sql);
-        sql = "INSERT INTO CourseOffering (\"course_id\", \"faculty_id\", \"term_id\", \"section\", \"time_start\", \"time_end\", \"days\", \"room_id\") VALUES ('3', '2', '1', 'S17A', '11:00', '12:30', 'MW', '5');";
+        sql = "INSERT INTO CourseOffering (\"course_id\", \"faculty_id\", \"term_id\", \"section\", \"time_start\", \"time_end\", \"days\", \"room_id\") VALUES ('3', '2', '1', 'S17A', '11:00', '12:30', 'W', '5');";
         db.execSQL(sql);
-        sql = "INSERT INTO CourseOffering (\"course_id\", \"faculty_id\", \"term_id\", \"section\", \"time_start\", \"time_end\", \"days\", \"room_id\") VALUES ('3', '2', '1', 'S18A', '12:45', '14:15', 'TH', '6');";
+        sql = "INSERT INTO CourseOffering (\"course_id\", \"faculty_id\", \"term_id\", \"section\", \"time_start\", \"time_end\", \"days\", \"room_id\") VALUES ('3', '2', '1', 'S18A', '12:45', '14:15', 'T', '6');";
         db.execSQL(sql);
-        sql = "INSERT INTO CourseOffering (\"course_id\", \"faculty_id\", \"term_id\", \"section\", \"time_start\", \"time_end\", \"days\", \"room_id\") VALUES ('4', '3', '1', 'S17', '12:45', '14:15', 'TH', '7');";
+        sql = "INSERT INTO CourseOffering (\"course_id\", \"faculty_id\", \"term_id\", \"section\", \"time_start\", \"time_end\", \"days\", \"room_id\") VALUES ('4', '3', '1', 'S17', '12:45', '14:15', 'T', '7');";
         db.execSQL(sql);
-        sql = "INSERT INTO CourseOffering (\"course_id\", \"faculty_id\", \"term_id\", \"section\", \"time_start\", \"time_end\", \"days\", \"room_id\") VALUES ('4', '3', '1', 'S18', '11:00', '12:30', 'MW', '8');";
+        sql = "INSERT INTO CourseOffering (\"course_id\", \"faculty_id\", \"term_id\", \"section\", \"time_start\", \"time_end\", \"days\", \"room_id\") VALUES ('4', '3', '1', 'S18', '11:00', '12:30', 'W', '8');";
         db.execSQL(sql);
-        sql = "INSERT INTO CourseOffering (\"course_id\", \"faculty_id\", \"term_id\", \"section\", \"time_start\", \"time_end\", \"days\", \"room_id\") VALUES ('4', '3', '1', 'S19', '11:00', '12:30', 'TH', '8');";
+        sql = "INSERT INTO CourseOffering (\"course_id\", \"faculty_id\", \"term_id\", \"section\", \"time_start\", \"time_end\", \"days\", \"room_id\") VALUES ('4', '3', '1', 'S19', '11:00', '12:30', 'T', '8');";
         db.execSQL(sql);
-        sql = "INSERT INTO CourseOffering (\"course_id\", \"faculty_id\", \"term_id\", \"section\", \"time_start\", \"time_end\", \"days\", \"room_id\") VALUES ('5', '3', '1', 'S17', '12:45', '14:15', 'TH', '7');";
+        sql = "INSERT INTO CourseOffering (\"course_id\", \"faculty_id\", \"term_id\", \"section\", \"time_start\", \"time_end\", \"days\", \"room_id\") VALUES ('5', '3', '1', 'S17', '12:45', '14:15', 'T', '7');";
         db.execSQL(sql);
-        sql = "INSERT INTO CourseOffering (\"course_id\", \"faculty_id\", \"term_id\", \"section\", \"time_start\", \"time_end\", \"days\", \"room_id\") VALUES ('5', '3', '1', 'S18', '12:45', '14:15', 'MW', '9');";
+        sql = "INSERT INTO CourseOffering (\"course_id\", \"faculty_id\", \"term_id\", \"section\", \"time_start\", \"time_end\", \"days\", \"room_id\") VALUES ('5', '3', '1', 'S18', '12:45', '14:15', 'W', '9');";
         db.execSQL(sql);
-        sql = "INSERT INTO CourseOffering (\"course_id\", \"faculty_id\", \"term_id\", \"section\", \"time_start\", \"time_end\", \"days\", \"room_id\") VALUES ('5', '3', '1', 'S19', '11:00', '12:30', 'TH', '8');";
+        sql = "INSERT INTO CourseOffering (\"course_id\", \"faculty_id\", \"term_id\", \"section\", \"time_start\", \"time_end\", \"days\", \"room_id\") VALUES ('5', '3', '1', 'S19', '11:00', '12:30', 'T', '8');";
         db.execSQL(sql);
-        sql = "INSERT INTO CourseOffering (\"course_id\", \"faculty_id\", \"term_id\", \"section\", \"time_start\", \"time_end\", \"days\", \"room_id\") VALUES ('5', '3', '1', 'S21', '14:30', '16:00', 'MW', '4');";
+        sql = "INSERT INTO CourseOffering (\"course_id\", \"faculty_id\", \"term_id\", \"section\", \"time_start\", \"time_end\", \"days\", \"room_id\") VALUES ('5', '3', '1', 'S21', '14:30', '16:00', 'W', '4');";
         db.execSQL(sql);
-        sql = "INSERT INTO CourseOffering (\"course_id\", \"faculty_id\", \"term_id\", \"section\", \"time_start\", \"time_end\", \"days\", \"room_id\") VALUES ('5', '3', '1', 'S21', '16:15', '17:45', 'MW', '5');";
+        sql = "INSERT INTO CourseOffering (\"course_id\", \"faculty_id\", \"term_id\", \"section\", \"time_start\", \"time_end\", \"days\", \"room_id\") VALUES ('5', '3', '1', 'S21', '16:15', '17:45', 'W', '5');";
+        db.execSQL(sql);
+
+
+        sql = "INSERT INTO CourseOffering (\"course_id\", \"faculty_id\", \"term_id\", \"section\", \"time_start\", \"time_end\", \"days\", \"room_id\") VALUES ('1', '1', '1', 'S17', '12:45', '14:15', 'H', '1');";
+        db.execSQL(sql);
+        sql = "INSERT INTO CourseOffering (\"course_id\", \"faculty_id\", \"term_id\", \"section\", \"time_start\", \"time_end\", \"days\", \"room_id\") VALUES ('1', '1', '1', 'S18', '14:30', '16:00', 'H', '2');";
+        db.execSQL(sql);
+        sql = "INSERT INTO CourseOffering (\"course_id\", \"faculty_id\", \"term_id\", \"section\", \"time_start\", \"time_end\", \"days\", \"room_id\") VALUES ('1', '1', '1', 'S19', '12:45', '14:15', 'M', '3');";
+        db.execSQL(sql);
+        sql = "INSERT INTO CourseOffering (\"course_id\", \"faculty_id\", \"term_id\", \"section\", \"time_start\", \"time_end\", \"days\", \"room_id\") VALUES ('2', '2', '1', 'S17', '14:30', '16:00', 'M', '11');";
+        db.execSQL(sql);
+        sql = "INSERT INTO CourseOffering (\"course_id\", \"faculty_id\", \"term_id\", \"section\", \"time_start\", \"time_end\", \"days\", \"room_id\") VALUES ('2', '2', '1', 'S18', '09:15', '10:45', 'M', '12');";
+        db.execSQL(sql);
+        sql = "INSERT INTO CourseOffering (\"course_id\", \"faculty_id\", \"term_id\", \"section\", \"time_start\", \"time_end\", \"days\", \"room_id\") VALUES ('2', '2', '1', 'S19', '12:45', '14:15', 'M', '6');";
+        db.execSQL(sql);
+        sql = "INSERT INTO CourseOffering (\"course_id\", \"faculty_id\", \"term_id\", \"section\", \"time_start\", \"time_end\", \"days\", \"room_id\") VALUES ('3', '2', '1', 'S11A', '09:15', '10:45', 'M', '5');";
+        db.execSQL(sql);
+        sql = "INSERT INTO CourseOffering (\"course_id\", \"faculty_id\", \"term_id\", \"section\", \"time_start\", \"time_end\", \"days\", \"room_id\") VALUES ('3', '2', '1', 'S17A', '11:00', '12:30', 'M', '5');";
+        db.execSQL(sql);
+        sql = "INSERT INTO CourseOffering (\"course_id\", \"faculty_id\", \"term_id\", \"section\", \"time_start\", \"time_end\", \"days\", \"room_id\") VALUES ('3', '2', '1', 'S18A', '12:45', '14:15', 'H', '6');";
+        db.execSQL(sql);
+        sql = "INSERT INTO CourseOffering (\"course_id\", \"faculty_id\", \"term_id\", \"section\", \"time_start\", \"time_end\", \"days\", \"room_id\") VALUES ('4', '3', '1', 'S17', '12:45', '14:15', 'H', '7');";
+        db.execSQL(sql);
+        sql = "INSERT INTO CourseOffering (\"course_id\", \"faculty_id\", \"term_id\", \"section\", \"time_start\", \"time_end\", \"days\", \"room_id\") VALUES ('4', '3', '1', 'S18', '11:00', '12:30', 'M', '8');";
+        db.execSQL(sql);
+        sql = "INSERT INTO CourseOffering (\"course_id\", \"faculty_id\", \"term_id\", \"section\", \"time_start\", \"time_end\", \"days\", \"room_id\") VALUES ('4', '3', '1', 'S19', '11:00', '12:30', 'H', '8');";
+        db.execSQL(sql);
+        sql = "INSERT INTO CourseOffering (\"course_id\", \"faculty_id\", \"term_id\", \"section\", \"time_start\", \"time_end\", \"days\", \"room_id\") VALUES ('5', '3', '1', 'S17', '12:45', '14:15', 'H', '7');";
+        db.execSQL(sql);
+        sql = "INSERT INTO CourseOffering (\"course_id\", \"faculty_id\", \"term_id\", \"section\", \"time_start\", \"time_end\", \"days\", \"room_id\") VALUES ('5', '3', '1', 'S18', '12:45', '14:15', 'M', '9');";
+        db.execSQL(sql);
+        sql = "INSERT INTO CourseOffering (\"course_id\", \"faculty_id\", \"term_id\", \"section\", \"time_start\", \"time_end\", \"days\", \"room_id\") VALUES ('5', '3', '1', 'S19', '11:00', '12:30', 'H', '8');";
+        db.execSQL(sql);
+        sql = "INSERT INTO CourseOffering (\"course_id\", \"faculty_id\", \"term_id\", \"section\", \"time_start\", \"time_end\", \"days\", \"room_id\") VALUES ('5', '3', '1', 'S21', '14:30', '16:00', 'M', '4');";
+        db.execSQL(sql);
+        sql = "INSERT INTO CourseOffering (\"course_id\", \"faculty_id\", \"term_id\", \"section\", \"time_start\", \"time_end\", \"days\", \"room_id\") VALUES ('5', '3', '1', 'S21', '16:15', '17:45', 'M', '5');";
         db.execSQL(sql);
 
         sql = "INSERT INTO Rotation (\"id\") VALUES ('A');";
@@ -612,6 +657,9 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
 
         String query;
 
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String date = sdf.format(Calendar.getInstance().getTime());
+
         query = "INSERT INTO Attendance " +
                 "(courseoffering_id) " +
                 "SELECT co.id " +
@@ -620,10 +668,14 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
 
         db.execSQL(query);
 
+        query = "UPDATE Attendance SET date = '" + date + "' WHERE date IS NULL;";
+
+        db.execSQL(query);
+
         sql = "INSERT INTO Substitute (\"faculty_id\") VALUES ('2');";
         db.execSQL(sql);
 
-        sql = "INSERT INTO MakeupClass (\"new_start_time\", \"new_end_time\", \"date\", \"new_rm_id\", \"reason\", \"attendance_id\", \"sub_id\") VALUES ('12:45', '14:45', '2016-11-23', '1', 'AC', '3', '2');";
+        sql = "INSERT INTO MakeupClass (\"new_start_time\", \"new_end_time\", \"mdate\", \"new_rm_id\", \"reason\", \"attendance_id\", \"sub_id\") VALUES ('12:45', '14:45', '2016-11-23', '1', 'AC', '4', '2');";
         db.execSQL(sql);
     }
 

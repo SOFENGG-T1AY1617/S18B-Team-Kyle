@@ -30,6 +30,7 @@ import android.widget.Toast;
 
 import com.ToxicBakery.viewpager.transforms.AccordionTransformer;
 import com.example.avggo.attendancechecker.adapter.ViewPagerAdapter;
+import com.example.avggo.attendancechecker.meneger.AttendanceDateManager;
 import com.example.avggo.attendancechecker.meneger.SebmetMeneger;
 import com.example.avggo.attendancechecker.model.Attendance;
 import com.example.avggo.attendancechecker.model.Filter;
@@ -41,6 +42,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.List;
 import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -65,6 +67,8 @@ public class MainActivity extends AppCompatActivity {
     public static final int SUBMITTED_TAB = 2;
     int currentHourFilter;
     int currentMinuteFilter;
+    int lastMinute;
+    int lastHour;
 
     //header
     String NAME;
@@ -80,6 +84,8 @@ public class MainActivity extends AppCompatActivity {
 
     private String RID;
     private Boolean exceedPopped;
+    Boolean alerted = false;
+    Boolean timerCanceled = false;
     public DatabaseOpenHelper db;
     Timer timer;
     Filter mainFilter;
@@ -91,18 +97,21 @@ public class MainActivity extends AppCompatActivity {
     protected void onPause(){
         super.onPause();
         SebmetMeneger.saveState(this);
+        //AttendanceDateManager.saveState(this);
     }
 
     @Override
     protected void onDestroy(){
         super.onDestroy();
         SebmetMeneger.saveState(this);
+        //AttendanceDateManager.saveState(this);
     }
 
     @Override
     protected void onResume(){
         super.onResume();
         SebmetMeneger.resumeState(this);
+        //AttendanceDateManager.resumeState(this);
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         submitted = SebmetMeneger.isSubmittedDate(sdf.format(Calendar.getInstance().getTime()));
     }
@@ -111,7 +120,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         SimpleDateFormat dayFormat = new SimpleDateFormat("EEEE", Locale.US);
 
         Calendar calendar = Calendar.getInstance();
@@ -153,6 +161,8 @@ public class MainActivity extends AppCompatActivity {
         tabSlider.setViewPager(viewPager);
         db = new DatabaseOpenHelper(getBaseContext());
 
+
+
         curBuildings = db.getAssignedBuildings(RID);
         //initialize drawer
         initializeDrawer();
@@ -165,6 +175,11 @@ public class MainActivity extends AppCompatActivity {
         // Get the value for the run counter
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         submitted = SebmetMeneger.isSubmittedDate(sdf.format(Calendar.getInstance().getTime()));
+
+        if(!submitted) {
+            timerCanceled = true;
+            new MainTask().execute();
+        }
 
         tabSlider.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
 
@@ -190,9 +205,9 @@ public class MainActivity extends AppCompatActivity {
                     int size = db.getAssignedAttendance(temp).size();
                     Log.i("tagg", "--------------------------------------------------------------"+
                             "size is " + size + " " +!submitButton.getText().equals("ALREADY SUBMITTED"));
-                    if (size == 0 && !submitButton.getText().equals("ALREADY SUBMITTED")){
+                    if (size == 0 && !submitButton.getText().equals("ALREADY SUBMITTED") || submitted){
                         temp.setDone(true);
-                        if(db.getAssignedAttendance(temp).size() > 0 && !submitted){
+                        if(db.getAssignedAttendance(temp).size() > 0 && !submitted || timerCanceled && !submitted){
                             submitButton.setEnabled(true);
                             submitButton.setText("SUBMIT");
                         }
@@ -210,15 +225,25 @@ public class MainActivity extends AppCompatActivity {
                     Log.i("tagg", "tabSlider.pageListener()  done");
                     //filter(mainFilter);
                     //Log.i("tagg", "tabSlider.pageListener()  filtered already");
+                    //if(timerCanceled) {
+                        mainFilter.setStartMinute(-1);
+                        mainFilter.setStartHour(-1);
+                        mainFilter.setDone(true);
+                        Log.i("DONE", "DONE");
 
 
                 }else if(position == SUBMITTED_TAB){
+
                     mainFilter.setTab(SUBMITTED_TAB);
                     submitButton.setVisibility(View.GONE);
                 }
                 else if (position == UNDONE_TAB){
-                    mainFilter.setTab(UNDONE_TAB);
-                    submitButton.setVisibility(View.GONE);
+                        mainFilter.setStartHour(currentHourFilter);
+                        mainFilter.setStartMinute(currentMinuteFilter);
+                        mainFilter.setTab(UNDONE_TAB);
+                        mainFilter.setDone(false);
+                        submitButton.setVisibility(View.GONE);
+
                 }
                 else {
                     submitButton.setVisibility(View.GONE);
@@ -259,9 +284,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        new MainTask().execute();
-
-
+        initializeTodayDate();
         /*Calendar c = GregorianCalendar.getInstance();
 
         for(int i = 0; i < lisData.size(); i++) {
@@ -273,6 +296,29 @@ public class MainActivity extends AppCompatActivity {
             if (hour > hourNow || (hour == hourNow && minute > minuteNow))
                 scheduleTask(getBaseContext(), hour, minute);
         }*/
+    }
+
+    public void initializeTodayDate(){
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String date = sdf.format(Calendar.getInstance().getTime());
+
+        AttendanceDateManager.resumeState(getBaseContext());
+        if (!AttendanceDateManager.isAttendanceDate(date)) {
+            AttendanceDateManager.addAttendanceDate(date);
+            String query;
+            query = "INSERT INTO Attendance " +
+                    "(courseoffering_id) " +
+                    "SELECT co.id " +
+                    "from CourseOffering co inner join Room r on co.room_id = r.id " +
+                    "inner join RotationRoom rr on r.id = rr.room_id;";
+
+            db.getReadableDatabase().execSQL(query);
+
+            query = "UPDATE Attendance SET date = '" + date + "' WHERE date IS NULL;";
+
+            db.getReadableDatabase().execSQL(query);
+        }
+        AttendanceDateManager.saveState(getBaseContext());
     }
 
     public int getStartHour(Attendance a){
@@ -362,7 +408,8 @@ public class MainActivity extends AppCompatActivity {
 
                 switch(menuItem.getItemId()) {
                     case R.id.nav_logout:
-                        timer.cancel();
+                        if(timer != null)
+                            timer.cancel();
                         goToLogin();
                         break;
                     case R.id.nav_allbuildings:
@@ -521,24 +568,54 @@ public class MainActivity extends AppCompatActivity {
                             //listData.get(0).setCode("Checker Error");
                             //db.updateAttendance(listData.get(0));
                             listData.remove(0);
+                            if(!alerted){
+                                alerted = true;
+                                alertMissedAttendance();
+                            }
                             if(listData.size() > 0) {
+                                if(listData.size() == 1){
+                                    lastMinute = getStartMinute(listData.get(0));
+                                    lastHour = getStartHour(listData.get(0));
+                                }
                                 mainFilter.setStartHour(getStartHour(listData.get(0)));
                                 mainFilter.setStartMinute(getStartMinute(listData.get(0)));
                                 filter(mainFilter);
                                 mNavigationView.getMenu().performIdentifierAction(R.id.nav_allbuildings, 0);
                             }
+                            else {
+                                mainFilter.setDone(true);
+                                mainFilter.setStartMinute(1000);
+                                mainFilter.setStartHour(1000);
+                                filter(mainFilter);
+                                mNavigationView.getMenu().performIdentifierAction(R.id.nav_allbuildings, 0);
+                            }
                             //filter(mainFilter);
                             Log.i("REMOVED", "EXCEEDED");
-
                         }
                     }
                     else {
                         Log.i("tagg", "TIMER");
-                        //timer.cancel();
+                        timerCanceled = true;
+                        timer.cancel();
                     }
                 }
             });
         }
+    }
+
+    public void alertMissedAttendance(){
+        AlertDialog.Builder adb = new AlertDialog.Builder(this);
+
+        adb.setMessage("You have missed several classes and they are automatically removed from the list.");
+        adb.setCancelable(false);
+
+        adb.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which){
+            }
+        });
+
+        adb.show();
     }
 
     public void showDialog(int startHour, int startMinute){

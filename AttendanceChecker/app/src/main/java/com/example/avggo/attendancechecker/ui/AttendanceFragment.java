@@ -21,6 +21,7 @@ import com.example.avggo.attendancechecker.model.Attendance;
 import com.example.avggo.attendancechecker.model.Filter;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -211,5 +212,9 @@ public class AttendanceFragment extends android.support.v4.app.Fragment implemen
                 adapter.setItemClickCallback(it);
             }
         }
+    }
+
+    public List<Attendance> getAttendanceList(){
+        return this.listData;
     }
 }
