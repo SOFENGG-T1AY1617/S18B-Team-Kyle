@@ -41,13 +41,6 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center">
 
-                    <ImageView
-                        android:id="@+id/buttonPreviousProf"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:src="@drawable/ic_chevron_left"/>
-
                     <de.hdodenhof.circleimageview.CircleImageView
                         android:id="@+id/facultyImage"
                         android:layout_width="145dp"
@@ -55,12 +48,6 @@
                         android:layout_gravity="center_horizontal"
                         android:src="@drawable/winfred"/>
 
-                    <ImageView
-                        android:id="@+id/buttonNextProf"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:src="@drawable/ic_chevron_right"/>
 
 
                 </LinearLayout>

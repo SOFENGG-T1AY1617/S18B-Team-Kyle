@@ -72,13 +72,14 @@ public class AttendanceAdapter extends RecyclerView.Adapter<AttendanceAdapter.At
     @Override
     public void onBindViewHolder(AttendanceHolder holder, int position) {
         Attendance item = listData.get(position);
-        holder.subTitle.setText(item.getFacultyList().get(0).getFullName());
-        holder.thumbnail.setImageBitmap(item.getFacultyList().get(0).getPic());
+        holder.subTitle.setText(item.getFname());
+        byte[] arrImage = item.getPic();
+        holder.thumbnail.setImageBitmap(BitmapFactory.decodeByteArray(arrImage, 0, arrImage.length));
         if(item.getReason() != null) {
             holder.reason.setText(item.getReason());
             holder.title.setText(item.getRoom());
             holder.subTitle.setText(item.getSubName());
-            holder.thumbnail.setImageBitmap(item.getSubPic());
+            holder.thumbnail.setImageBitmap(BitmapFactory.decodeByteArray(item.getSubPic(), 0, item.getSubPic().length));
         }
         else
             holder.title.setText(item.getRoom());

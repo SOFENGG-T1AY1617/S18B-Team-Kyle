@@ -14,11 +14,7 @@ import com.google.gson.Gson;
 
 public class AttendanceDateManager {
 
-<<<<<<< HEAD
     public static final String ATTENDANCE_DATE_TAG = "attendance_date";
-=======
-    public static final String ATTENDANCE_DATE_TAG = "heheheheheh";
->>>>>>> 5fe7be902c9a14a2a6ddc352a15413b18ad0dd8f
 
     private  static AttendanceDateModel dateMedel;
     private static boolean initialized = false;
@@ -32,11 +28,7 @@ public class AttendanceDateManager {
         String json = gson.toJson(dateMedel);
         prefsEditor.putString(ATTENDANCE_DATE_TAG, json);
         prefsEditor.commit();
-<<<<<<< HEAD
         Log.i("tagg", "AttendanceDateManager.saveState() size of dateModel is " + dateMedel.getSubmittedDates().size());
-=======
-        Log.i("tagg", "SubmitManager.saveState() size of dateModel is " + dateMedel.getSubmittedDates().size());
->>>>>>> 5fe7be902c9a14a2a6ddc352a15413b18ad0dd8f
     }
 
     public static void resumeState(Context context){
@@ -48,11 +40,7 @@ public class AttendanceDateManager {
         Gson gson = new Gson();
         String json = app_preferences.getString(ATTENDANCE_DATE_TAG, null);
         dateMedel = gson.fromJson(json, AttendanceDateModel.class);
-<<<<<<< HEAD
         Log.i("tagg", "AttendanceDateManager.resumeState() dateModel is null? " + (dateMedel == null));
-=======
-        Log.i("tagg", "SubmitManager.resumeState() dateModel is null? " + (dateMedel == null));
->>>>>>> 5fe7be902c9a14a2a6ddc352a15413b18ad0dd8f
     }
 
     /**
@@ -62,11 +50,7 @@ public class AttendanceDateManager {
     public static void addAttendanceDate(String date){
         checkForErrors();
         dateMedel.addAttendanceDate(date);
-<<<<<<< HEAD
         Log.i("tagg", "AttendanceDateManager.submitToDate()");
-=======
-        Log.i("tagg", "SubmitState.submitToDate()");
->>>>>>> 5fe7be902c9a14a2a6ddc352a15413b18ad0dd8f
     }
 
     /**
@@ -76,11 +60,7 @@ public class AttendanceDateManager {
      */
     public static boolean isAttendanceDate(String date){
         checkForErrors();
-<<<<<<< HEAD
         Log.i("tagg", "AttendanceDateManager.isSubmittedDate() returns " + dateMedel.hasDate(date));
-=======
-        Log.i("tagg", "SubmitManager.isSubmittedDate() returns " + dateMedel.hasDate(date));
->>>>>>> 5fe7be902c9a14a2a6ddc352a15413b18ad0dd8f
         return dateMedel.hasDate(date);
     }
 
