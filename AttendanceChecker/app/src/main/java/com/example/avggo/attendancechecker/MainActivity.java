@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -213,7 +214,18 @@ public class MainActivity extends AppCompatActivity {
                         temp.setDone(true);
                         Integer size2 = db.getAssignedAttendance(temp).size();
 
-                        if(db.getAssignedAttendance(temp).size() > 0 && !submitted || (!submitted && timerCanceled)){
+                        String weekDay;
+                        SimpleDateFormat dayFormat = new SimpleDateFormat("EEEE", Locale.US);
+
+                        Calendar calendar = Calendar.getInstance();
+                        weekDay = dayFormat.format(calendar.getTime());
+
+                        weekDay = weekDay.substring(0, 1);
+
+                        if(weekDay.equals(("S"))){
+                            submitButton.setText("NO LIST FOUND");
+                        }
+                        else if(db.getAssignedAttendance(temp).size() > 0 && !submitted || (!submitted && timerCanceled)){
                             Log.i("WEEENT IIN", size2.toString());
                             Log.i("WEEENT IIN", timerCanceled.toString());
                             Log.i("WEEENT IIN", submitted.toString());
@@ -223,9 +235,6 @@ public class MainActivity extends AppCompatActivity {
                         else if(submitted){
                             submitButton.setEnabled(false);
                             submitButton.setText("ALREADY SUBMITTED");
-                        }
-                        else if(false){
-                            submitButton.setText("HUH  NO LIST  HUH");
                         }
                     }
                     else
@@ -609,7 +618,7 @@ public class MainActivity extends AppCompatActivity {
                         else {
                             Log.i("EARLY", "TOO EARLY");
                             if(!earlyAlerted && (hourNow < first_hour || hourNow == first_hour && minuteNow < first_minute)){
-                                alertTooEarly();;
+                                alertTooEarly();
                                 earlyAlerted = true;
                                 mainFilter.setStartMinute(1000);
                                 mainFilter.setStartHour(1000);
