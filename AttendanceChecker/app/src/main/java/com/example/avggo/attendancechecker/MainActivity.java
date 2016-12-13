@@ -261,7 +261,6 @@ public class MainActivity extends AppCompatActivity {
                         mainFilter.setTab(UNDONE_TAB);
                         mainFilter.setDone(false);
                         submitButton.setVisibility(View.GONE);
-
                 }
                 else {
                     submitButton.setVisibility(View.GONE);
