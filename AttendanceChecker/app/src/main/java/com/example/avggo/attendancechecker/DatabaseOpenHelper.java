@@ -35,7 +35,7 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
 
     public DatabaseOpenHelper(Context context) {
         super(context, SCHEMA, null, 1);
-        //context.deleteDatabase("attendance_checker");
+//        context.deleteDatabase("attendance_checker");
         this.context = context;
     }
 
@@ -451,23 +451,26 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
     private void initializeDBData(SQLiteDatabase db) {
         String sql;
 
-        sql = "INSERT INTO Course (\"code\", \"name\") VALUES ('ADVANDB', 'Advanced Topics In Database Systems');";    //1
+        sql = "INSERT INTO Course (\"code\", \"name\") VALUES ('ADVANDB', 'Advanced Topics In Database Systems');";     //1
         db.execSQL(sql);
-        sql = "INSERT INTO Course (\"code\", \"name\") VALUES ('COMPRO1', 'Introduction To Computer Programming');";   //2
+        sql = "INSERT INTO Course (\"code\", \"name\") VALUES ('COMPRO1', 'Introduction To Computer Programming');";    //2
         db.execSQL(sql);
-        sql = "INSERT INTO Course (\"code\", \"name\") VALUES ('COMPRO2', 'Advanced C Programming');";                 //3
+        sql = "INSERT INTO Course (\"code\", \"name\") VALUES ('COMPRO2', 'Advanced C Programming');";                  //3
         db.execSQL(sql);
-        sql = "INSERT INTO Course (\"code\", \"name\") VALUES ('DISCTRU', 'Discrete Structures');";                    //4
+        sql = "INSERT INTO Course (\"code\", \"name\") VALUES ('DISCTRU', 'Discrete Structures');";                     //4
         db.execSQL(sql);
-        sql = "INSERT INTO Course (\"code\", \"name\") VALUES ('ST-STAT', 'Statistics And Probability For ST');";      //5
+        sql = "INSERT INTO Course (\"code\", \"name\") VALUES ('ST-STAT', 'Statistics And Probability For ST');";       //5
         db.execSQL(sql);
-        sql = "INSERT INTO Course (\"code\", \"name\") VALUES ('SOFENGG', 'Introduction to Software Engineering');";   //6
+        sql = "INSERT INTO Course (\"code\", \"name\") VALUES ('SOFENGG', 'Introduction to Software Engineering');";    //6
         db.execSQL(sql);
-        sql = "INSERT INTO Course (\"code\", \"name\") VALUES ('OBJECTP', 'Object-Oriented Programming With Java');";  //7
+        sql = "INSERT INTO Course (\"code\", \"name\") VALUES ('OBJECTP', 'Object-Oriented Programming With Java');";   //7
         db.execSQL(sql);
-        sql = "INSERT INTO Course (\"code\", \"name\") VALUES ('ARCHORG', 'Computer Architecture and Organization');"; //8
+        sql = "INSERT INTO Course (\"code\", \"name\") VALUES ('ARCHORG', 'Computer Architecture and Organization');";  //8
         db.execSQL(sql);
-
+        sql = "INSERT INTO Course (\"code\", \"name\") VALUES ('WEBAPDE', 'Web Applications Development for ST');";     //9
+        db.execSQL(sql);
+        sql = "INSERT INTO Course (\"code\", \"name\") VALUES ('INTESYS', 'Introduction to Artificial Intelligence');"; //10
+        db.execSQL(sql);
 
         sql = "INSERT INTO Term (\"start\", \"end\", \"term_no\", \"year_id\") VALUES ('2016-04-01', '2016-07-01', '1', '1');";
         db.execSQL(sql);
@@ -509,6 +512,8 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
         sql = "INSERT INTO Room (\"name\", \"building_id\") VALUES ('All04', '2');"; //14
         db.execSQL(sql);
         sql = "INSERT INTO Room (\"name\", \"building_id\") VALUES ('A1105', '2');"; //15
+        db.execSQL(sql);
+        sql = "INSERT INTO Room (\"name\", \"building_id\") VALUES ('G301', '1');"; //16
         db.execSQL(sql);
 
         sql = "INSERT INTO CourseOffering (\"course_id\", \"faculty_id\", \"term_id\", \"section\", \"time_start\", \"time_end\", \"days\", \"room_id\") VALUES ('1', '1', '1', 'S17', '12:45', '14:15', 'T', '1');";
@@ -606,6 +611,22 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
         db.execSQL(sql);
         sql = "INSERT INTO CourseOffering (\"course_id\", \"faculty_id\", \"term_id\", \"section\", \"time_start\", \"time_end\", \"days\", \"room_id\") VALUES ('8', '6', '1', 'S20', '07:30', '09:00', 'W', '10');";
         db.execSQL(sql);
+        sql = "INSERT INTO CourseOffering (\"course_id\", \"faculty_id\", \"term_id\", \"section\", \"time_start\", \"time_end\", \"days\", \"room_id\") VALUES ('9', '7', '1', 'S16', '07:30', '09:00', 'T', '16');";
+        db.execSQL(sql);
+        sql = "INSERT INTO CourseOffering (\"course_id\", \"faculty_id\", \"term_id\", \"section\", \"time_start\", \"time_end\", \"days\", \"room_id\") VALUES ('9', '7', '1', 'S16', '07:30', '09:00', 'H', '16');";
+        db.execSQL(sql);
+        sql = "INSERT INTO CourseOffering (\"course_id\", \"faculty_id\", \"term_id\", \"section\", \"time_start\", \"time_end\", \"days\", \"room_id\") VALUES ('9', '7', '1', 'S20', '09:15', '10:45', 'T', '16');";
+        db.execSQL(sql);
+        sql = "INSERT INTO CourseOffering (\"course_id\", \"faculty_id\", \"term_id\", \"section\", \"time_start\", \"time_end\", \"days\", \"room_id\") VALUES ('9', '7', '1', 'S20', '09:15', '10:45', 'H', '16');";
+        db.execSQL(sql);
+        sql = "INSERT INTO CourseOffering (\"course_id\", \"faculty_id\", \"term_id\", \"section\", \"time_start\", \"time_end\", \"days\", \"room_id\") VALUES ('10', '8', '1', 'S16', '14:30', '16:00', 'T', '3');";
+        db.execSQL(sql);
+        sql = "INSERT INTO CourseOffering (\"course_id\", \"faculty_id\", \"term_id\", \"section\", \"time_start\", \"time_end\", \"days\", \"room_id\") VALUES ('10', '8', '1', 'S16', '14:30', '16:00', 'H', '3');";
+        db.execSQL(sql);
+        sql = "INSERT INTO CourseOffering (\"course_id\", \"faculty_id\", \"term_id\", \"section\", \"time_start\", \"time_end\", \"days\", \"room_id\") VALUES ('10', '8', '1', 'S20', '11:00', '12:30', 'T', '7');";
+        db.execSQL(sql);
+        sql = "INSERT INTO CourseOffering (\"course_id\", \"faculty_id\", \"term_id\", \"section\", \"time_start\", \"time_end\", \"days\", \"room_id\") VALUES ('10', '8', '1', 'S20', '11:00', '12:30', 'H', '7');";
+        db.execSQL(sql);
 
         sql = "INSERT INTO Rotation (\"id\") VALUES ('A');";
         db.execSQL(sql);
@@ -630,8 +651,18 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
         db.execSQL(sql);
         sql = "INSERT INTO RotationRoom (\"rotation_id\", \"room_id\") VALUES ('A', '11');";
         db.execSQL(sql);
-        sql = "INSERT INTO RotationRoom (\"rotation_id\", \"room_id\") VALUES ('A', '12');";
+
+        sql = "INSERT INTO RotationRoom (\"rotation_id\", \"room_id\") VALUES ('A', '6');";
         db.execSQL(sql);
+        sql = "INSERT INTO RotationRoom (\"rotation_id\", \"room_id\") VALUES ('A', '7');";
+        db.execSQL(sql);
+        sql = "INSERT INTO RotationRoom (\"rotation_id\", \"room_id\") VALUES ('A', '9');";
+        db.execSQL(sql);
+        sql = "INSERT INTO RotationRoom (\"rotation_id\", \"room_id\") VALUES ('A', '10');";
+        db.execSQL(sql);
+        sql = "INSERT INTO RotationRoom (\"rotation_id\", \"room_id\") VALUES ('A', '16');";
+        db.execSQL(sql);
+
 
         sql = "INSERT INTO attendancestatus (\"code\", \"name\", \"description\") VALUES ('AB', 'Absent', 'The faculty is not in class after the first third of the official class time.');";
         db.execSQL(sql);
@@ -723,6 +754,30 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
         cv.put(Faculty.COL_EMAIL, "roger.uy@dlsu.edu.ph");
         cv.put(Faculty.COL_MOBNUM, "09175148169");
         cv.put(Faculty.COL_PIC, drawableToByteArray(ContextCompat.getDrawable(context, R.drawable.uy)));
+        cv.put(Faculty.COL_DEPT, "ST Department");
+        db.insert(Faculty.TABLE_NAME, null, cv);
+
+        //7
+        cv = new ContentValues();
+        cv.put(Faculty.COL_FNAME, "Courtney Anne");
+        cv.put(Faculty.COL_MNAME, "M.");
+        cv.put(Faculty.COL_LNAME, "Ngo");
+        cv.put(Faculty.COL_COLLEGE, "College of Computer Studies");
+        cv.put(Faculty.COL_EMAIL, "courtney.ngo@dlsu.edu.ph");
+        cv.put(Faculty.COL_MOBNUM, "09175148169");
+        cv.put(Faculty.COL_PIC, drawableToByteArray(ContextCompat.getDrawable(context, R.drawable.ngo)));
+        cv.put(Faculty.COL_DEPT, "ST Department");
+        db.insert(Faculty.TABLE_NAME, null, cv);
+
+        //8
+        cv = new ContentValues();
+        cv.put(Faculty.COL_FNAME, "Solomon");
+        cv.put(Faculty.COL_MNAME, "L.");
+        cv.put(Faculty.COL_LNAME, "See");
+        cv.put(Faculty.COL_COLLEGE, "College of Computer Studies");
+        cv.put(Faculty.COL_EMAIL, "solomon.see@dlsu.edu.ph");
+        cv.put(Faculty.COL_MOBNUM, "09175148169");
+        cv.put(Faculty.COL_PIC, drawableToByteArray(ContextCompat.getDrawable(context, R.drawable.see)));
         cv.put(Faculty.COL_DEPT, "ST Department");
         db.insert(Faculty.TABLE_NAME, null, cv);
 
