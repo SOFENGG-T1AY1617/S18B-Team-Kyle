@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.example.avggo.attendancechecker.DatabaseOpenHelper;
 import com.example.avggo.attendancechecker.MainActivity;
@@ -19,6 +20,7 @@ import com.example.avggo.attendancechecker.R;
 import com.example.avggo.attendancechecker.adapter.AttendanceAdapter;
 import com.example.avggo.attendancechecker.model.Attendance;
 import com.example.avggo.attendancechecker.model.Filter;
+import com.example.avggo.attendancechecker.support.RecyclerViewEmptySupport;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,8 +43,9 @@ public class AttendanceFragment extends android.support.v4.app.Fragment implemen
     private static int tabID;
     public static boolean loaded = false;
 
-    RecyclerView recView;
+    RecyclerViewEmptySupport recView;
     AttendanceAdapter adapter;
+    TextView emptyView;
     ArrayList listData;
     DatabaseOpenHelper db;
     LayoutInflater li;
@@ -204,8 +207,10 @@ public class AttendanceFragment extends android.support.v4.app.Fragment implemen
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
 
-            recView = (RecyclerView) v.findViewById(R.id.rec_list);
+
+            recView = (RecyclerViewEmptySupport) v.findViewById(R.id.rec_list);
             recView.setLayoutManager(new LinearLayoutManager(getActivity()));
+            recView.setEmptyView(v.findViewById(R.id.empty_view));
             if(getActivity() != null) {
                 adapter = new AttendanceAdapter(db.getAssignedAttendance(f), getActivity());
                 recView.setAdapter(adapter);
