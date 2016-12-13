@@ -242,7 +242,7 @@
                             android:id="@+id/remarkField"
                             android:layout_width="match_parent"
                             android:textSize="14sp"
-                            android:inputType="textMultiLine"
+                            android:inputType="textLongMessage"
                             android:maxLength="200"
                             android:hint="Write a remark..."
                             android:layout_height="match_parent" />

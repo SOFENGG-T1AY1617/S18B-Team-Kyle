@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -64,12 +65,20 @@ public class MainActivity extends AppCompatActivity {
     public static final int TAB_NUMBERS = 3;
 
     public static final int UNDONE_TAB = 0;
+    Boolean huh = false;
     public static final int DONE_TAB = 1;
     public static final int SUBMITTED_TAB = 2;
     int currentHourFilter;
     int currentMinuteFilter;
+    int curHour;
+    int curMinute;
     int lastMinute;
     int lastHour;
+    int verylastMinute;
+    int verylastHour;
+    int hourNow;
+    int minuteNow;
+    int startHour, startMinute;
 
     //header
     String NAME;
@@ -85,6 +94,7 @@ public class MainActivity extends AppCompatActivity {
 
     private String RID;
     private Boolean exceedPopped;
+    Boolean alerted2 = false;
     Boolean alerted = false;
     Boolean timerCanceled = false;
     Boolean earlyAlerted = false;
@@ -155,7 +165,9 @@ public class MainActivity extends AppCompatActivity {
         viewPager.setCurrentItem(0);
         submitButton = (Button) findViewById(R.id.submitSheetButton);
         submitButton.setVisibility(View.GONE);
+        submitButton.setBackgroundColor(Color.GRAY);
         submitButton.setEnabled(false);
+        submitButton.setStateListAnimator(null);
         tabSlider = (SlidingTabLayout) findViewById(R.id.tabs);
         tabSlider.setDistributeEvenly(true);
         tabSlider.setCustomTabColorizer(new SlidingTabLayout.TabColorizer() {
@@ -224,17 +236,21 @@ public class MainActivity extends AppCompatActivity {
 
                         if(weekDay.equals(("S"))){
                             submitButton.setText("NO LIST FOUND");
+                            submitButton.setBackgroundColor(Color.GRAY);
+                            submitButton.setEnabled(false);
                         }
-                        else if(db.getAssignedAttendance(temp).size() > 0 && !submitted || (!submitted && timerCanceled)){
+                        else if(size2 > 0 && !submitted || (!submitted && timerCanceled)){
                             Log.i("WEEENT IIN", size2.toString());
                             Log.i("WEEENT IIN", timerCanceled.toString());
                             Log.i("WEEENT IIN", submitted.toString());
                             submitButton.setEnabled(true);
                             submitButton.setText("SUBMIT");
+                            submitButton.setBackgroundColor(Color.rgb(8, 120, 48));
                         }
                         else if(submitted){
                             submitButton.setEnabled(false);
                             submitButton.setText("ALREADY SUBMITTED");
+                            submitButton.setBackgroundColor(Color.GRAY);
                         }
                     }
                     else
@@ -287,17 +303,7 @@ public class MainActivity extends AppCompatActivity {
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                submitted = true;
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-                String date = sdf.format(Calendar.getInstance().getTime());
-                Log.i("DATE", date);
-                SebmetMeneger.submitToDate(date);
-                submitButton.setText("ALREADY SUBMITTED");
-                pagerAdapter.notifyDataSetChanged();
-                submitButton.setEnabled(false);
-                mainFilter.setStartHour(-1);
-                mainFilter.setStartMinute(-1);
-                pagerAdapter.notifyDataSetChanged();
+                confirmSubmission();
             }
         });
 
@@ -559,15 +565,17 @@ public class MainActivity extends AppCompatActivity {
                         initialFilter.setRID(RID);
                         initialFilter.setStatus("unique");
                         listData = db.getAssignedAttendance(initialFilter);
+                        verylastHour = getStartHour(listData.get(listData.size() - 1));
+                        verylastMinute = getStartMinute(listData.get(listData.size() - 1));
                     }
                     if(listData.size() > 0) {
                         Calendar c = GregorianCalendar.getInstance();
-                        int startHour = getStartHour(listData.get(0));
-                        int startMinute = getStartMinute(listData.get(0));
+                        startHour = getStartHour(listData.get(0));
+                        startMinute = getStartMinute(listData.get(0));
                         int endHour = getEndHour(listData.get(0));
                         int endMinute = getEndMinute(listData.get(0));
-                        int hourNow = c.get(Calendar.HOUR_OF_DAY);
-                        int minuteNow = c.get(Calendar.MINUTE);
+                        hourNow = c.get(Calendar.HOUR_OF_DAY);
+                        minuteNow = c.get(Calendar.MINUTE);
                         if(!initializedFirstTime) {
                             initializedFirstTime = true;
                             first_hour = startHour;
@@ -628,7 +636,24 @@ public class MainActivity extends AppCompatActivity {
                     else {
                         Log.i("tagg", "TIMER");
                         timerCanceled = true;
-                        timer.cancel();
+                        if(!huh) {
+                            huh = true;
+                            if (hourNow > verylastHour || hourNow == verylastHour && minuteNow > verylastMinute) {
+                                submitted = true;
+                                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                                String date = sdf.format(Calendar.getInstance().getTime());
+                                Log.i("DATE", date);
+                                SebmetMeneger.submitToDate(date);
+                                submitButton.setText("ALREADY SUBMITTED");
+                                pagerAdapter.notifyDataSetChanged();
+                                submitButton.setEnabled(false);
+                                mainFilter.setStartHour(-1);
+                                mainFilter.setStartMinute(-1);
+                                pagerAdapter.notifyDataSetChanged();
+                                Toast.makeText(getBaseContext(), "You have missed all classes. Your attendance sheet has been successfully saved.", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                        //timer.cancel();
                     }
                 }
             });
@@ -661,6 +686,39 @@ public class MainActivity extends AppCompatActivity {
         adb.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which){
+
+            }
+        });
+
+        adb.show();
+    }
+
+    public void confirmSubmission(){
+        AlertDialog.Builder adb = new AlertDialog.Builder(this);
+
+        adb.setTitle("Confirmation");
+        adb.setMessage("Are you sure you want to submit?").setNegativeButton("no", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        adb.setCancelable(true);
+
+        adb.setPositiveButton("yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which){
+                submitted = true;
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                String date = sdf.format(Calendar.getInstance().getTime());
+                Log.i("DATE", date);
+                SebmetMeneger.submitToDate(date);
+                submitButton.setText("ALREADY SUBMITTED");
+                pagerAdapter.notifyDataSetChanged();
+                submitButton.setEnabled(false);
+                mainFilter.setStartHour(-1);
+                mainFilter.setStartMinute(-1);
+                pagerAdapter.notifyDataSetChanged();
+                Toast.makeText(getBaseContext(), "Your attendance sheet has been successfully saved.", Toast.LENGTH_SHORT).show();
             }
         });
 
