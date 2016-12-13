@@ -180,6 +180,8 @@ public class DetailActivity extends AppCompatActivity {
                 us.getBackground().setColorFilter(Color.WHITE, PorterDuff.Mode.MULTIPLY);
                 vr.setTextColor(Color.BLACK);
                 vr.getBackground().setColorFilter(Color.WHITE, PorterDuff.Mode.MULTIPLY);
+                submitButton.setBackgroundColor(Color.rgb(8, 120, 48));
+                submitButton.setEnabled(true);
             }
         });
         ed.setOnClickListener(new View.OnClickListener() {
@@ -202,6 +204,8 @@ public class DetailActivity extends AppCompatActivity {
                 us.getBackground().setColorFilter(Color.WHITE, PorterDuff.Mode.MULTIPLY);
                 vr.setTextColor(Color.BLACK);
                 vr.getBackground().setColorFilter(Color.WHITE, PorterDuff.Mode.MULTIPLY);
+                submitButton.setBackgroundColor(Color.rgb(8, 120, 48));
+                submitButton.setEnabled(true);
             }
         });
         la.setOnClickListener(new View.OnClickListener() {
@@ -224,6 +228,8 @@ public class DetailActivity extends AppCompatActivity {
                 us.getBackground().setColorFilter(Color.WHITE, PorterDuff.Mode.MULTIPLY);
                 vr.setTextColor(Color.BLACK);
                 vr.getBackground().setColorFilter(Color.WHITE, PorterDuff.Mode.MULTIPLY);
+                submitButton.setBackgroundColor(Color.rgb(8, 120, 48));
+                submitButton.setEnabled(true);
             }
         });
         pr.setOnClickListener(new View.OnClickListener() {
@@ -246,6 +252,8 @@ public class DetailActivity extends AppCompatActivity {
                 us.getBackground().setColorFilter(Color.WHITE, PorterDuff.Mode.MULTIPLY);
                 vr.setTextColor(Color.BLACK);
                 vr.getBackground().setColorFilter(Color.WHITE, PorterDuff.Mode.MULTIPLY);
+                submitButton.setBackgroundColor(Color.rgb(8, 120, 48));
+                submitButton.setEnabled(true);
             }
         });
         sb.setOnClickListener(new View.OnClickListener() {
@@ -268,6 +276,8 @@ public class DetailActivity extends AppCompatActivity {
                 us.getBackground().setColorFilter(Color.WHITE, PorterDuff.Mode.MULTIPLY);
                 vr.setTextColor(Color.BLACK);
                 vr.getBackground().setColorFilter(Color.WHITE, PorterDuff.Mode.MULTIPLY);
+                submitButton.setBackgroundColor(Color.rgb(8, 120, 48));
+                submitButton.setEnabled(true);
             }
         });
         sw.setOnClickListener(new View.OnClickListener() {
@@ -290,6 +300,8 @@ public class DetailActivity extends AppCompatActivity {
                 us.getBackground().setColorFilter(Color.WHITE, PorterDuff.Mode.MULTIPLY);
                 vr.setTextColor(Color.BLACK);
                 vr.getBackground().setColorFilter(Color.WHITE, PorterDuff.Mode.MULTIPLY);
+                submitButton.setBackgroundColor(Color.rgb(8, 120, 48));
+                submitButton.setEnabled(true);
             }
         });
         us.setOnClickListener(new View.OnClickListener() {
@@ -312,6 +324,8 @@ public class DetailActivity extends AppCompatActivity {
                 ab.getBackground().setColorFilter(Color.WHITE, PorterDuff.Mode.MULTIPLY);
                 vr.setTextColor(Color.BLACK);
                 vr.getBackground().setColorFilter(Color.WHITE, PorterDuff.Mode.MULTIPLY);
+                submitButton.setBackgroundColor(Color.rgb(8, 120, 48));
+                submitButton.setEnabled(true);
             }
         });
         vr.setOnClickListener(new View.OnClickListener() {
@@ -334,6 +348,8 @@ public class DetailActivity extends AppCompatActivity {
                 us.getBackground().setColorFilter(Color.WHITE, PorterDuff.Mode.MULTIPLY);
                 ab.setTextColor(Color.BLACK);
                 ab.getBackground().setColorFilter(Color.WHITE, PorterDuff.Mode.MULTIPLY);
+                submitButton.setBackgroundColor(Color.rgb(8, 120, 48));
+                submitButton.setEnabled(true);
             }
         });
         submitButton.setOnClickListener(new View.OnClickListener() {
@@ -345,10 +361,13 @@ public class DetailActivity extends AppCompatActivity {
                     Intent intent = new Intent();
                     intent.putExtra("CODED_ATTENDANCE_ITEM", item);
                     setResult(RESULT_OK, intent);
+                    Toast.makeText(getBaseContext(), "Attendance successfully saved.", Toast.LENGTH_SHORT).show();
                     finish();
                 }
             }
         });
+        submitButton.setBackgroundColor(Color.GRAY);
+        submitButton.setEnabled(false);
     }
 
     private void setSelectedCode(String code){

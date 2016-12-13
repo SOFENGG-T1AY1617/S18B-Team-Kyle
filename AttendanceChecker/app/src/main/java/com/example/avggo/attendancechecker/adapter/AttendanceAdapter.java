@@ -54,7 +54,7 @@ public class AttendanceAdapter extends RecyclerView.Adapter<AttendanceAdapter.At
         listData.remove(index);
         notifyItemRemoved(index);
         notifyItemRangeChanged(index, listData.size());
-        //notifyDataSetChanged();
+        notifyDataSetChanged();
     }
 
     public void updateItem(int i, Attendance a){

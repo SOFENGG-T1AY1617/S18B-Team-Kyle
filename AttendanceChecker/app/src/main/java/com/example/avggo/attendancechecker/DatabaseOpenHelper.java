@@ -35,7 +35,7 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
 
     public DatabaseOpenHelper(Context context) {
         super(context, SCHEMA, null, 1);
-//        context.deleteDatabase("attendance_checker");
+        //context.deleteDatabase("attendance_checker");
         this.context = context;
     }
 
@@ -652,15 +652,15 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
         sql = "INSERT INTO RotationRoom (\"rotation_id\", \"room_id\") VALUES ('A', '11');";
         db.execSQL(sql);
 
-        sql = "INSERT INTO RotationRoom (\"rotation_id\", \"room_id\") VALUES ('A', '6');";
+        sql = "INSERT INTO RotationRoom (\"rotation_id\", \"room_id\") VALUES ('B', '6');";
         db.execSQL(sql);
-        sql = "INSERT INTO RotationRoom (\"rotation_id\", \"room_id\") VALUES ('A', '7');";
+        sql = "INSERT INTO RotationRoom (\"rotation_id\", \"room_id\") VALUES ('B', '7');";
         db.execSQL(sql);
-        sql = "INSERT INTO RotationRoom (\"rotation_id\", \"room_id\") VALUES ('A', '9');";
+        sql = "INSERT INTO RotationRoom (\"rotation_id\", \"room_id\") VALUES ('B', '9');";
         db.execSQL(sql);
-        sql = "INSERT INTO RotationRoom (\"rotation_id\", \"room_id\") VALUES ('A', '10');";
+        sql = "INSERT INTO RotationRoom (\"rotation_id\", \"room_id\") VALUES ('B', '10');";
         db.execSQL(sql);
-        sql = "INSERT INTO RotationRoom (\"rotation_id\", \"room_id\") VALUES ('A', '16');";
+        sql = "INSERT INTO RotationRoom (\"rotation_id\", \"room_id\") VALUES ('B', '16');";
         db.execSQL(sql);
 
 
