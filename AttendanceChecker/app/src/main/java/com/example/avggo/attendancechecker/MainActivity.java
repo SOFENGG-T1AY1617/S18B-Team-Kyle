@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
     private ViewPager viewPager;
     private ViewPagerAdapter pagerAdapter;
     private SlidingTabLayout tabSlider;
-    private CharSequence tabList[] = {"current", "done", "submitted"};
+    private CharSequence tabList[] = {"pending", "done", "submitted"};
     private ArrayList<String> buildings = new ArrayList<String>();
     ArrayList<String> curBuildings = new ArrayList<String>();
     ArrayList<Integer> buldingIDs = new ArrayList<Integer>();
