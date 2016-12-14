@@ -52,17 +52,18 @@ import java.util.TimerTask;
 public class MainActivity extends AppCompatActivity {
 
     public static Boolean submitted;
+    Boolean notified = false;
 
     private Toolbar toolbar;
     private ViewPager viewPager;
     private ViewPagerAdapter pagerAdapter;
     private SlidingTabLayout tabSlider;
-    private CharSequence tabList[] = {"current", "done", "submitted"};
+    private CharSequence tabList[] = {"pending", "done"};
     private ArrayList<String> buildings = new ArrayList<String>();
     ArrayList<String> curBuildings = new ArrayList<String>();
     ArrayList<Integer> buldingIDs = new ArrayList<Integer>();
     ArrayList<Attendance> listData;
-    public static final int TAB_NUMBERS = 3;
+    public static final int TAB_NUMBERS = 2;
 
     public static final int UNDONE_TAB = 0;
     Boolean huh = false;
@@ -87,6 +88,7 @@ public class MainActivity extends AppCompatActivity {
     NavigationView mNavigationView;
     DrawerLayout Drawer;                                  // Declaring DrawerLayout
     Button submitButton;
+    TextView emptyView;
 
     Filter MainActivityFilter;
 
@@ -164,6 +166,7 @@ public class MainActivity extends AppCompatActivity {
         viewPager.setAdapter(pagerAdapter);
         viewPager.setCurrentItem(0);
         submitButton = (Button) findViewById(R.id.submitSheetButton);
+        emptyView = (TextView) findViewById(R.id.empty_view);
         submitButton.setVisibility(View.GONE);
         submitButton.setBackgroundColor(Color.GRAY);
         submitButton.setEnabled(false);
@@ -206,7 +209,8 @@ public class MainActivity extends AppCompatActivity {
                 //refresh();
 
                 if(position == DONE_TAB) {
-
+                    if(emptyView != null)
+                        emptyView.setText("You haven't checked any classes yet.");
                     submitButton.setVisibility(View.VISIBLE);
                     mainFilter.setDone(false);
                     mainFilter.setSubmitted(false);
@@ -266,17 +270,23 @@ public class MainActivity extends AppCompatActivity {
                         Log.i("DONE", "DONE");
 
 
-                }else if(position == SUBMITTED_TAB){
+                    if(submitted){
+                        mainFilter.setTab(SUBMITTED_TAB);
+                    }
+
+                }/*else if(position == SUBMITTED_TAB){
 
                     mainFilter.setTab(SUBMITTED_TAB);
                     submitButton.setVisibility(View.GONE);
-                }
+                }*/
                 else if (position == UNDONE_TAB){
-                        mainFilter.setStartHour(currentHourFilter);
-                        mainFilter.setStartMinute(currentMinuteFilter);
-                        mainFilter.setTab(UNDONE_TAB);
-                        mainFilter.setDone(false);
-                        submitButton.setVisibility(View.GONE);
+                    if(emptyView != null)
+                        emptyView.setText("You have checked all classes.");
+                    mainFilter.setStartHour(currentHourFilter);
+                    mainFilter.setStartMinute(currentMinuteFilter);
+                    mainFilter.setTab(UNDONE_TAB);
+                    mainFilter.setDone(false);
+                    submitButton.setVisibility(View.GONE);
                 }
                 else {
                     submitButton.setVisibility(View.GONE);
@@ -565,8 +575,8 @@ public class MainActivity extends AppCompatActivity {
                         initialFilter.setRID(RID);
                         initialFilter.setStatus("unique");
                         listData = db.getAssignedAttendance(initialFilter);
-                        verylastHour = getStartHour(listData.get(listData.size() - 1));
-                        verylastMinute = getStartMinute(listData.get(listData.size() - 1));
+                        verylastHour = getEndHour(listData.get(listData.size() - 1));
+                        verylastMinute = getEndMinute(listData.get(listData.size() - 1));
                     }
                     if(listData.size() > 0) {
                         Calendar c = GregorianCalendar.getInstance();
@@ -606,6 +616,9 @@ public class MainActivity extends AppCompatActivity {
                                 if(listData.size() == 1){
                                     lastMinute = getStartMinute(listData.get(0));
                                     lastHour = getStartHour(listData.get(0));
+                                    verylastMinute = getEndMinute(listData.get(0));
+                                    verylastHour = getEndHour(listData.get(0));
+                                    Log.i("VERYLAST", verylastHour + ":" + verylastMinute);
                                 }
                                 mainFilter.setStartHour(getStartHour(listData.get(0)));
                                 mainFilter.setStartMinute(getStartMinute(listData.get(0)));
@@ -623,6 +636,10 @@ public class MainActivity extends AppCompatActivity {
                             Log.i("REMOVED", "EXCEEDED");
                         }
                         else {
+                            if(!notified) {
+                                notified = true;
+                                pagerAdapter.notifyDataSetChanged();
+                            }
                             Log.i("EARLY", "TOO EARLY");
                             if(!earlyAlerted && (hourNow < first_hour || hourNow == first_hour && minuteNow < first_minute)){
                                 alertTooEarly();
@@ -637,12 +654,14 @@ public class MainActivity extends AppCompatActivity {
                         Log.i("tagg", "TIMER");
                         timerCanceled = true;
                         if(!huh) {
-                            huh = true;
                             if (hourNow > verylastHour || hourNow == verylastHour && minuteNow > verylastMinute) {
+                                /*huh = true;
                                 submitted = true;
                                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
                                 String date = sdf.format(Calendar.getInstance().getTime());
                                 Log.i("DATE", date);
+
+
                                 SebmetMeneger.submitToDate(date);
                                 submitButton.setText("ALREADY SUBMITTED");
                                 pagerAdapter.notifyDataSetChanged();
@@ -650,7 +669,7 @@ public class MainActivity extends AppCompatActivity {
                                 mainFilter.setStartHour(-1);
                                 mainFilter.setStartMinute(-1);
                                 pagerAdapter.notifyDataSetChanged();
-                                Toast.makeText(getBaseContext(), "You have missed all classes. Your attendance sheet has been successfully saved.", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getBaseContext(), "You have missed all classes. Your attendance sheet has been successfully saved.", Toast.LENGTH_SHORT).show();*/
                             }
                         }
                         //timer.cancel();
@@ -718,6 +737,7 @@ public class MainActivity extends AppCompatActivity {
                 mainFilter.setStartHour(-1);
                 mainFilter.setStartMinute(-1);
                 pagerAdapter.notifyDataSetChanged();
+                submitButton.setBackgroundColor(Color.GRAY);
                 Toast.makeText(getBaseContext(), "Your attendance sheet has been successfully saved.", Toast.LENGTH_SHORT).show();
             }
         });
