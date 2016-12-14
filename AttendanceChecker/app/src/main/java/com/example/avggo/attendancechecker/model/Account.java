@@ -13,6 +13,13 @@ public class Account {
     private int id;
 
 
+    public Account(int id){
+        submitManager = new SebmetMeneger();
+        dateManager = new AttendanceDateManager();
+        this.id = id;
+    }
+
+
     public SebmetMeneger getSubmitManager() {
         return submitManager;
     }

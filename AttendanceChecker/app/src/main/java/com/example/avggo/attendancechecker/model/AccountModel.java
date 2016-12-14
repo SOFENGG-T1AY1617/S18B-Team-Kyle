@@ -30,4 +30,13 @@ public class AccountModel {
 
         return false;
     }
+
+    public Account getAccount(int id){
+        for(Account a : arreyLest){
+            if(a.getId() == id)
+                return a;
+        }
+
+        return null;
+    }
 }

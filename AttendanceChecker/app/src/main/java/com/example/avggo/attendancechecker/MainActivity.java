@@ -32,8 +32,8 @@ import android.widget.Toast;
 
 import com.ToxicBakery.viewpager.transforms.AccordionTransformer;
 import com.example.avggo.attendancechecker.adapter.ViewPagerAdapter;
+import com.example.avggo.attendancechecker.meneger.AccountManager;
 import com.example.avggo.attendancechecker.meneger.AttendanceDateManager;
-import com.example.avggo.attendancechecker.meneger.SebmetMeneger;
 import com.example.avggo.attendancechecker.model.Attendance;
 import com.example.avggo.attendancechecker.model.Filter;
 import com.example.avggo.attendancechecker.ui.AttendanceFragment;
@@ -113,24 +113,24 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onPause(){
         super.onPause();
-        SebmetMeneger.saveState(this);
+        AccountManager.account.getSubmitManager().saveState(this);
         //AttendanceDateManager.saveState(this);
     }
 
     @Override
     protected void onDestroy(){
         super.onDestroy();
-        SebmetMeneger.saveState(this);
+        AccountManager.account.getSubmitManager().saveState(this);
         //AttendanceDateManager.saveState(this);
     }
 
     @Override
     protected void onResume(){
         super.onResume();
-        SebmetMeneger.resumeState(this);
+        AccountManager.account.getSubmitManager().resumeState(this);
         //AttendanceDateManager.resumeState(this);
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        submitted = SebmetMeneger.isSubmittedDate(sdf.format(Calendar.getInstance().getTime()));
+        submitted = AccountManager.account.getSubmitManager().isSubmittedDate(sdf.format(Calendar.getInstance().getTime()));
     }
 
     @Override
@@ -187,14 +187,14 @@ public class MainActivity extends AppCompatActivity {
         //initialize drawer
         initializeDrawer();
 
-        SebmetMeneger.resumeState(this);
+        AccountManager.account.getSubmitManager().resumeState(this);
 
         SharedPreferences app_preferences =
                 PreferenceManager.getDefaultSharedPreferences(this);
 
         // Get the value for the run counter
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        submitted = SebmetMeneger.isSubmittedDate(sdf.format(Calendar.getInstance().getTime()));
+        submitted = AccountManager.account.getSubmitManager().isSubmittedDate(sdf.format(Calendar.getInstance().getTime()));
 
         if(!submitted) {
             //timerCanceled = true;
@@ -335,9 +335,9 @@ public class MainActivity extends AppCompatActivity {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         String date = sdf.format(Calendar.getInstance().getTime());
 
-        AttendanceDateManager.resumeState(getBaseContext());
-        if (!AttendanceDateManager.isAttendanceDate(date)) {
-            AttendanceDateManager.addAttendanceDate(date);
+        AccountManager.account.getDateManager().resumeState(getBaseContext());
+        if (!AccountManager.account.getDateManager().isAttendanceDate(date)) {
+            AccountManager.account.getDateManager().addAttendanceDate(date);
             String query;
             query = "INSERT INTO Attendance " +
                     "(courseoffering_id) " +
@@ -351,7 +351,7 @@ public class MainActivity extends AppCompatActivity {
 
             db.getReadableDatabase().execSQL(query);
         }
-        AttendanceDateManager.saveState(getBaseContext());
+        AccountManager.account.getDateManager().saveState(getBaseContext());
     }
 
     public int getStartHour(Attendance a){
@@ -730,7 +730,7 @@ public class MainActivity extends AppCompatActivity {
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
                 String date = sdf.format(Calendar.getInstance().getTime());
                 Log.i("DATE", date);
-                SebmetMeneger.submitToDate(date);
+                AccountManager.account.getSubmitManager().submitToDate(date);
                 submitButton.setText("ALREADY SUBMITTED");
                 pagerAdapter.notifyDataSetChanged();
                 submitButton.setEnabled(false);

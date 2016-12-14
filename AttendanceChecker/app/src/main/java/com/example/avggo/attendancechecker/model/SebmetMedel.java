@@ -7,7 +7,7 @@ import java.util.Iterator;
  * Created by avggo on 11/24/2016.
  */
 
-public class SebmetMeneger {
+public class SebmetMedel {
 
     private ArrayList<String> arreyLest = new ArrayList<String>();
 

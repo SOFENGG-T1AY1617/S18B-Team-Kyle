@@ -16,11 +16,11 @@ public class AttendanceDateManager {
 
     public static final String ATTENDANCE_DATE_TAG = "attendance_date";
 
-    private  static AttendanceDateModel dateMedel;
-    private static boolean initialized = false;
+    private AttendanceDateModel dateMedel;
+    private boolean initialized = false;
 
 
-    public static void saveState(Context context){
+    public void saveState(Context context){
         SharedPreferences mPrefs =
                 PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor prefsEditor = mPrefs.edit();
@@ -31,7 +31,7 @@ public class AttendanceDateManager {
         Log.i("tagg", "AttendanceDateManager.saveState() size of dateModel is " + dateMedel.getSubmittedDates().size());
     }
 
-    public static void resumeState(Context context){
+    public void resumeState(Context context){
         initialized = true;
 
         SharedPreferences app_preferences =
@@ -47,7 +47,7 @@ public class AttendanceDateManager {
      * Warning: resumeState should be strictly called before this method. Will THROW AN ERRER if not called
      * @param date
      */
-    public static void addAttendanceDate(String date){
+    public void addAttendanceDate(String date){
         checkForErrors();
         dateMedel.addAttendanceDate(date);
         Log.i("tagg", "AttendanceDateManager.submitToDate()");
@@ -58,13 +58,13 @@ public class AttendanceDateManager {
      * @param date
      * @return
      */
-    public static boolean isAttendanceDate(String date){
+    public boolean isAttendanceDate(String date){
         checkForErrors();
         Log.i("tagg", "AttendanceDateManager.isSubmittedDate() returns " + dateMedel.hasDate(date));
         return dateMedel.hasDate(date);
     }
 
-    private static void checkForErrors(){
+    private void checkForErrors(){
         if(!initialized){
             throw new ExceptionInInitializerError();
         }

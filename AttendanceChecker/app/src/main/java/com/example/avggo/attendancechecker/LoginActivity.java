@@ -12,6 +12,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.avggo.attendancechecker.meneger.AccountManager;
+import com.example.avggo.attendancechecker.model.Account;
 import com.example.avggo.attendancechecker.model.CheckerAccount;
 
 public class LoginActivity extends AppCompatActivity {
@@ -25,10 +27,31 @@ public class LoginActivity extends AppCompatActivity {
     CheckerAccount u;
     String username, password;
 
+
+    @Override
+    protected void onPause(){
+        super.onPause();
+        AccountManager.saveState(this);
+    }
+
+    @Override
+    protected void onDestroy(){
+        super.onDestroy();
+        AccountManager.saveState(this);
+    }
+
+    @Override
+    protected void onResume(){
+        super.onResume();
+        AccountManager.resumeState(this);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        AccountManager.resumeState(this);
 
         db = new DatabaseOpenHelper(getBaseContext());
         usernameET = (EditText) findViewById(R.id.username_et);
@@ -113,6 +136,12 @@ public class LoginActivity extends AppCompatActivity {
                     if (password.equals(checkPassword)) {
                         CHECKER_ID = u.getCheckerid();
                         CHECKER_NAME = u.getFname() + " " + u.getLname();
+
+
+                        Account a = AccountManager.getAccount(CHECKER_ID);
+                        if(a == null)
+                            AccountManager.addAccount(new Account(CHECKER_ID));
+                        AccountManager.setAccount(CHECKER_ID);
 
                         homepage.putExtra("DISPLAY_NAME", u.getFname() + " " + u.getLname());
                         homepage.putExtra("EMAIL", u.getEmail());

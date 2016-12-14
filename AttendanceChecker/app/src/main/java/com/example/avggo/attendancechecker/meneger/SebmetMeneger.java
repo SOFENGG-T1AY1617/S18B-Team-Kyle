@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
+import com.example.avggo.attendancechecker.model.SebmetMedel;
 import com.google.gson.Gson;
 
 /**
@@ -15,11 +16,11 @@ public class SebmetMeneger {
 
     public static final String SEBMET_MEDEL_TAG = "heheheheheh";
 
-    private  static com.example.avggo.attendancechecker.model.SebmetMeneger dateMedel;
-    private static boolean initialized = false;
+    private SebmetMedel dateMedel;
+    private boolean initialized = false;
 
 
-    public static void saveState(Context context){
+    public void saveState(Context context){
         SharedPreferences mPrefs =
                 PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor prefsEditor = mPrefs.edit();
@@ -30,7 +31,7 @@ public class SebmetMeneger {
         Log.i("tagg", "SubmitManager.saveState() size of dateModel is " + dateMedel.getSubmittedDates().size());
     }
 
-    public static void resumeState(Context context){
+    public void resumeState(Context context){
         initialized = true;
 
         SharedPreferences app_preferences =
@@ -38,7 +39,7 @@ public class SebmetMeneger {
 
         Gson gson = new Gson();
         String json = app_preferences.getString(SEBMET_MEDEL_TAG, null);
-        dateMedel = gson.fromJson(json, com.example.avggo.attendancechecker.model.SebmetMeneger.class);
+        dateMedel = gson.fromJson(json, SebmetMedel.class);
         Log.i("tagg", "SubmitManager.resumeState() dateModel is null? " + (dateMedel == null));
     }
 
@@ -46,7 +47,7 @@ public class SebmetMeneger {
      * Warning: resumeState should be strictly called before this method. Will THROW AN ERRER if not called
      * @param date
      */
-    public static void submitToDate(String date){
+    public void submitToDate(String date){
         checkForErrors();
         dateMedel.addSubmittedDate(date);
         Log.i("tagg", "SubmitState.submitToDate()");
@@ -57,18 +58,18 @@ public class SebmetMeneger {
      * @param date
      * @return
      */
-    public static boolean isSubmittedDate(String date){
+    public boolean isSubmittedDate(String date){
         checkForErrors();
         Log.i("tagg", "SubmitManager.isSubmittedDate() returns " + dateMedel.hasDate(date));
         return dateMedel.hasDate(date);
     }
 
-    private static void checkForErrors(){
+    private void checkForErrors(){
         if(!initialized){
             throw new ExceptionInInitializerError();
         }
         if(dateMedel == null){
-            dateMedel = new com.example.avggo.attendancechecker.model.SebmetMeneger();
+            dateMedel = new SebmetMedel();
         }
     }
 
