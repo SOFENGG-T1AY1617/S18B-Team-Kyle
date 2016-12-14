@@ -16,5 +16,5 @@
         android:gravity="center"
         android:visibility="gone"
         android:text="Empty List"
-        android:textSize="24sp" />
+        android:textSize="18sp" />
 </RelativeLayout>

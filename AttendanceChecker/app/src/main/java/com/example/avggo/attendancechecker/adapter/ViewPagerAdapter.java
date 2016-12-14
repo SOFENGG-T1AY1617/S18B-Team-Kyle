@@ -44,10 +44,15 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
         } else if (position == 1) {
             Log.i("tagg", "ViewPagerAdapter.getItem()   -- position ONE called");
             filter.setDone(true);
-            filter.setSubmitted(submitted);
+            //if(submitted)
+                filter.setSubmitted(!submitted);
+            if(!submitted)
+                filter.setSubmitted(submitted);
+            /*else
+                filter.setSubmitted(submitted);*/
              al = AttendanceFragment.newInstance(filter);
             return al;
-        } else if (position == 2) {
+        } /*else if (position == 2) {
             Log.i("tagg", "ViewPagerAdapter.getItem()   -- position TWO called");
             filter.setDone(true);
             filter.setSubmitted(!submitted);
@@ -59,7 +64,7 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
             temp.setRID(filter.getRID());
             al = AttendanceFragment.newInstance(filter);
             return al;
-        } else return null;
+        }*/ else return null;
     }
 
     public AttendanceFragment getFragment(){
