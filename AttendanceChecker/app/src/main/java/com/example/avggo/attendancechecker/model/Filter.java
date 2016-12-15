@@ -20,15 +20,6 @@ public class Filter {
         tab = 0;
     }
 
-    public Filter(Filter f) {
-        this.building = "NULL";
-        this.startHour = f.startHour;
-        this.startMinute = f.startMinute;
-        this.done = f.done;
-        this.submitted = f.submitted;
-        this.tab = f.tab;
-    }
-
     public String getRID() {
         return RID;
     }
