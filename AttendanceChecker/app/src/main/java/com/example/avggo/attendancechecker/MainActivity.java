@@ -600,13 +600,6 @@ public class MainActivity extends AppCompatActivity {
                             mainFilter.setStartHour(currentHourFilter);
                             mainFilter.setStartMinute(currentMinuteFilter);
                             showDialog(startHour, startMinute);
-
-                            Filter temp = new Filter(mainFilter);
-                            for (int i = 0; i < curBuildings.size(); i++) {
-                                temp.setBuilding(curBuildings.get(i));
-                                setMenuCounter(buldingIDs.get(buildings.indexOf(curBuildings.get(i))), db.getAssignedAttendance(temp).size());
-                            }
-                            
                             listData.remove(0);
                             Log.i("REMOVED", "UPDATED");
                         }
