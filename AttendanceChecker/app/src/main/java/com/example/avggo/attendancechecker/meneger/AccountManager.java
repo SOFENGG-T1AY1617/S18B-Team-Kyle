@@ -7,7 +7,6 @@ import android.util.Log;
 
 import com.example.avggo.attendancechecker.model.Account;
 import com.example.avggo.attendancechecker.model.AccountModel;
-import com.example.avggo.attendancechecker.model.SebmetMeneger;
 import com.google.gson.Gson;
 
 /**
