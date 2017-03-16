@@ -4,16 +4,12 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.IdRes;
 import android.support.design.widget.NavigationView;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.content.ContextCompat;
 //import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager;
@@ -25,15 +21,12 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.ToxicBakery.viewpager.transforms.AccordionTransformer;
 import com.example.avggo.attendancechecker.adapter.ViewPagerAdapter;
 import com.example.avggo.attendancechecker.meneger.AccountManager;
-import com.example.avggo.attendancechecker.meneger.AttendanceDateManager;
 import com.example.avggo.attendancechecker.model.Attendance;
 import com.example.avggo.attendancechecker.model.Filter;
 import com.example.avggo.attendancechecker.ui.AttendanceFragment;
@@ -42,12 +35,14 @@ import com.example.avggo.attendancechecker.ui.ReportUCActivity;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -84,6 +79,7 @@ public class MainActivity extends AppCompatActivity {
     //header
     String NAME;
     String EMAIL;
+    String PASSWORD;
 
     NavigationView mNavigationView;
     DrawerLayout Drawer;                                  // Declaring DrawerLayout
@@ -158,6 +154,8 @@ public class MainActivity extends AppCompatActivity {
         //SET NAVIGATION TEXT
         NAME = getIntent().getStringExtra("DISPLAY_NAME");
         EMAIL = getIntent().getStringExtra("EMAIL");
+        PASSWORD = "qazwsxedc1234";
+
         toolbar = (Toolbar) findViewById(R.id.tool_bar);
         toolbar.setTitle("Attendance");
         setSupportActionBar(toolbar);
@@ -575,10 +573,13 @@ public class MainActivity extends AppCompatActivity {
                         initialFilter.setRID(RID);
                         initialFilter.setStatus("unique");
                         listData = db.getAssignedAttendance(initialFilter);
+                        Log.i("listdata", "FIRST start" + listData.size());
                         verylastHour = getEndHour(listData.get(listData.size() - 1));
                         verylastMinute = getEndMinute(listData.get(listData.size() - 1));
                     }
                     if(listData.size() > 0) {
+
+
                         Calendar c = GregorianCalendar.getInstance();
                         startHour = getStartHour(listData.get(0));
                         startMinute = getStartMinute(listData.get(0));
@@ -739,6 +740,49 @@ public class MainActivity extends AppCompatActivity {
                 pagerAdapter.notifyDataSetChanged();
                 submitButton.setBackgroundColor(Color.GRAY);
                 Toast.makeText(getBaseContext(), "Your attendance sheet has been successfully saved.", Toast.LENGTH_SHORT).show();
+
+                Log.i("huh", "zzz");
+
+                //send emails here
+                Filter initialFilter = new Filter();
+                initialFilter.setBuilding("NULL");
+                initialFilter.setRID(RID);
+                initialFilter.setDate(date);
+                initialFilter.setStatus("unique");
+                Log.i("listdata", "print starts" + listData.size());
+                listData = db.getCheckedList(initialFilter);
+                Log.i("listdata", "print start" + listData.size());
+
+                //sending email per prof
+                for(int i=0; i<listData.size(); i++){
+                    Log.i("listData", i + ": " + listData.get(i).getFname() + " : " + listData.get(i).getDate() + " : " + listData.get(i).getCode());
+huh
+
+                    Log.i("SendMailActivity", "Send Button Clicked.");
+
+                    //String fromEmail = EMAIL;
+                    String fromEmail = "santos.kylealthea@gmail.com";
+                    String fromPassword = "qazwsxedc1234";
+
+                    //String toEmails = listData.get(i).getEmail();
+                    String toEmails = "santos.kylealthea@gmail.com";
+
+                    List toEmailList = Arrays.asList(toEmails.split("\\s*,\\s*"));
+                    Log.i("SendMailActivity", "To List: " + toEmailList);
+                    String emailSubject = "ATTENDANCE FOR " + listData.get(i).getFname() + " : " + date + " : " + i;
+                    String emailBody = "Hello Mr./Ms. " + listData.get(i).getFname() + "! \n "
+                            + "Your attendance for the class: " + listData.get(i).getCoursecode() + " is " + listData.get(i).getCode() + ". \n"
+                            +"Best regards, \n"
+                            +NAME;
+
+                    new SendMailTask(MainActivity.this).execute(fromEmail, fromPassword, toEmailList, emailSubject, emailBody);
+
+                    Log.i("SendMailActivity", "sent");
+                }
+
+                Log.i("listdata", "print done");
+
+
             }
         });
 

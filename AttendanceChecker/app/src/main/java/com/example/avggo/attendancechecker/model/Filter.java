@@ -5,7 +5,7 @@ package com.example.avggo.attendancechecker.model;
  */
 
 public class Filter {
-    private String building, RID, status;
+    private String building, RID, status, date;
     private int startHour, startMinute;
     private boolean done;
     private boolean submitted;
@@ -79,4 +79,12 @@ public class Filter {
     }
 
     public void setTab(int i){this.tab = i;}
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
 }

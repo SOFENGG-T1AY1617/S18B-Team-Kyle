@@ -844,4 +844,79 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
 
         return u;
     }
+
+    public ArrayList <Attendance> getCheckedList(Filter f){
+        Log.i("retrieve 0", f.getRID());
+        Log.i("retrieve", "0");
+        SQLiteDatabase db = getReadableDatabase();
+        String query = "select f.first_name, f.middle_name, f.last_name, f.college, c.code, c.name 'course_name', co.time_start, co.time_end, r.name 'room_name', f.pic, a.remarks, a.id 'id', m.reason, m.mdate 'mdate', m.new_start_time, m.new_end_time, (select r2.name from room r2 where r2.id = m.new_rm_id) new_room, (select f1.first_name from substitute s inner join faculty f1 on s.faculty_id = f1.id) sfname, (select f1.middle_name from substitute s inner join faculty f1 on s.faculty_id = f1.id) smname, (select f1.last_name from substitute s inner join faculty f1 on s.faculty_id = f1.id) slname, (select f1.pic from substitute s inner join faculty f1 on s.faculty_id = f1.id) spic, (SELECT name from attendancestatus ats where a.status_id = ats.id) 'acode', a.date \n" +
+                "from attendance a inner join courseoffering co on a.courseoffering_id = co.id \n" +
+                "inner join faculty f on f.id = co.faculty_id \n" +
+                "inner join course c on c.id = co.course_id \n" +
+                "inner join room r on co.room_id = r.id \n" +
+                "inner join rotationroom rr on r.id = rr.room_id \n" +
+                "left join makeupclass m on m.attendance_id = a.id \n" +
+                "where rr.rotation_id = '" + f.getRID() + "' and a.date = '" + f.getDate() + "';" ;
+
+        ArrayList<Attendance> aTemp = new ArrayList<>();
+        //Log.i("tagg", "DB.getAssignedAttendance query is  "+query+"\n" + f.getSubmitted());
+
+        Log.i("Retrieve", "1");
+
+            Cursor c = db.rawQuery(query, null);
+        Log.i("Retrieve", "2");
+
+            if (c.moveToFirst()) {
+                Log.i("Retrieve", "3");
+                while (c.isAfterLast() == false) {
+                    String first_name = c.getString(c.getColumnIndex("first_name"));
+                    String middle_name = c.getString(c.getColumnIndex("middle_name"));
+                    String last_name = c.getString(c.getColumnIndex("last_name"));
+                    String college = c.getString(c.getColumnIndex("college"));
+                    String code = c.getString(c.getColumnIndex("code"));
+                    String course_name = c.getString(c.getColumnIndex("course_name"));
+                    String time_start = c.getString(c.getColumnIndex("time_start"));
+                    String time_end = c.getString(c.getColumnIndex("time_end"));
+                    String room_name = c.getString(c.getColumnIndex("room_name"));
+                    byte[] pic = c.getBlob(c.getColumnIndex("pic"));
+                    int id = c.getInt(c.getColumnIndex("id"));
+                    String aCode = c.getString(c.getColumnIndex("acode"));
+                    String remark = c.getString(c.getColumnIndex("remarks"));
+                    String date = c.getString(c.getColumnIndex("date"));
+
+                    Attendance a = new Attendance();
+
+                    a.setFname(first_name + " " + middle_name + " " + last_name);
+                    a.setCollege(college);
+                    a.setCoursecode(code);
+                    a.setCoursename(course_name);
+                    a.setStartTime(time_start);
+                    a.setEndTime(time_end);
+                    a.setRoom(room_name);
+                    a.setPic(pic);
+                    a.setId(id);
+                    if(aCode == null)
+                        aCode = "Checker error";
+                    a.setCode(aCode);
+                    a.setRemarks(remark);
+                    a.setDate(date);
+                    Log.i("DATE2", new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime()));
+                    Log.i("DATE MAKEUP", c.getString(c.getColumnIndex("mdate")) + "");
+                    Log.i("DATE ATTENDANCE", c.getString(c.getColumnIndex("date")) + "");
+
+                    //Log.i("tagg", "DB.getAssignedAttendance() " + a.toString());
+                    //if(a.getCode() == null || !a.getCode().equals("Checker Error"))
+                        aTemp.add(a);
+
+                    c.moveToNext();
+
+                }
+            }
+
+        Log.i("Retrieve", "4");
+            c.close();
+            db.close();
+
+        return aTemp;
+    }
 }
