@@ -47,6 +47,7 @@ import java.util.TimerTask;
 public class MainActivity extends AppCompatActivity {
 
     public static Boolean submitted;
+    public final GMailSender sender = new GMailSender("santos.kylealthea@gmail.com", "qetuoadgjl");
     Boolean notified = false;
 
     private Toolbar toolbar;
@@ -143,6 +144,7 @@ public class MainActivity extends AppCompatActivity {
         mainFilter = new Filter();
         mainFilter.setBuilding("NULL");
         mainFilter.setRID(RID);
+        filter(mainFilter);
 
         populateAllBuildings();
         //Toast.makeText(getApplicationContext(), RID, Toast.LENGTH_LONG).show();
@@ -559,6 +561,7 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void run() {
+
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -578,8 +581,6 @@ public class MainActivity extends AppCompatActivity {
                         verylastMinute = getEndMinute(listData.get(listData.size() - 1));
                     }
                     if(listData.size() > 0) {
-
-
                         Calendar c = GregorianCalendar.getInstance();
                         startHour = getStartHour(listData.get(0));
                         startMinute = getStartMinute(listData.get(0));
@@ -729,7 +730,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which){
                 submitted = true;
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-                String date = sdf.format(Calendar.getInstance().getTime());
+                final String date = sdf.format(Calendar.getInstance().getTime());
                 Log.i("DATE", date);
                 AccountManager.account.getSubmitManager().submitToDate(date);
                 submitButton.setText("ALREADY SUBMITTED");
@@ -741,48 +742,53 @@ public class MainActivity extends AppCompatActivity {
                 submitButton.setBackgroundColor(Color.GRAY);
                 Toast.makeText(getBaseContext(), "Your attendance sheet has been successfully saved.", Toast.LENGTH_SHORT).show();
 
-                Log.i("huh", "zzz");
-
                 //send emails here
                 Filter initialFilter = new Filter();
                 initialFilter.setBuilding("NULL");
                 initialFilter.setRID(RID);
                 initialFilter.setDate(date);
                 initialFilter.setStatus("unique");
-                Log.i("listdata", "print starts" + listData.size());
                 listData = db.getCheckedList(initialFilter);
-                Log.i("listdata", "print start" + listData.size());
-
-                //sending email per prof
-                for(int i=0; i<listData.size(); i++){
-                    Log.i("listData", i + ": " + listData.get(i).getFname() + " : " + listData.get(i).getDate() + " : " + listData.get(i).getCode());
-huh
-
-                    Log.i("SendMailActivity", "Send Button Clicked.");
-
-                    //String fromEmail = EMAIL;
-                    String fromEmail = "santos.kylealthea@gmail.com";
-                    String fromPassword = "qazwsxedc1234";
-
-                    //String toEmails = listData.get(i).getEmail();
-                    String toEmails = "santos.kylealthea@gmail.com";
-
-                    List toEmailList = Arrays.asList(toEmails.split("\\s*,\\s*"));
-                    Log.i("SendMailActivity", "To List: " + toEmailList);
-                    String emailSubject = "ATTENDANCE FOR " + listData.get(i).getFname() + " : " + date + " : " + i;
-                    String emailBody = "Hello Mr./Ms. " + listData.get(i).getFname() + "! \n "
-                            + "Your attendance for the class: " + listData.get(i).getCoursecode() + " is " + listData.get(i).getCode() + ". \n"
-                            +"Best regards, \n"
-                            +NAME;
-
-                    new SendMailTask(MainActivity.this).execute(fromEmail, fromPassword, toEmailList, emailSubject, emailBody);
-
-                    Log.i("SendMailActivity", "sent");
-                }
-
-                Log.i("listdata", "print done");
 
 
+
+                Thread thread=new Thread(){
+                    @Override
+                    public void run() {
+                        try {
+                            for(int i=0; i<listData.size(); i++){
+                                Log.i("listData", i + ": " + listData.get(i).getFname() + " : " + listData.get(i).getDate() + " : " + listData.get(i).getCode());
+
+                                Log.i("SendMailActivity", "Send Button Clicked.");
+
+                                String toEmails = "santos.kylealthea@gmail.com";
+
+                                Log.i("SendMailActivity", "To List: " + toEmails);
+                                String emailSubject = "ATTENDANCE FOR " + listData.get(i).getFname() + " : " + date + " : " + i;
+                                String emailBody = "Hello Mr./Ms. " + listData.get(i).getFname() + "! \n "
+                                        + "Your attendance for the class: " + listData.get(i).getCoursecode() + " is " + listData.get(i).getCode() + ". \n"
+                                        +"Best regards, \n"
+                                        +NAME;
+
+                                sender.sendMail(emailSubject,
+                                        emailBody,
+                                        toEmails,
+                                        toEmails,
+                                        "");
+
+                                //new SendMailTask(MainActivity.this).execute(fromEmail, fromPassword, toEmailList, emailSubject, emailBody);
+
+                                Log.i("SendMailActivity", "sent");
+                            }
+
+                            Log.i("listdata", "print done");
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+                };
+                thread.start();
             }
         });
 
